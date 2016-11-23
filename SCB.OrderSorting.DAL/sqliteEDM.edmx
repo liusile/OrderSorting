@@ -1,0 +1,732 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OrderSortingDBModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=C:\SCBSource\OrderSorting\SCB.OrderSorting.Client\bin\Debug\OrderSortingDB.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ConfigParamers">
+          <Key>
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="Key" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Countrys">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="EnName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CnName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="EnShorting" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LatticeOrdersCache">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="TraceId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="LatticesettingId" Type="int" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="CountryId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LatticeSetting">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="CabinetId" Type="int" Nullable="false" />
+          <Property Name="LatticeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="LEDIndex" Type="int" Nullable="false" />
+          <Property Name="GratingIndex" Type="int" Nullable="false" />
+          <Property Name="ButtonIndex" Type="int" Nullable="false" />
+          <Property Name="IsEnable" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LoginLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="LoginTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OldOrderInfo">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="TraceId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OldOrderSortingLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="OrderId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="TargetCabinetId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="TargetLatticeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="ResultCabinetId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="ResultLatticeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="OperationType" Type="int" Nullable="false" />
+          <Property Name="OperationTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OldPackingLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PackNumber" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CabinetId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="LatticeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="OrderIds" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostTypeIds" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostTypeNames" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryIds" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryNames" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="OrderQty" Type="int" Nullable="false" />
+          <Property Name="OperationType" Type="int" Nullable="false" />
+          <Property Name="OperationTime" Type="datetime" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderInfo">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="TraceId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderSortingLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="OrderId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="TargetCabinetId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="TargetLatticeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="ResultCabinetId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="ResultLatticeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="OperationType" Type="int" Nullable="false" />
+          <Property Name="OperationTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PackingLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PackNumber" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CabinetId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="LatticeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="OrderIds" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostTypeIds" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostTypeNames" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryIds" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryNames" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="OrderQty" Type="int" Nullable="false" />
+          <Property Name="OperationType" Type="int" Nullable="false" />
+          <Property Name="OperationTime" Type="datetime" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="53" Scale="0" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PostArea">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="Area" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="Type" Type="int" />
+          <Property Name="PostTypeId" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="Posttypes">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CnPostName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="EnPostCode" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SolutionCountry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="SortingSolutionId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CabinetId" Type="int" Nullable="false" />
+          <Property Name="LatticeSettingId" Type="int" Nullable="false" />
+          <Property Name="CountryId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SolutionPostArea">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="SortingSolutionId" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="Type" Type="int" />
+          <Property Name="Flag" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="PostTypeId" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="CabinetId" Type="int" />
+          <Property Name="LactticeSettingId" Type="int" />
+          <Property Name="Area" Type="nvarchar" MaxLength="2147483647" />
+        </EntityType>
+        <EntityType Name="SolutionPostType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="SortingSolutionId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CabinetId" Type="int" Nullable="false" />
+          <Property Name="LatticeSettingId" Type="int" Nullable="false" />
+          <Property Name="PostTypeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostTypeName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SortingSolutions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="OrderSortingDBModelStoreContainer">
+          <EntitySet Name="ConfigParamers" EntityType="Self.ConfigParamers" store:Type="Tables" />
+          <EntitySet Name="Countrys" EntityType="Self.Countrys" store:Type="Tables" />
+          <EntitySet Name="LatticeOrdersCache" EntityType="Self.LatticeOrdersCache" store:Type="Tables" />
+          <EntitySet Name="LatticeSetting" EntityType="Self.LatticeSetting" store:Type="Tables" />
+          <EntitySet Name="LoginLog" EntityType="Self.LoginLog" store:Type="Tables" />
+          <EntitySet Name="OldOrderInfo" EntityType="Self.OldOrderInfo" store:Type="Tables" />
+          <EntitySet Name="OldOrderSortingLog" EntityType="Self.OldOrderSortingLog" store:Type="Tables" />
+          <EntitySet Name="OldPackingLog" EntityType="Self.OldPackingLog" store:Type="Tables" />
+          <EntitySet Name="OrderInfo" EntityType="Self.OrderInfo" store:Type="Tables" />
+          <EntitySet Name="OrderSortingLog" EntityType="Self.OrderSortingLog" store:Type="Tables" />
+          <EntitySet Name="PackingLog" EntityType="Self.PackingLog" store:Type="Tables" />
+          <EntitySet Name="PostArea" EntityType="Self.PostArea" store:Type="Tables" />
+          <EntitySet Name="Posttypes" EntityType="Self.Posttypes" store:Type="Tables" />
+          <EntitySet Name="SolutionCountry" EntityType="Self.SolutionCountry" store:Type="Tables" />
+          <EntitySet Name="SolutionPostArea" EntityType="Self.SolutionPostArea" store:Type="Tables" />
+          <EntitySet Name="SolutionPostType" EntityType="Self.SolutionPostType" store:Type="Tables" />
+          <EntitySet Name="SortingSolutions" EntityType="Self.SortingSolutions" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OrderSortingDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="OrderSortingDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ConfigParamers" EntityType="OrderSortingDBModel.ConfigParamers" />
+          <EntitySet Name="Countrys" EntityType="OrderSortingDBModel.Countrys" />
+          <EntitySet Name="LatticeOrdersCache" EntityType="OrderSortingDBModel.LatticeOrdersCache" />
+          <EntitySet Name="LatticeSetting" EntityType="OrderSortingDBModel.LatticeSetting" />
+          <EntitySet Name="OldOrderInfo" EntityType="OrderSortingDBModel.OldOrderInfo" />
+          <EntitySet Name="OldOrderSortingLog" EntityType="OrderSortingDBModel.OldOrderSortingLog" />
+          <EntitySet Name="OrderInfo" EntityType="OrderSortingDBModel.OrderInfo" />
+          <EntitySet Name="OrderSortingLog" EntityType="OrderSortingDBModel.OrderSortingLog" />
+          <EntitySet Name="PackingLog" EntityType="OrderSortingDBModel.PackingLog" />
+          <EntitySet Name="Posttypes" EntityType="OrderSortingDBModel.Posttypes" />
+          <EntitySet Name="SolutionCountry" EntityType="OrderSortingDBModel.SolutionCountry" />
+          <EntitySet Name="SolutionPostType" EntityType="OrderSortingDBModel.SolutionPostType" />
+          <EntitySet Name="SortingSolutions" EntityType="OrderSortingDBModel.SortingSolutions" />
+          <EntitySet Name="LoginLog" EntityType="OrderSortingDBModel.LoginLog" />
+          <EntitySet Name="OldPackingLog" EntityType="OrderSortingDBModel.OldPackingLog" />
+          <EntitySet Name="PostArea" EntityType="OrderSortingDBModel.PostArea" />
+          <EntitySet Name="SolutionPostArea" EntityType="OrderSortingDBModel.SolutionPostArea" />
+        </EntityContainer>
+        <EntityType Name="ConfigParamers">
+          <Key>
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="Key" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Countrys">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="EnName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CnName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="EnShorting" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LatticeOrdersCache">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TraceId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="LatticesettingId" Type="Int32" Nullable="false" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="53" Scale="0" />
+          <Property Name="CountryId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LatticeSetting">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="CabinetId" Type="Int32" Nullable="false" />
+          <Property Name="LatticeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="LEDIndex" Type="Int32" Nullable="false" />
+          <Property Name="GratingIndex" Type="Int32" Nullable="false" />
+          <Property Name="ButtonIndex" Type="Int32" Nullable="false" />
+          <Property Name="IsEnable" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="OldOrderInfo">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TraceId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="53" Scale="0" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OldOrderSortingLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TargetCabinetId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TargetLatticeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="ResultCabinetId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="ResultLatticeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="53" Scale="0" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="OperationType" Type="Int32" Nullable="false" />
+          <Property Name="OperationTime" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderInfo">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TraceId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="53" Scale="0" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderSortingLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="OrderId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TargetCabinetId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="TargetLatticeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="ResultCabinetId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="ResultLatticeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="53" Scale="0" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="OperationType" Type="Int32" Nullable="false" />
+          <Property Name="OperationTime" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PackingLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PackNumber" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CabinetId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="LatticeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="OrderIds" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostTypeIds" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostTypeNames" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryIds" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryNames" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="OrderQty" Type="Int32" Nullable="false" />
+          <Property Name="OperationType" Type="Int32" Nullable="false" />
+          <Property Name="OperationTime" Type="DateTime" Nullable="false" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="53" Scale="0" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Posttypes">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CnPostName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="EnPostCode" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SolutionCountry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="SortingSolutionId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CabinetId" Type="Int32" Nullable="false" />
+          <Property Name="LatticeSettingId" Type="Int32" Nullable="false" />
+          <Property Name="CountryId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SolutionPostType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="SortingSolutionId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CabinetId" Type="Int32" Nullable="false" />
+          <Property Name="LatticeSettingId" Type="Int32" Nullable="false" />
+          <Property Name="PostTypeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostTypeName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SortingSolutions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LoginLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="LoginTime" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OldPackingLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PackNumber" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CabinetId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="LatticeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="OrderIds" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostTypeIds" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostTypeNames" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryIds" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CountryNames" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="OrderQty" Type="Int32" Nullable="false" />
+          <Property Name="OperationType" Type="Int32" Nullable="false" />
+          <Property Name="OperationTime" Type="DateTime" Nullable="false" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="53" Scale="0" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PostArea">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Area" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="PostTypeId" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SolutionPostArea">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="SortingSolutionId" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="Flag" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostTypeId" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CabinetId" Type="Int32" />
+          <Property Name="LactticeSettingId" Type="Int32" />
+          <Property Name="Area" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OrderSortingDBModelStoreContainer" CdmEntityContainer="OrderSortingDBEntities">
+          <EntitySetMapping Name="ConfigParamers">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.ConfigParamers">
+              <MappingFragment StoreEntitySet="ConfigParamers">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countrys">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.Countrys">
+              <MappingFragment StoreEntitySet="Countrys">
+                <ScalarProperty Name="EnShorting" ColumnName="EnShorting" />
+                <ScalarProperty Name="CnName" ColumnName="CnName" />
+                <ScalarProperty Name="EnName" ColumnName="EnName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LatticeOrdersCache">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.LatticeOrdersCache">
+              <MappingFragment StoreEntitySet="LatticeOrdersCache">
+                <ScalarProperty Name="PostName" ColumnName="PostName" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="LatticesettingId" ColumnName="LatticesettingId" />
+                <ScalarProperty Name="TraceId" ColumnName="TraceId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LatticeSetting">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.LatticeSetting">
+              <MappingFragment StoreEntitySet="LatticeSetting">
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="ButtonIndex" ColumnName="ButtonIndex" />
+                <ScalarProperty Name="GratingIndex" ColumnName="GratingIndex" />
+                <ScalarProperty Name="LEDIndex" ColumnName="LEDIndex" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LatticeId" ColumnName="LatticeId" />
+                <ScalarProperty Name="CabinetId" ColumnName="CabinetId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OldOrderInfo">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.OldOrderInfo">
+              <MappingFragment StoreEntitySet="OldOrderInfo">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="PostName" ColumnName="PostName" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="TraceId" ColumnName="TraceId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OldOrderSortingLog">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.OldOrderSortingLog">
+              <MappingFragment StoreEntitySet="OldOrderSortingLog">
+                <ScalarProperty Name="OperationTime" ColumnName="OperationTime" />
+                <ScalarProperty Name="OperationType" ColumnName="OperationType" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="ResultLatticeId" ColumnName="ResultLatticeId" />
+                <ScalarProperty Name="ResultCabinetId" ColumnName="ResultCabinetId" />
+                <ScalarProperty Name="TargetLatticeId" ColumnName="TargetLatticeId" />
+                <ScalarProperty Name="TargetCabinetId" ColumnName="TargetCabinetId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderInfo">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.OrderInfo">
+              <MappingFragment StoreEntitySet="OrderInfo">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="PostName" ColumnName="PostName" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="TraceId" ColumnName="TraceId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderSortingLog">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.OrderSortingLog">
+              <MappingFragment StoreEntitySet="OrderSortingLog">
+                <ScalarProperty Name="OperationTime" ColumnName="OperationTime" />
+                <ScalarProperty Name="OperationType" ColumnName="OperationType" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="ResultLatticeId" ColumnName="ResultLatticeId" />
+                <ScalarProperty Name="ResultCabinetId" ColumnName="ResultCabinetId" />
+                <ScalarProperty Name="TargetLatticeId" ColumnName="TargetLatticeId" />
+                <ScalarProperty Name="TargetCabinetId" ColumnName="TargetCabinetId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PackingLog">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.PackingLog">
+              <MappingFragment StoreEntitySet="PackingLog">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="OperationTime" ColumnName="OperationTime" />
+                <ScalarProperty Name="OperationType" ColumnName="OperationType" />
+                <ScalarProperty Name="OrderQty" ColumnName="OrderQty" />
+                <ScalarProperty Name="CountryNames" ColumnName="CountryNames" />
+                <ScalarProperty Name="CountryIds" ColumnName="CountryIds" />
+                <ScalarProperty Name="PostTypeNames" ColumnName="PostTypeNames" />
+                <ScalarProperty Name="PostTypeIds" ColumnName="PostTypeIds" />
+                <ScalarProperty Name="OrderIds" ColumnName="OrderIds" />
+                <ScalarProperty Name="LatticeId" ColumnName="LatticeId" />
+                <ScalarProperty Name="CabinetId" ColumnName="CabinetId" />
+                <ScalarProperty Name="PackNumber" ColumnName="PackNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posttypes">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.Posttypes">
+              <MappingFragment StoreEntitySet="Posttypes">
+                <ScalarProperty Name="EnPostCode" ColumnName="EnPostCode" />
+                <ScalarProperty Name="CnPostName" ColumnName="CnPostName" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SolutionCountry">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.SolutionCountry">
+              <MappingFragment StoreEntitySet="SolutionCountry">
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="LatticeSettingId" ColumnName="LatticeSettingId" />
+                <ScalarProperty Name="CabinetId" ColumnName="CabinetId" />
+                <ScalarProperty Name="SortingSolutionId" ColumnName="SortingSolutionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SolutionPostType">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.SolutionPostType">
+              <MappingFragment StoreEntitySet="SolutionPostType">
+                <ScalarProperty Name="PostTypeName" ColumnName="PostTypeName" />
+                <ScalarProperty Name="PostTypeId" ColumnName="PostTypeId" />
+                <ScalarProperty Name="LatticeSettingId" ColumnName="LatticeSettingId" />
+                <ScalarProperty Name="CabinetId" ColumnName="CabinetId" />
+                <ScalarProperty Name="SortingSolutionId" ColumnName="SortingSolutionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SortingSolutions">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.SortingSolutions">
+              <MappingFragment StoreEntitySet="SortingSolutions">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginLog">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.LoginLog">
+              <MappingFragment StoreEntitySet="LoginLog">
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OldPackingLog">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.OldPackingLog">
+              <MappingFragment StoreEntitySet="OldPackingLog">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="OperationTime" ColumnName="OperationTime" />
+                <ScalarProperty Name="OperationType" ColumnName="OperationType" />
+                <ScalarProperty Name="OrderQty" ColumnName="OrderQty" />
+                <ScalarProperty Name="CountryNames" ColumnName="CountryNames" />
+                <ScalarProperty Name="CountryIds" ColumnName="CountryIds" />
+                <ScalarProperty Name="PostTypeNames" ColumnName="PostTypeNames" />
+                <ScalarProperty Name="PostTypeIds" ColumnName="PostTypeIds" />
+                <ScalarProperty Name="OrderIds" ColumnName="OrderIds" />
+                <ScalarProperty Name="LatticeId" ColumnName="LatticeId" />
+                <ScalarProperty Name="CabinetId" ColumnName="CabinetId" />
+                <ScalarProperty Name="PackNumber" ColumnName="PackNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PostArea">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.PostArea">
+              <MappingFragment StoreEntitySet="PostArea">
+                <ScalarProperty Name="PostTypeId" ColumnName="PostTypeId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SolutionPostArea">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.SolutionPostArea">
+              <MappingFragment StoreEntitySet="SolutionPostArea">
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="LactticeSettingId" ColumnName="LactticeSettingId" />
+                <ScalarProperty Name="CabinetId" ColumnName="CabinetId" />
+                <ScalarProperty Name="PostTypeId" ColumnName="PostTypeId" />
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="SortingSolutionId" ColumnName="SortingSolutionId" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

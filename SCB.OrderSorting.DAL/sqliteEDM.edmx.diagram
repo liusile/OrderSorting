@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c08c30ec741b4c16bfc46fc622ac6982" Name="Diagram1" ZoomLevel="80">
+        <EntityTypeShape EntityType="OrderSortingDBModel.ConfigParamers" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.Countrys" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.LatticeOrdersCache" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.LatticeSetting" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.OldOrderInfo" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.OldOrderSortingLog" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.OrderInfo" Width="1.5" PointX="6.75" PointY="5.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.OrderSortingLog" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.PackingLog" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.Posttypes" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.SolutionCountry" Width="1.5" PointX="8.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.SolutionPostType" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.SortingSolutions" Width="1.5" PointX="4.75" PointY="9.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.LoginLog" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.OldPackingLog" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.PostArea" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="OrderSortingDBModel.SolutionPostArea" Width="1.5" PointX="11.375" PointY="6.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
