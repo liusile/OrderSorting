@@ -6,8 +6,8 @@
     <Parity>0</Parity>
     <DataBits>8</DataBits>
     <StopBits>1</StopBits>
-    <LEDStartAddress>40100</LEDStartAddress>
-    <GratingStartAddress>30100</GratingStartAddress>
+    <LEDStartAddress>40099</LEDStartAddress>
+    <GratingStartAddress>30099</GratingStartAddress>
     <ButtonStartAddress>30112</ButtonStartAddress>
     <ResetGratingStartAddress>40000</ResetGratingStartAddress>
     <ResetButtonStartAddress>40012</ResetButtonStartAddress>
@@ -20,7 +20,7 @@
   <CabinetNumber>2</CabinetNumber>
   <CriticalWeight>5.000</CriticalWeight>
   <BoxWeight>1.700</BoxWeight>
-  <WarningCabinetId>1</WarningCabinetId>
+  <WarningCabinetId>2</WarningCabinetId>
   <SlaveConfigs>
     <SlaveConfig>
       <CabinetId>1</CabinetId>

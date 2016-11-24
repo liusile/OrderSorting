@@ -8,6 +8,8 @@ using SCB.OrderSorting.BLL.Model;
 using System.Net.Sockets;
 using Modbus.Device;
 using System.Threading;
+using SCB.OrderSorting.BLL.Common;
+using System.Diagnostics;
 
 namespace SCB.OrderSorting.BLL.Service
 {
@@ -15,8 +17,8 @@ namespace SCB.OrderSorting.BLL.Service
     {
         private SlaveConfig slaveConfig { get; set; }
         private Modbussetting modbus { get; set; }
-        private int writeTimeout { get; set; } = 20;
-        private int readTimeout { get; set; } = 20;
+        private int writeTimeout { get; set; } = 30;
+        private int readTimeout { get; set; } = 30;
         private int tryCount { get; set; } = 10;
         public bool isMaster { get; private set; }
 
@@ -213,13 +215,12 @@ namespace SCB.OrderSorting.BLL.Service
         public void SetLED( IList<KeyValuePair<int, ushort>> registerChangeList)
         {
             var addressS = modbus.LEDStartAddress;
-            
-            foreach(var kv in registerChangeList)
+            ushort[] data = { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 };//5不处理
+            foreach (var kv in registerChangeList)
             {
                 int index = kv.Key;
-                var address = addressS + index;
-                ushort[] value = { kv.Value };
-                WriteRegisters((ushort)address, value);
+                data[index] = kv.Value;
+                WriteRegisters((ushort)addressS, data);
             }
            
         }
@@ -233,9 +234,12 @@ namespace SCB.OrderSorting.BLL.Service
 
         public void SetLED(int LEDIndex, ushort value)
         {
+           
             var address = modbus.LEDStartAddress + LEDIndex;
             ushort[] data = { value };
-             WriteRegisters((ushort)address, data);
+           // Stopwatch sw = Stopwatch.StartNew();
+            WriteRegisters((ushort)address, data);
+          //  SaveErrLogHelper.SaveErrorLog("WriteRegistersLED用时", sw.ElapsedMilliseconds.ToString());
         }
 
         public void SetLEDAll(ushort value)
@@ -278,6 +282,7 @@ namespace SCB.OrderSorting.BLL.Service
                         master.Transport.WriteTimeout = writeTimeout;
                         master.Transport.ReadTimeout = readTimeout;
                         master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
+                        SaveErrLogHelper.SaveErrorLog("写的次数", i.ToString());
                         return;
                     }
                 }
@@ -290,6 +295,7 @@ namespace SCB.OrderSorting.BLL.Service
                 master.Transport.ReadTimeout = readTimeout;
                 master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
             }
+           
         }
      
         private ushort[] ReadRegisters(ushort address, ushort num)
