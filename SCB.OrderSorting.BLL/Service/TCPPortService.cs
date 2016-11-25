@@ -17,8 +17,8 @@ namespace SCB.OrderSorting.BLL.Service
     {
         private SlaveConfig slaveConfig { get; set; }
         private Modbussetting modbus { get; set; }
-        private int writeTimeout { get; set; } = 30;
-        private int readTimeout { get; set; } = 30;
+        private int writeTimeout { get; set; } = 60;
+        private int readTimeout { get; set; } = 60;
         private int tryCount { get; set; } = 10;
         public bool isMaster { get; private set; }
 
@@ -45,11 +45,12 @@ namespace SCB.OrderSorting.BLL.Service
                 }
             }
             WriteRegisters((ushort)address, data);
-            //var result = ReadRegistersCheck((ushort)addressRead, 1);
-            //if (!result)
-            //{
-            //    throw new Exception("清除光栅失败！");
-            //}
+            //发布时需删除，占用时间
+            var result = ReadRegistersCheck((ushort)addressRead, 1);
+            if (!result)
+            {
+                throw new Exception("清除光栅失败！");
+            }
         }
 
         public void ClearGratingRegisterAll()
@@ -282,6 +283,7 @@ namespace SCB.OrderSorting.BLL.Service
                         master.Transport.WriteTimeout = writeTimeout;
                         master.Transport.ReadTimeout = readTimeout;
                         master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
+                        //发布时需删除
                         SaveErrLogHelper.SaveErrorLog("写的次数", i.ToString());
                         return;
                     }

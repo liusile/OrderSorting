@@ -183,6 +183,7 @@
     <Compile Include="Service\BaseDataService.cs" />
     <Compile Include="Service\ClearDataService.cs" />
     <Compile Include="Service\SerialPortService.cs" />
+    <Compile Include="Service\SoundService.cs" />
     <Compile Include="Service\TCPPortManage.cs" />
     <Compile Include="Service\TCPPortService.cs" />
   </ItemGroup>

@@ -29,6 +29,10 @@ namespace SCB.OrderSorting.BLL
         /// 串口服务
         /// </summary>
         public static TCPPortManage TCPPortManage { get; set; }
+        /// <summary>
+        /// 声音服务
+        /// </summary>
+        private static SoundService soundService { get; set; }
         #endregion
 
         #region 初始化
@@ -74,6 +78,8 @@ namespace SCB.OrderSorting.BLL
 
                  //分拣数据服务实例化
                  sortingService = new SortingService(_systemSetting.CabinetNumber, _systemSetting.SortingPatten, _systemSetting.SortingSolution, _systemSetting.IsFlyt, _systemSetting.BoxWeight);
+                //声音服务
+                soundService = new SoundService();
             }
             catch (Exception ex)
             {
@@ -477,5 +483,14 @@ namespace SCB.OrderSorting.BLL
         {
             return _systemSetting.SlaveConfigs.Where(s => s.SlaveAddress > 0 && s.CabinetId <= _systemSetting.CabinetNumber).ToList();
         }
+        /// <summary>
+        /// 播放声音
+        /// </summary>
+        /// <param name="path"></param>
+        public static void SoundAsny(string path)
+        {
+            soundService.playSoundAsny(path);
+        }
+
     }
 }
