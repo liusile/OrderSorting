@@ -116,5 +116,9 @@ namespace SCB.OrderSorting.Client.Model
         /// 格子序号
         /// </summary>
         public ushort Index { get; set; }
+        /// <summary>
+        /// 是否验证
+        /// </summary>
+        public bool isCheck { get; set; } = true;
     }
 }

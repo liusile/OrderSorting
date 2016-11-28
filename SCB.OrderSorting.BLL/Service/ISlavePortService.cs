@@ -32,7 +32,7 @@ namespace SCB.OrderSorting.BLL.Service
         ushort[] ReadGratingRegisterAll();
         void SetGratingRegister(ushort gratingIndex, ushort value);
         void SetGratingRegisterAll(ushort value);
-        void ClearGratingRegister(ushort gratingIndex);
+        void ClearGratingRegister(ushort gratingIndex,bool isCheck);
         void ClearGratingRegisterAll();
         #endregion
 

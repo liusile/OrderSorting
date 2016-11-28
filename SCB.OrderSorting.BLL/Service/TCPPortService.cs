@@ -19,7 +19,7 @@ namespace SCB.OrderSorting.BLL.Service
         private Modbussetting modbus { get; set; }
         private int writeTimeout { get; set; } = 60;
         private int readTimeout { get; set; } = 60;
-        private int tryCount { get; set; } = 10;
+        private int tryCount { get; set; } = 1000;
         public bool isMaster { get; private set; }
 
         public TCPPortService(Modbussetting modbus, SlaveConfig slaveConfig,bool isMaster)
@@ -28,28 +28,34 @@ namespace SCB.OrderSorting.BLL.Service
             this.slaveConfig = slaveConfig;
             this.isMaster = isMaster;
         }
-        public void ClearGratingRegister(ushort gratingIndex)
+        public void ClearGratingRegister(ushort gratingIndex,bool isCheck=true)
         {
 
             var address = modbus.ResetGratingStartAddress + gratingIndex;
             var addressRead = modbus.GratingStartAddress + gratingIndex;
             ushort[] data = {0};
-            while (true)
-            {
-                var read1 = ReadRegisters((ushort)addressRead, 1)[0];
-                var read2 = ReadRegisters((ushort)addressRead, 1)[0];
-                if (read1 == read2)
-                {
-                    //throw new Exception("不稳定数据！");
-                    break;
-                }
-            }
+            //第一种方式：标准验证是否投递完成
+            //while (true)
+            //{
+            //    var read1 = ReadRegisters((ushort)addressRead, 1)[0];
+            //    var read2 = ReadRegisters((ushort)addressRead, 1)[0];
+            //    if (read1 == read2)
+            //    {
+            //        break;
+            //    }
+            //}
+            //第二种方式：默认投递过程最长为30毫秒
+            //Thread.Sleep(30);
+
             WriteRegisters((ushort)address, data);
-            //发布时需删除，占用时间
-            var result = ReadRegistersCheck((ushort)addressRead, 1);
-            if (!result)
+            if (isCheck)
             {
-                throw new Exception("清除光栅失败！");
+                //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                var isSuccess = ReadRegistersCheck((ushort)addressRead, 1);
+                if (!isSuccess)
+                {
+                    ClearGratingRegister(gratingIndex);
+                }
             }
         }
 
@@ -284,11 +290,12 @@ namespace SCB.OrderSorting.BLL.Service
                         master.Transport.ReadTimeout = readTimeout;
                         master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
                         //发布时需删除
-                        SaveErrLogHelper.SaveErrorLog("写的次数", i.ToString());
+                        // SaveErrLogHelper.SaveErrorLog("写的次数", i.ToString());
                         return;
                     }
                 }
                 catch { }
+                Thread.Sleep(10);
             }
             using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
             {
@@ -297,7 +304,7 @@ namespace SCB.OrderSorting.BLL.Service
                 master.Transport.ReadTimeout = readTimeout;
                 master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
             }
-           
+
         }
      
         private ushort[] ReadRegisters(ushort address, ushort num)
@@ -315,6 +322,7 @@ namespace SCB.OrderSorting.BLL.Service
                     }
                 }
                 catch { }
+                Thread.Sleep(10);
             }
             using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
             {
@@ -336,9 +344,13 @@ namespace SCB.OrderSorting.BLL.Service
                         master.Transport.WriteTimeout = writeTimeout;
                         master.Transport.ReadTimeout = readTimeout;
                         var result= master.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
-                        if (result.Max() > 0)
+                        if (result[0] > 0)
                         {
                             Thread.Sleep(10);
+                        }
+                        else
+                        {
+                            return true;
                         }
                     }
                 }
