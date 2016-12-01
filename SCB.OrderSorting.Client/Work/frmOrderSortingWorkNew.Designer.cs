@@ -41,6 +41,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtOrderId = new System.Windows.Forms.TextBox();
             this.lblMsg = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lbl_WaitQuq = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -174,11 +177,42 @@
             this.lblMsg.TabIndex = 10;
             this.lblMsg.Text = "您还未开始分拣";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(747, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(92, 20);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "  等待队列：";
+            // 
+            // lbl_WaitQuq
+            // 
+            this.lbl_WaitQuq.AutoSize = true;
+            this.lbl_WaitQuq.Location = new System.Drawing.Point(836, 9);
+            this.lbl_WaitQuq.Name = "lbl_WaitQuq";
+            this.lbl_WaitQuq.Size = new System.Drawing.Size(18, 20);
+            this.lbl_WaitQuq.TabIndex = 12;
+            this.lbl_WaitQuq.Text = "0";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(876, 8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(114, 23);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "orderThread";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // frmOrderSortingWorkNew
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1002, 584);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.lbl_WaitQuq);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.txtOrderId);
             this.Controls.Add(this.label1);
@@ -216,5 +250,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtOrderId;
         private System.Windows.Forms.Label lblMsg;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbl_WaitQuq;
+        private System.Windows.Forms.Button button1;
     }
 }

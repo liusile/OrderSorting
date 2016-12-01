@@ -157,8 +157,12 @@ namespace SCB.OrderSorting.BLL.Service
         }
         public bool isCollect()
         {
-            var TCPPortService = GetMasterTCPPortService();
-            return TCPPortService.isCollect();
+            foreach(var kv in TCPPortServiceList) {
+                var TCPPortService = GetTCPPortService(kv.Key);
+                bool isSuccess=TCPPortService.isCollect();
+                if (!isSuccess) return false;
+            }
+            return true;
         }
     }
 }

@@ -93,8 +93,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NModbus4, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NModbus4.3.0.0-alpha1\lib\net45\NModbus4.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\NModbus4\NModbus4\bin\Debug\net45\NModbus4.dll</HintPath>
     </Reference>
     <Reference Include="NModbus4.Serial, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NModbus4.Serial.1.0.0-alpha1\lib\net45\NModbus4.Serial.dll</HintPath>

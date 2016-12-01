@@ -18,8 +18,8 @@
     <NumberOfPoints>12</NumberOfPoints>
   </ModbusSetting>
   <CabinetNumber>2</CabinetNumber>
-  <CriticalWeight>5.000</CriticalWeight>
-  <BoxWeight>1.700</BoxWeight>
+  <CriticalWeight>100</CriticalWeight>
+  <BoxWeight>1</BoxWeight>
   <WarningCabinetId>2</WarningCabinetId>
   <SlaveConfigs>
     <SlaveConfig>
