@@ -20,7 +20,7 @@ namespace SCB.OrderSorting.BLL.Service
         private Modbussetting modbus { get; set; }
         private int writeTimeout { get; set; } = 60;
         private int readTimeout { get; set; } = 60;
-        private int tryCount { get; set; } = 20;
+        private int tryCount { get; set; } = 1000;
         public bool isMaster { get; private set; }
         public IModbusSerialMaster masterSocket { get; set; }
 
@@ -84,7 +84,7 @@ namespace SCB.OrderSorting.BLL.Service
                 var isSuccess = ReadRegistersCheck((ushort)addressRead, 1);
                 if (!isSuccess)
                 {
-                    SaveErrLogHelper.SaveErrorLog("清除计数器后在验证有没有清除成功","");
+                    SaveErrLogHelper.SaveErrorLog("清除计数器后在验证有没有清除成功","没有成功，正在重试！");
                     ClearGratingRegister(gratingIndex);
                 }
             }
@@ -333,10 +333,11 @@ namespace SCB.OrderSorting.BLL.Service
                     //    masterSocket.Transport.ReadTimeout = readTimeout;
                     //    masterSocket.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
                     //}
+                    Debug.WriteLine($"{address}正在尝试写，当前次数：{i}");
                     masterSocket.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
                     if (i > 1)
                     {
-                        SaveErrLogHelper.SaveErrorLog($"{address}写的次数：{i}", string.Join(",",data.Select(o=>o.ToString())));
+                        SaveErrLogHelper.SaveErrorLog($"{address}写的次数：{i}", string.Join(",", data.Select(o => o.ToString())));
                     }
                     return;
                 }
