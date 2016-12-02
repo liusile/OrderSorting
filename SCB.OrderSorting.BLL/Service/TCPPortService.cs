@@ -10,6 +10,7 @@ using Modbus.Device;
 using System.Threading;
 using SCB.OrderSorting.BLL.Common;
 using System.Diagnostics;
+using System.Net;
 
 namespace SCB.OrderSorting.BLL.Service
 {
@@ -19,37 +20,73 @@ namespace SCB.OrderSorting.BLL.Service
         private Modbussetting modbus { get; set; }
         private int writeTimeout { get; set; } = 60;
         private int readTimeout { get; set; } = 60;
-        private int tryCount { get; set; } = 10;
+        private int tryCount { get; set; } = 1000;
         public bool isMaster { get; private set; }
+        public IModbusSerialMaster masterSocket { get; set; }
 
         public TCPPortService(Modbussetting modbus, SlaveConfig slaveConfig,bool isMaster)
         {
             this.modbus = modbus;
             this.slaveConfig = slaveConfig;
             this.isMaster = isMaster;
+          
         }
-        public void ClearGratingRegister(ushort gratingIndex)
+    
+        public bool CreateSocket()
+        {
+            try
+            {
+                //socket
+                //Socket socketSend = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //IPEndPoint point = new IPEndPoint(IPAddress.Parse(slaveConfig.TCPHost), Convert.ToInt32(slaveConfig.TCPPort));
+                //socketSend.Connect(point);
+                //masterSocket = ModbusSerialMaster.CreateRtu(socketSend);
+                //masterSocket.Transport.WriteTimeout = writeTimeout;
+                //masterSocket.Transport.ReadTimeout = readTimeout;
+
+                //tcp
+                TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort);
+                masterSocket = ModbusSerialMaster.CreateRtu(client);
+                masterSocket.Transport.WriteTimeout = writeTimeout;
+                masterSocket.Transport.ReadTimeout = readTimeout;
+              
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
+        public void ClearGratingRegister(ushort gratingIndex,bool isCheck=true)
         {
 
             var address = modbus.ResetGratingStartAddress + gratingIndex;
             var addressRead = modbus.GratingStartAddress + gratingIndex;
             ushort[] data = {0};
-            while (true)
-            {
-                var read1 = ReadRegisters((ushort)addressRead, 1)[0];
-                var read2 = ReadRegisters((ushort)addressRead, 1)[0];
-                if (read1 == read2)
-                {
-                    //throw new Exception("不稳定数据！");
-                    break;
-                }
-            }
+            //第一种方式：标准验证是否投递完成
+            //while (true)
+            //{
+            //    var read1 = ReadRegisters((ushort)addressRead, 1)[0];
+            //    var read2 = ReadRegisters((ushort)addressRead, 1)[0];
+            //    if (read1 == read2)
+            //    {
+            //        break;
+            //    }
+            //}
+            //第二种方式：默认投递过程最长为30毫秒
+            //Thread.Sleep(30);
+
             WriteRegisters((ushort)address, data);
-            //发布时需删除，占用时间
-            var result = ReadRegistersCheck((ushort)addressRead, 1);
-            if (!result)
+            if (isCheck)
             {
-                throw new Exception("清除光栅失败！");
+                //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                var isSuccess = ReadRegistersCheck((ushort)addressRead, 1);
+                if (!isSuccess)
+                {
+                    SaveErrLogHelper.SaveErrorLog("清除计数器后在验证有没有清除成功","没有成功，正在重试！");
+                    ClearGratingRegister(gratingIndex);
+                }
             }
         }
 
@@ -221,9 +258,9 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 int index = kv.Key;
                 data[index] = kv.Value;
-                WriteRegisters((ushort)addressS, data);
+              
             }
-           
+            WriteRegisters((ushort)addressS, data);
         }
 
         public void SetLED(LatticeSetting lattice, ushort value)
@@ -277,27 +314,55 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 try
                 {
-                    using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
+                    //using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
+                    //{
+                    //    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
+                    //    master.Transport.WriteTimeout = writeTimeout;
+                    //    master.Transport.ReadTimeout = readTimeout;
+                    //    master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
+                    //    //发布时需删除
+                    //     SaveErrLogHelper.SaveErrorLog($"成功需要写的次数:{i}", $"从机：{slaveConfig.SlaveAddress},地址：{address},数据：{string.Join(",",data.Select(o=>o.ToString()))}");
+                    //    return;
+                    //}
+                    //using (Socket socketSend = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                    //{
+                    //    IPEndPoint point = new IPEndPoint(IPAddress.Parse(slaveConfig.TCPHost), Convert.ToInt32(slaveConfig.TCPPort));
+                    //    socketSend.Connect(point);
+                    //    IModbusSerialMaster masterSocket = ModbusSerialMaster.CreateRtu(socketSend);
+                    //    masterSocket.Transport.WriteTimeout = writeTimeout;
+                    //    masterSocket.Transport.ReadTimeout = readTimeout;
+                    //    masterSocket.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
+                    //}
+                    Debug.WriteLine($"{address}正在尝试写，当前次数：{i}");
+                    masterSocket.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
+                    if (i > 1)
                     {
-                        IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
-                        master.Transport.WriteTimeout = writeTimeout;
-                        master.Transport.ReadTimeout = readTimeout;
-                        master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
-                        //发布时需删除
-                        SaveErrLogHelper.SaveErrorLog("写的次数", i.ToString());
-                        return;
+                        SaveErrLogHelper.SaveErrorLog($"{address}写的次数：{i}", string.Join(",", data.Select(o => o.ToString())));
                     }
+                    return;
                 }
                 catch { }
+                
             }
-            using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
-            {
-                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
-                master.Transport.WriteTimeout = writeTimeout;
-                master.Transport.ReadTimeout = readTimeout;
-                master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
-            }
+            masterSocket.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
+            //using (Socket socketSend = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            //{
+            //    IPEndPoint point = new IPEndPoint(IPAddress.Parse(slaveConfig.TCPHost), Convert.ToInt32(slaveConfig.TCPPort));
+            //    socketSend.Connect(point);
+            //    IModbusSerialMaster masterSocket = ModbusSerialMaster.CreateRtu(socketSend);
+            //    masterSocket.Transport.WriteTimeout = writeTimeout;
+            //    masterSocket.Transport.ReadTimeout = readTimeout;
+            //    masterSocket.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
+            //}
            
+            //using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
+            //{
+            //    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
+            //    master.Transport.WriteTimeout = writeTimeout;
+            //    master.Transport.ReadTimeout = readTimeout;
+            //    master.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
+            //}
+
         }
      
         private ushort[] ReadRegisters(ushort address, ushort num)
@@ -306,23 +371,29 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 try
                 {
-                    using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
-                    {
-                        IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
-                        master.Transport.WriteTimeout = writeTimeout;
-                        master.Transport.ReadTimeout = readTimeout;
-                        return master.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
-                    }
+                    //using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
+                    //{
+                    //    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
+                    //    master.Transport.WriteTimeout = writeTimeout;
+                    //    master.Transport.ReadTimeout = readTimeout;
+                    //    return master.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
+                    //}
+                    //using (Socket socketSend = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                    //{
+                    //    IPEndPoint point = new IPEndPoint(IPAddress.Parse(slaveConfig.TCPHost), Convert.ToInt32(slaveConfig.TCPPort));
+                    //    socketSend.Connect(point);
+                    //    IModbusSerialMaster masterSocket = ModbusSerialMaster.CreateRtu(socketSend);
+                    //    masterSocket.Transport.WriteTimeout = writeTimeout;
+                    //    masterSocket.Transport.ReadTimeout = readTimeout;
+                    //    return masterSocket.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
+                    //}
+                    return masterSocket.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
+
                 }
                 catch { }
+                
             }
-            using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
-            {
-                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
-                master.Transport.WriteTimeout = writeTimeout;
-                master.Transport.ReadTimeout = readTimeout;
-                return master.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
-            }
+            return masterSocket.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
         }
         private bool ReadRegistersCheck(ushort address, ushort num)
         {
@@ -330,41 +401,34 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 try
                 {
-                    using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
+                    //using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
+                    //{
+                    //    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
+                    //    master.Transport.WriteTimeout = writeTimeout;
+                    //    master.Transport.ReadTimeout = readTimeout;
+                    //    var result= master.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
+                    //    if (result[0] > 0)
+                    //    {
+
+                    //    }
+                    //    else
+                    //    {
+                    //        return true;
+                    //    }
+                    //}
+                    var result = masterSocket.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
+                    if (result[0] <= 0)
                     {
-                        IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
-                        master.Transport.WriteTimeout = writeTimeout;
-                        master.Transport.ReadTimeout = readTimeout;
-                        var result= master.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
-                        if (result.Max() > 0)
-                        {
-                            Thread.Sleep(10);
-                        }
+                        return true;
                     }
                 }
                 catch { }
             }
-            using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
-            {
-                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
-                master.Transport.WriteTimeout = writeTimeout;
-                master.Transport.ReadTimeout = readTimeout;
-                var result = master.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num);
-                if (result.Max() > 0)
-                {
-                    return false;
-                }else
-                {
-                    return true;
-                }
-            }
+            return masterSocket.ReadHoldingRegisters(slaveConfig.SlaveAddress, address, num)[0] <= 0 ? true : false;
         }
         public bool isCollect()
         {
-            using (TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort))
-            {
-                return true;
-            }
+           return CreateSocket();
         }
         
     }
