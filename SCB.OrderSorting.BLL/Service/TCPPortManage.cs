@@ -50,10 +50,10 @@ namespace SCB.OrderSorting.BLL.Service
             var TCPPortService = GetTCPPortService(slaveAddress);
             TCPPortService.ClearGratingRegisterAll();
         }
-        public void ClearGrating(byte slaveAddress,ushort gratingIndex,bool isCheck=true)
+        public void ClearGrating(byte slaveAddress,ushort gratingIndex)
         {
             var TCPPortService = GetTCPPortService(slaveAddress);
-            TCPPortService.ClearGratingRegister(gratingIndex,  isCheck );
+            TCPPortService.ClearGratingRegister(gratingIndex);
         }
         public  void ClearGrating()
         {
