@@ -212,13 +212,13 @@ namespace SCB.OrderSorting.Client
                     var registersGrating = OrderSortService.TCPPortManage.ReadGratingRegisters(ThreadManage.SlaveConfig.SlaveAddress);
                     ThreadReadGratingMsg(registersGrating, ThreadManage.SlaveConfig);
                    
-                    // 读按钮
-                       ushort[] registersButton = OrderSortService.TCPPortManage.ReadButtonRegisters(ThreadManage.SlaveConfig.SlaveAddress);
-                        if (registersButton.Max() > 0)
-                        {
-                            SaveErrLogHelper.SaveErrorLog($"按钮数据：", string.Join(",", registersButton.Select(o => o.ToString())));
-                        }
-                        ThreadReadButtonMsg(registersButton, ThreadManage.SlaveConfig);
+                    // 读按钮 先暂时关闭
+                       //ushort[] registersButton = OrderSortService.TCPPortManage.ReadButtonRegisters(ThreadManage.SlaveConfig.SlaveAddress);
+                       // if (registersButton.Max() > 0)
+                       // {
+                       //     SaveErrLogHelper.SaveErrorLog($"按钮数据：", string.Join(",", registersButton.Select(o => o.ToString())));
+                       // }
+                       // ThreadReadButtonMsg(registersButton, ThreadManage.SlaveConfig);
                        
                 }
                 catch (Exception ex)
@@ -458,7 +458,7 @@ namespace SCB.OrderSorting.Client
                                 SetQueueWarningLight(_SlaveConfig.First().CabinetId, LightOperStatus_Enum.Off);
                             }
 
-
+                            ThreadSortOrder.SortStatus = SortStatus_Enum.WaitPut;
                             SetQueueLED(ThreadSortOrder.TargetLattice, ThreadSortOrder.WaitPutColor, 0, new FinishStatus { SortStatus_Enum = SortStatus_Enum.WaitPut, ThreadSortOrder = ThreadSortOrder });
                             ThreadSortOrder.SortOrderNo = orderID;
                             ThreadSortOrder.ResultLattice = null;
