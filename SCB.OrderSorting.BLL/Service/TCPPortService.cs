@@ -37,18 +37,18 @@ namespace SCB.OrderSorting.BLL.Service
             try
             {
                 //socket
-                //Socket socketSend = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                //IPEndPoint point = new IPEndPoint(IPAddress.Parse(slaveConfig.TCPHost), Convert.ToInt32(slaveConfig.TCPPort));
-                //socketSend.Connect(point);
-                //masterSocket = ModbusSerialMaster.CreateRtu(socketSend);
-                //masterSocket.Transport.WriteTimeout = writeTimeout;
-                //masterSocket.Transport.ReadTimeout = readTimeout;
-
-                //tcp
-                TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort);
-                masterSocket = ModbusSerialMaster.CreateRtu(client);
+                Socket socketSend = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint point = new IPEndPoint(IPAddress.Parse(slaveConfig.TCPHost), Convert.ToInt32(slaveConfig.TCPPort));
+                socketSend.Connect(point);
+                masterSocket = ModbusSerialMaster.CreateRtu(socketSend);
                 masterSocket.Transport.WriteTimeout = writeTimeout;
                 masterSocket.Transport.ReadTimeout = readTimeout;
+
+                //tcp
+                //TcpClient client = new TcpClient(slaveConfig.TCPHost, slaveConfig.TCPPort);
+                //masterSocket = ModbusSerialMaster.CreateRtu(client);
+                //masterSocket.Transport.WriteTimeout = writeTimeout;
+                //masterSocket.Transport.ReadTimeout = readTimeout;
               
                 return true;
             }
@@ -335,7 +335,8 @@ namespace SCB.OrderSorting.BLL.Service
                     //}
                     Debug.WriteLine($"{address}正在尝试写，当前次数：{i}");
                     masterSocket.WriteMultipleRegisters(slaveConfig.SlaveAddress, address, data);
-                    if (i > 1)
+                    Debug.WriteLine($"{address}写成功，次数：{i}");
+                    if (i > 0)
                     {
                         SaveErrLogHelper.SaveErrorLog($"{address}写的次数：{i}", string.Join(",", data.Select(o => o.ToString())));
                     }

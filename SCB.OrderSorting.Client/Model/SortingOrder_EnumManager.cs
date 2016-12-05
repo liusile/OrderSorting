@@ -63,7 +63,11 @@ namespace SCB.OrderSorting.Client.Model
             /// <summary>
             /// 暂停
             /// </summary>
-            Stop=12
+            Stop=12,
+            /// <summary>
+            /// 投递进行中
+            /// </summary>
+            WaitPuting = 13
 
         }
         /// <summary>

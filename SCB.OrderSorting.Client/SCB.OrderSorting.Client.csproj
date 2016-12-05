@@ -480,6 +480,9 @@
     <EmbeddedResource Include="App_Data\Sound\UnBlocked.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Content Include="App_Data\Sound\waiting.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\sql\ConfigParamers.sql" />
     <Content Include="App_Data\sql\Countrys国家.sql" />
     <Content Include="App_Data\sql\LatticeOrdersCache格口内的快件信息.sql" />

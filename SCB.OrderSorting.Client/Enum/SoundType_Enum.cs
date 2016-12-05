@@ -105,6 +105,10 @@ namespace SCB.OrderSorting.Client
         /// 警告：创建打包记录失败！请重试
         /// </summary>
         public string CreatePackingLogError = BasePath + "CreatePackingLogError.wav";
-   
+        /// <summary>
+        /// 请稍等
+        /// </summary>
+        public string Waiting = BasePath + "waiting.wav";
+
     }
 }

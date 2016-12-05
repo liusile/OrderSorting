@@ -147,13 +147,8 @@ namespace SCB.OrderSorting.Client
             try
             {
                 _ThreadStop = false;
-
-
-
-
                 foreach (SlaveConfig sc in _SlaveConfig)
                 {
-                    
                     ThreadManage ThreadManage = new ThreadManage
                     {
                         SlaveConfig = sc,
@@ -166,7 +161,6 @@ namespace SCB.OrderSorting.Client
                             Task.Factory.StartNew(ThreadRead, ThreadManage)
                         )
                      );
-
                     _ThreadList.Add(
                         new KeyValuePair<byte, Task>(
                             sc.SlaveAddress,
@@ -184,6 +178,7 @@ namespace SCB.OrderSorting.Client
         /// <summary>
         /// 读串口数据线程
         /// </summary>
+     
         private  void ThreadRead(object obj)
         {
             ThreadManage ThreadManage = (ThreadManage)obj;
@@ -192,34 +187,35 @@ namespace SCB.OrderSorting.Client
                 //锁定
                 if (ThreadManage.QueueWrite.Count > 0 || !_IsLoaded || _SlaveConfig == null || _SlaveConfig.Count < 1)
                 {
-                    //Invoke((MethodInvoker)delegate ()
-                    //{
-                    //    lbl_WaitQuq.Text = ThreadManage.QueueWrite.Count.ToString();
-                    //});
+                    Invoke((MethodInvoker)delegate ()
+                    {
+                        lbl_WaitQuq.Text = ThreadManage.QueueWrite.Count.ToString();
+                    });
                     Thread.Sleep(_ThreadSleepTime);
                     continue;
                 }
                 else
                 {
-                    //Invoke((MethodInvoker)delegate ()
-                    //{
-                    //    lbl_WaitQuq.Text = ThreadManage.QueueWrite.Count.ToString();
-                    //});
+                    Invoke((MethodInvoker)delegate ()
+                    {
+                        lbl_WaitQuq.Text = ThreadManage.QueueWrite.Count.ToString();
+                    });
                 }
                 try
                 {
-                    //读光栅
-                    var registersGrating = OrderSortService.TCPPortManage.ReadGratingRegisters(ThreadManage.SlaveConfig.SlaveAddress);
+                    
+                       //读光栅
+                       var registersGrating = OrderSortService.TCPPortManage.ReadGratingRegisters(ThreadManage.SlaveConfig.SlaveAddress);
                     ThreadReadGratingMsg(registersGrating, ThreadManage.SlaveConfig);
-                   
+                  
                     // 读按钮 先暂时关闭
-                       //ushort[] registersButton = OrderSortService.TCPPortManage.ReadButtonRegisters(ThreadManage.SlaveConfig.SlaveAddress);
-                       // if (registersButton.Max() > 0)
-                       // {
-                       //     SaveErrLogHelper.SaveErrorLog($"按钮数据：", string.Join(",", registersButton.Select(o => o.ToString())));
-                       // }
-                       // ThreadReadButtonMsg(registersButton, ThreadManage.SlaveConfig);
-                       
+                    //ushort[] registersButton = OrderSortService.TCPPortManage.ReadButtonRegisters(ThreadManage.SlaveConfig.SlaveAddress);
+                    // if (registersButton.Max() > 0)
+                    // {
+                    //     SaveErrLogHelper.SaveErrorLog($"按钮数据：", string.Join(",", registersButton.Select(o => o.ToString())));
+                    // }
+                    // ThreadReadButtonMsg(registersButton, ThreadManage.SlaveConfig);
+
                 }
                 catch (Exception ex)
                 {
@@ -326,6 +322,12 @@ namespace SCB.OrderSorting.Client
                         if (ThreadSortOrder == null)
                         {
                             OrderSortService.SoundAsny(SoundType.ScanSettingError);
+                            return;
+                        }
+                        //繁忙中
+                        if (ThreadSortOrder.SortStatus == SortStatus_Enum.WaitPuting)
+                        {
+                            OrderSortService.SoundAsny(SoundType.Waiting);
                             return;
                         }
                         //禁止连续扫同一订单
@@ -457,12 +459,14 @@ namespace SCB.OrderSorting.Client
                                 SetQueueLED(RepeatLacttingList, LED_Enum.None);
                                 SetQueueWarningLight(_SlaveConfig.First().CabinetId, LightOperStatus_Enum.Off);
                             }
+                            
 
-                            ThreadSortOrder.SortStatus = SortStatus_Enum.WaitPut;
-                            SetQueueLED(ThreadSortOrder.TargetLattice, ThreadSortOrder.WaitPutColor, 0, new FinishStatus { SortStatus_Enum = SortStatus_Enum.WaitPut, ThreadSortOrder = ThreadSortOrder });
-                            ThreadSortOrder.SortOrderNo = orderID;
-                            ThreadSortOrder.ResultLattice = null;
-                            // SetTipMsg(string.Format("订单号（{0}）已扫描，等待投递...", orderID));
+                                ThreadSortOrder.SortStatus = SortStatus_Enum.WaitPuting;
+                                SetQueueLED(ThreadSortOrder.TargetLattice, ThreadSortOrder.WaitPutColor, 0, new FinishStatus { SortStatus_Enum = SortStatus_Enum.WaitPut, ThreadSortOrder = ThreadSortOrder });
+                                ThreadSortOrder.SortOrderNo = orderID;
+                                ThreadSortOrder.ResultLattice = null;
+                                // SetTipMsg(string.Format("订单号（{0}）已扫描，等待投递...", orderID));
+                            
                         }
                         else
                         {
@@ -991,13 +995,13 @@ namespace SCB.OrderSorting.Client
                             SetPortLED(msg.LED.CabinetId, msg.LED.LEDChangeList);
                             //  SaveErrLogHelper.SaveErrorLog("结束写LED", sw.ElapsedMilliseconds.ToString());
                             //UI线程卡 暂时关闭
-                            //Invoke((MethodInvoker)delegate ()
-                            //{
-                            //    _ButtonList.Where(o => msg.LED.LEDChangeList.Select(p => p.ID)
-                            //               .Contains(o.TabIndex))
-                            //               .ToList()
-                            //               .ForEach(b => b.BackColor = GetColor(msg.LED.LEDChangeList.First().LED));
-                            //});
+                            Invoke((MethodInvoker)delegate ()
+                            {
+                                _ButtonList.Where(o => msg.LED.LEDChangeList.Select(p => p.ID)
+                                           .Contains(o.TabIndex))
+                                           .ToList()
+                                           .ForEach(b => b.BackColor = GetColor(msg.LED.LEDChangeList.First().LED));
+                            });
                         }
                         break;
                     case ThreadWriteType_Enum.ReSetCount:
@@ -1028,11 +1032,9 @@ namespace SCB.OrderSorting.Client
                
                 foreach (ThreadSortOrder ThreadSortOrder in _ThreadSortOrderManager.Get())
                 {
-                   
-                   
                     if (ThreadSortOrder.SortStatus == SortStatus_Enum.Blocked && ThreadSortOrder.CabinetId != slave.CabinetId)
                     {
-                                               return;
+                        return;
                     }
                     //解除阻挡
                     if (ThreadSortOrder.SortStatus == SortStatus_Enum.Blocked && registers.Max() > 0 && ThreadSortOrder.CabinetId == slave.CabinetId)
