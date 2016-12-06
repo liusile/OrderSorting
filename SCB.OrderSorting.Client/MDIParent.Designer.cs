@@ -16,7 +16,7 @@ namespace SCB.OrderSorting.Client
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
+            { 
                 _frmLgn.Dispose();
                 components.Dispose();
             }

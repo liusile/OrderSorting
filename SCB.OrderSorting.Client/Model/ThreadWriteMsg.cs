@@ -14,10 +14,6 @@ namespace SCB.OrderSorting.Client.Model
     public class ThreadWriteMsg
     {
         /// <summary>
-        /// 
-        /// </summary>
-
-        /// <summary>
         /// 写类型
         /// </summary>
         public ThreadWriteType_Enum WriteType { get; set; }

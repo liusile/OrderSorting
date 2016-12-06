@@ -24,13 +24,13 @@
   <SlaveConfigs>
     <SlaveConfig>
       <CabinetId>1</CabinetId>
-      <SlaveAddress>14</SlaveAddress>
+      <SlaveAddress>15</SlaveAddress>
       <TCPHost>192.168.1.7</TCPHost>
       <TCPPort>26</TCPPort>
     </SlaveConfig>
     <SlaveConfig>
       <CabinetId>2</CabinetId>
-      <SlaveAddress>15</SlaveAddress>
+      <SlaveAddress>14</SlaveAddress>
       <TCPHost>192.168.1.8</TCPHost>
       <TCPPort>27</TCPPort>
     </SlaveConfig>

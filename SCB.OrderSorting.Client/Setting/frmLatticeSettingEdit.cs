@@ -156,25 +156,25 @@ namespace SCB.OrderSorting.Client
         private void btnTest2_Click(object sender, EventArgs e)
         {
             byte SlaveAddress = OrderSortService.GetSlaveConfig().Find(o => o.CabinetId == _latticesetting.CabinetId).SlaveAddress;
-            OrderSortService.TCPPortManage.SetLED(SlaveAddress, _latticesetting.LEDIndex,2);
+            OrderSortService.SerialPortService.SetLED(SlaveAddress, _latticesetting.LEDIndex,2);
         }
 
         private void btnTest0_Click(object sender, EventArgs e)
         {
             byte SlaveAddress = OrderSortService.GetSlaveConfig().Find(o => o.CabinetId == _latticesetting.CabinetId).SlaveAddress;
-            OrderSortService.TCPPortManage.SetLED(SlaveAddress, _latticesetting.LEDIndex, 0);
+            OrderSortService.SerialPortService.SetLED(SlaveAddress, _latticesetting.LEDIndex, 0);
         }
 
         private void btnTest1_Click(object sender, EventArgs e)
         {
             byte SlaveAddress = OrderSortService.GetSlaveConfig().Find(o => o.CabinetId == _latticesetting.CabinetId).SlaveAddress;
-            OrderSortService.TCPPortManage.SetLED(SlaveAddress, _latticesetting.LEDIndex, 1);
+            OrderSortService.SerialPortService.SetLED(SlaveAddress, _latticesetting.LEDIndex, 1);
         }
 
         private void btnTest3_Click(object sender, EventArgs e)
         {
             byte SlaveAddress = OrderSortService.GetSlaveConfig().Find(o => o.CabinetId == _latticesetting.CabinetId).SlaveAddress;
-            OrderSortService.TCPPortManage.SetLED(SlaveAddress, _latticesetting.LEDIndex, 3);
+            OrderSortService.SerialPortService.SetLED(SlaveAddress, _latticesetting.LEDIndex, 3);
         }
         /// <summary>
         /// 选择渠道地区

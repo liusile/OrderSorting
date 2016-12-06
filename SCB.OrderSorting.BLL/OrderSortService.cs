@@ -28,7 +28,7 @@ namespace SCB.OrderSorting.BLL
         /// <summary>
         /// 串口服务
         /// </summary>
-        public static TCPPortManage TCPPortManage { get; set; }
+        public static SerialPortService SerialPortService { get; set; }
         /// <summary>
         /// 声音服务
         /// </summary>
@@ -73,8 +73,8 @@ namespace SCB.OrderSorting.BLL
                 //获取系统设置信息
                 _systemSetting = BaseDataService.GetSystemSetting();
 
-                 //串口服务实例化
-                 TCPPortManage = TCPPortManage.Instance(_systemSetting);
+                //串口服务实例化
+                SerialPortService = SerialPortService.Instance(_systemSetting.ModbusSetting, _systemSetting.SlaveConfigs, _systemSetting.WarningCabinetId);
 
                  //分拣数据服务实例化
                  sortingService = new SortingService(_systemSetting.CabinetNumber, _systemSetting.SortingPatten, _systemSetting.SortingSolution, _systemSetting.IsFlyt, _systemSetting.BoxWeight);
@@ -118,7 +118,7 @@ namespace SCB.OrderSorting.BLL
             _systemSetting = setting;
             BaseDataService.SaveSystemSetting(_systemSetting);
             //串口服务实例化
-            TCPPortManage = TCPPortManage.Instance(_systemSetting);
+            SerialPortService = SerialPortService.Instance(_systemSetting.ModbusSetting, _systemSetting.SlaveConfigs, _systemSetting.WarningCabinetId);
         }
         #endregion
    
@@ -492,5 +492,9 @@ namespace SCB.OrderSorting.BLL
             soundService.playSoundAsny(path);
         }
 
+        public static bool isCollect()
+        {
+           return SerialPortService.isCollect();
+        }
     }
 }

@@ -6,41 +6,19 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 
 namespace SCB.OrderSorting.BLL.Service
 {
-    internal class SerialPortService
+    public class SerialPortService
     {
         /// <summary>
         /// 表示串行端口资源
         /// </summary>
         private static SerialPort _serialPort { get; set; }
-       // private static IModbusSerialMaster _modbusSerialMaster { get; set; }
-
-        private static ModbusIpMaster _modbusSerialMaster { get; set; }
-        
-        /// <summary>
-        /// LED灯的初始状态值
-        /// </summary>
-        private static ushort[][] _defaultRegistersLEDArray
-        {
-            get
-            {
-                return new ushort[4][]
-                {
-                    new ushort[12] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-                    new ushort[12] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-                    new ushort[12] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-                    new ushort[12] { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }
-                };
-            }
-        }
-        /// <summary>
-        /// 当前LED灯状态值
-        /// </summary>
-        private static ushort[][] _runningRegistersLEDArray { get; set; }
+        private static IModbusSerialMaster _modbusSerialMaster { get; set; }
         /// <summary>
         /// modbus设置
         /// </summary>
@@ -54,75 +32,60 @@ namespace SCB.OrderSorting.BLL.Service
         /// </summary>
         private ushort _WarningCabinetId { get; set; }
         /// <summary>
+        /// 循环执行次数
+        /// </summary>
+        public int LoopCount { get; private set; } = 10;
+        /// <summary>
         /// 超时时间
         /// </summary>
-        private static int TimeoutMilliseconds = 100;//60;
+        private static int TimeoutMilliseconds = 50;
+
+        private SerialPortService()
+        {
+
+        }
         /// <summary>
         /// 窗口服务构造函数
         /// </summary>
         /// <param name="modbus">modbus设置</param>[]
         /// <param name="slaveConfig">从机信息</param>
         /// <param name="warningCabinetId">警示灯从机id（1-4）</param>
-        internal SerialPortService(Modbussetting modbus, List<SlaveConfig> slaveConfig, ushort warningCabinetId)
+        /// 
+        private SerialPortService(Modbussetting modbus, List<SlaveConfig> slaveConfig, ushort warningCabinetId)
         {
             try
             {
                 _ModbusSetting = modbus;
                 _SlaveConfig = slaveConfig;
                 _WarningCabinetId = warningCabinetId;
-                _runningRegistersLEDArray = _defaultRegistersLEDArray.Clone() as ushort[][];
-                //if (_serialPort != null)
-                //    _serialPort.Dispose();
-                //_serialPort = new SerialPort(_ModbusSetting.PortName, _ModbusSetting.BaudRate, (Parity)_ModbusSetting.Parity, _ModbusSetting.DataBits, (StopBits)_ModbusSetting.StopBits);
-                //_modbusSerialMaster = ModbusSerialMaster.CreateRtu(new SerialPortAdapter(_serialPort));
-                
-                ////设置Modbus通讯的超时时间
-                //_modbusSerialMaster.Transport.ReadTimeout = TimeoutMilliseconds;
-                //_modbusSerialMaster.Transport.WriteTimeout = TimeoutMilliseconds;
-                //_serialPort.Open();
 
-                //TCP
-                TcpClient client = new TcpClient("192.168.1.7", 26);
-                _modbusSerialMaster = ModbusIpMaster.CreateIp(client);
+                if (_serialPort != null)
+                    _serialPort.Dispose();
+                _serialPort = new SerialPort(_ModbusSetting.PortName, _ModbusSetting.BaudRate, (Parity)_ModbusSetting.Parity, _ModbusSetting.DataBits, (StopBits)_ModbusSetting.StopBits);
+                _modbusSerialMaster = ModbusSerialMaster.CreateRtu(new SerialPortAdapter(_serialPort));
+
+                //设置Modbus通讯的超时时间
                 _modbusSerialMaster.Transport.ReadTimeout = TimeoutMilliseconds;
                 _modbusSerialMaster.Transport.WriteTimeout = TimeoutMilliseconds;
-
+                _serialPort.Open();
             }
             catch (Exception ex)
             {
                 SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
             }
         }
-
+        public static SerialPortService Instance(Modbussetting modbus, List<SlaveConfig> slaveConfig, ushort warningCabinetId)
+        {
+            return new SerialPortService( modbus, slaveConfig,  warningCabinetId);
+        }
         /// <summary>
         /// 读取光栅计数器
         /// </summary>
         /// <param name="slaveAddress">从机地址</param>
         /// <returns></returns>
-        internal ushort[] ReadGratingRegisters(byte slaveAddress,int tryReadCount)
+        public ushort[] ReadGratingRegisters(byte slaveAddress)
         {
-            try
-            {
-                if (_serialPort != null && _serialPort.IsOpen)
-                {
-                    Wait_A_Minute();
-                   // Stopwatch shopWatch = Stopwatch.StartNew();
-                    var result = _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, _ModbusSetting.GratingStartAddress, _ModbusSetting.NumberOfPoints);//60-75ms
-                    
-                   // shopWatch.Stop();
-                    //if (shopWatch.ElapsedMilliseconds > 500) {
-                    //    SaveErrLogHelper.SaveErrorLog(string.Empty, "第101行，ReadHoldingRegisters时间："+shopWatch.ElapsedMilliseconds+"ms");
-                    //}
-                    return result;
-                }
-                return new ushort[0] { };
-            }
-            catch (Exception ex)
-            {
-                var str = string.Format("尝试读取光栅：第{2}次,SlaveAddress={0},GratingStartAddress={1}", slaveAddress, _ModbusSetting.GratingStartAddress, tryReadCount);
-                SaveErrLogHelper.SaveErrorLog(str, ex.ToString());
-                return new ushort[0] { };
-            }
+            return ReadRegisters(slaveAddress, _ModbusSetting.GratingStartAddress, _ModbusSetting.NumberOfPoints);      
         }
 
         /// <summary>
@@ -130,270 +93,226 @@ namespace SCB.OrderSorting.BLL.Service
         /// </summary>
         /// <param name="slaveAddress">从机地址</param>
         /// <returns></returns>
-        internal ushort[] ReadButtonRegisters(byte slaveAddress,int tryReadCount)
+        public ushort[] ReadButtonRegisters(byte slaveAddress)
         {
-            try
-            {
-                if (_serialPort != null && _serialPort.IsOpen)
-                {
-                    Wait_A_Minute();
-                   // Stopwatch shopWatch = Stopwatch.StartNew();
-                    ushort [] result = _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, _ModbusSetting.ButtonStartAddress, _ModbusSetting.NumberOfPoints);//60-75ms
-                    //shopWatch.Stop();
-                    //if (shopWatch.ElapsedMilliseconds > 500)
-                    //{
-                    //    SaveErrLogHelper.SaveErrorLog(string.Empty, "第128行，ReadHoldingRegisters时间：" + shopWatch.ElapsedMilliseconds + "ms");
-                    //}
-                    return result;
-                }
-                return new ushort[0] { };
-            }
-            catch (Exception ex)
-            {
-                var str = string.Format("尝试读取光栅：第{2}次,SlaveAddress={0},GratingStartAddress={1}", slaveAddress, _ModbusSetting.ButtonStartAddress, tryReadCount);
-                SaveErrLogHelper.SaveErrorLog(str, ex.ToString());
-                return new ushort[0] { };
-            }
+            return ReadRegisters(slaveAddress, _ModbusSetting.ButtonStartAddress, _ModbusSetting.NumberOfPoints);
         }
         /// <summary>
-        /// 重置计数器（registerValue：1重置光栅计数器；2重置按钮计数器；3重置两者）
+        /// 重置光栅计数器
         /// </summary>
-        /// <param name="registerValue">1：重置光栅计数器；2：重置按钮计数器；3：重置两者</param>
-        internal void ReSetGratingOrButton(ushort registerValue)
+        /// <param name="registerValue"></param>
+        public void ClearGratingRegister(byte slaveAddress,ushort gratingIndex, bool isCheck = true)
         {
-            if (_serialPort != null && _serialPort.IsOpen)
+            var dataAddress = _ModbusSetting.ResetGratingStartAddress + gratingIndex;
+            var addressRead = _ModbusSetting.GratingStartAddress + gratingIndex;
+            ushort[] data = { 0 };
+            WriteRegisters(slaveAddress, (ushort)dataAddress, data);
+            if (isCheck)
             {
-                _SlaveConfig.ForEach(slave =>
+                //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                var ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
+                if (ReadFirst == 0 || ReadFirst == 200)
                 {
-                    Wait_A_Minute();
-                    ThreadSleep60();
-                    try
-                    {
-                      //  Stopwatch shopWatch = Stopwatch.StartNew();
-                        _modbusSerialMaster.WriteMultipleRegisters(slave.SlaveAddress, _ModbusSetting.ResetGratingStartAddress, new ushort[1] { registerValue });//40-55ms
-                      //  shopWatch.Stop();
-                        //if (shopWatch.ElapsedMilliseconds > 500)
-                        //{
-                        //    SaveErrLogHelper.SaveErrorLog(string.Empty, "第101行，ReadHoldingRegisters时间：" + shopWatch.ElapsedMilliseconds + "ms");
-                        //}
-                        
-                    }
-                    catch (Exception ex)
-                    {
-                        var str = string.Format("SlaveAddress={0},GratingStartAddress={1}", slave.SlaveAddress, _ModbusSetting.ResetGratingStartAddress);
-                        SaveErrLogHelper.SaveErrorLog(str, ex.ToString());
-                        throw;
-                    }
-                });
-               // ThreadSleep60();
+
+                }
+                else
+                {
+                    ClearGratingRegister(slaveAddress, gratingIndex);
+                }
+
             }
         }
-        internal void ReSetGratingOrButton(ushort registerValue,SlaveConfig slave)
+        public void ClearGratingRegister(byte slaveAddress, bool isCheck = true)
         {
-            if (_serialPort != null && _serialPort.IsOpen)
+            var dataAddress = _ModbusSetting.ResetGratingStartAddress ;
+            var addressRead = _ModbusSetting.GratingStartAddress ;
+            ushort[] data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            WriteRegisters(slaveAddress, (ushort)dataAddress, data);
+            if (isCheck)
+            {
+                Thread.Sleep(5);
+                //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                ushort[] ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, _ModbusSetting.NumberOfPoints);
+                if (ReadFirst.Max()>0)
+                {
+                    ClearGratingRegister(slaveAddress);
+                }
+            }
+        }
+        public void ClearGratingRegister( bool isCheck = true)
+        {
+            var dataAddress = _ModbusSetting.ResetGratingStartAddress;
+            var addressRead = _ModbusSetting.GratingStartAddress;
+            _SlaveConfig.ForEach(o =>
+            {
+                ushort[] data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                WriteRegisters(o.SlaveAddress, (ushort)dataAddress, data);
+                if (isCheck)
+                {
+                    Thread.Sleep(5);
+                    //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                    ushort[] ReadFirst = ReadRegisters(o.SlaveAddress, (ushort)addressRead, _ModbusSetting.NumberOfPoints);
+                    if (ReadFirst.Max()>0)
+                    {
+                        ClearGratingRegister(o.SlaveAddress);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// 重置按扭计数器
+        /// </summary>
+        /// <param name="slaveAddress"></param>
+        /// <param name="buttonIndex"></param>
+        /// <param name="isCheck"></param>
+        public void ClearButtonRegister(byte slaveAddress, ushort buttonIndex, bool isCheck = true)
+        {
+            var dataAddress = _ModbusSetting.ResetButtonStartAddress + buttonIndex;
+            var addressRead = _ModbusSetting.ButtonStartAddress + buttonIndex;
+            ushort[] data = { 0 };
+            WriteRegisters(slaveAddress, (ushort)dataAddress, data);
+            if (isCheck)
+            {
+                Thread.Sleep(5);
+                //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                var ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
+                if (ReadFirst>0)
+                {
+                    ClearGratingRegister(slaveAddress, buttonIndex);
+                }
+            }
+        }
+        public void ClearButtonRegister(byte slaveAddress, bool isCheck = true)
+        {
+            var dataAddress = _ModbusSetting.ResetButtonStartAddress ;
+            var addressRead = _ModbusSetting.ButtonStartAddress ;
+            ushort[] data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            WriteRegisters(slaveAddress, (ushort)dataAddress, data);
+            if (isCheck)
+            {
+                Thread.Sleep(5);
+                //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                ushort[] ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, _ModbusSetting.NumberOfPoints);
+                if (ReadFirst.Max()>0)
+                {
+                    ClearButtonRegister(slaveAddress);
+                }
+            }
+        }
+        public void ClearButtonRegister( bool isCheck = true)
+        {
+            var dataAddress = _ModbusSetting.ResetButtonStartAddress;
+            var addressRead = _ModbusSetting.ButtonStartAddress;
+            ushort[] data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            _SlaveConfig.ForEach(o =>
+            {
+                WriteRegisters(o.SlaveAddress, (ushort)dataAddress, data);
+                if (isCheck)
+                {
+                    Thread.Sleep(5);
+                    //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                    ushort[] ReadFirst = ReadRegisters(o.SlaveAddress, (ushort)addressRead, _ModbusSetting.NumberOfPoints);
+                    if (ReadFirst.Max()>0)
+                    {
+                        ClearButtonRegister(o.SlaveAddress);
+                    }
+                }
+            });
+        }
+        /// <summary>
+        /// 设置LED
+        /// </summary>
+        /// <param name="registerChangeList"></param>
+        public void SetLED(byte salveAddress,IList<KeyValuePair<int, ushort>> registerChangeList)
+        {
+            var address = _ModbusSetting.LEDStartAddress;
+            ushort[] data = { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 };//5不处理
+            foreach (var kv in registerChangeList)
+            {
+                int index = kv.Key;
+                data[index] = kv.Value;
+
+            }
+            WriteRegisters(salveAddress,(ushort)address, data);
+        }
+        
+        public void SetLED(byte salveAddress, int LEDIndex, ushort value)
+        {
+            var address = _ModbusSetting.LEDStartAddress+ LEDIndex;
+            ushort[] data = { value};
+            WriteRegisters(salveAddress, (ushort)address, data);
+        }
+        public void SetLED(byte salveAddress, ushort value)
+        {
+            var address = _ModbusSetting.LEDStartAddress;
+            ushort[] data = { value, value, value, value, value, value, value, value, value, value, value, value };
+            WriteRegisters(salveAddress, (ushort)address, data);
+        }
+        public void SetLED( ushort value)
+        {
+            var address = _ModbusSetting.LEDStartAddress;
+            _SlaveConfig.ForEach(o =>
+            {
+                ushort[] data = { value, value, value, value, value, value, value, value, value, value, value, value };
+                WriteRegisters(o.SlaveAddress, (ushort)address, data);
+            });
+        }
+        //写
+        private void WriteRegisters(byte slaveAddress, ushort dataAddress, ushort[] data)
+        {
+            for (int i = 1; i <= LoopCount; i++)
             {
                 try
                 {
-                    _modbusSerialMaster.WriteMultipleRegisters(slave.SlaveAddress, _ModbusSetting.ResetGratingStartAddress, new ushort[1] { registerValue });//40-55ms
+                    _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, dataAddress, data);
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    var str = string.Format("SlaveAddress={0},GratingStartAddress={1}", slave.SlaveAddress, _ModbusSetting.ResetGratingStartAddress);
-                    SaveErrLogHelper.SaveErrorLog(str, ex.ToString());
-                    throw;
-                }
+                catch { }
             }
+            _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, dataAddress, data);
         }
-        /// <summary>
-        /// 重置LED灯
-        /// </summary>
-        /// <returns></returns>
-        internal bool ReSetLED()
+        //读
+        private ushort[] ReadRegisters(byte slaveAddress, ushort dataAddress, ushort num)
         {
-            if (_serialPort != null && _serialPort.IsOpen)
+           
+            for (int i = 1; i <= LoopCount; i++)
             {
-                _runningRegistersLEDArray = _defaultRegistersLEDArray.Clone() as ushort[][];
-                _SlaveConfig.ForEach(slave =>
+                try
                 {
-                    Wait_A_Minute();
-                    try
-                    {
-                       // Stopwatch shopWatch = Stopwatch.StartNew();
-                        _modbusSerialMaster.WriteMultipleRegisters(slave.SlaveAddress, _ModbusSetting.LEDStartAddress, _runningRegistersLEDArray[slave.CabinetId - 1]);
-                        //shopWatch.Stop();
-                        //if (shopWatch.ElapsedMilliseconds > 500)
-                        //{
-                        //    SaveErrLogHelper.SaveErrorLog(string.Empty, "第101行，ReadHoldingRegisters时间：" + shopWatch.ElapsedMilliseconds + "ms");
-                        //}
-                    }
-                    catch (Exception ex)
-                    {
-                        var str = string.Format("SlaveAddress={0},LEDStartAddress={1}", slave.SlaveAddress, _ModbusSetting.LEDStartAddress);
-                        SaveErrLogHelper.SaveErrorLog(str, ex.ToString());
-                        throw;
-                    }
-                });
+                    return _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, dataAddress, num);
+
+                }
+                catch { }
+
+            }
+            return _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, dataAddress, num);
+            
+           
+        }
+
+        public bool isCollect()
+        {
+            if (_serialPort == null|| !_serialPort.IsOpen)
+            {
+                return false;
+            }
+            else
+            {
                 return true;
             }
-            return false;
-        }
-        /// <summary>
-        /// 设置LED灯颜色
-        /// </summary>
-        /// <param name="cabinetId">从机号</param>
-        /// <param name="index">索引</param>
-        /// <param name="registerValues">0绿灯，1红灯，2红灯闪烁，3熄灭</param>
-        /// <returns></returns>
-        internal bool SetLED(int cabinetId, int index, ushort registerValues)
-        {
-            using (TcpClient client = new TcpClient("192.168.1.7", 26))
-            {
-
-                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(client);
-
-                // read five input values
-                ushort startAddress = 40100;
-                ushort[] numInputs = { 1,1,1,1};
-               
-                    master.WriteMultipleRegisters(14,startAddress, numInputs);
-                    Thread.Sleep(1000);
-               
-
-
-            }
-            return true;
-            var slave = _SlaveConfig.Find(s => s.CabinetId == cabinetId);
-            try
-            {
-                //if (_serialPort != null && _serialPort.IsOpen)
-                //{
-                    _runningRegistersLEDArray[cabinetId - 1][index] = registerValues;
-                    Wait_A_Minute();
-             
-                   // Stopwatch shopWatch = Stopwatch.StartNew();
-                    _modbusSerialMaster.WriteMultipleRegisters(slave.SlaveAddress, _ModbusSetting.LEDStartAddress, _runningRegistersLEDArray[cabinetId - 1]);
-                    //shopWatch.Stop();
-                    //if (shopWatch.ElapsedMilliseconds > 500)
-                    //{
-                    //    SaveErrLogHelper.SaveErrorLog(string.Empty, "第101行，ReadHoldingRegisters时间：" + shopWatch.ElapsedMilliseconds + "ms");
-                    //}
-                    return true;
-                //}
-                return false;
-            }
-            catch (Exception ex)
-            {
-                var str = string.Format("SlaveAddress={0},LEDStartAddress={1}", slave.SlaveAddress, _ModbusSetting.LEDStartAddress);
-                SaveErrLogHelper.SaveErrorLog(str, ex.ToString());
-                return false;
-            }
         }
 
-        /// <summary>
-        /// 设置警示灯
-        /// </summary>
-        /// <param name="slaveAddress">架子地址</param>
-        /// <param name="type">1红灯，2绿灯，3黄灯，4蜂鸣器(+全部灯)</param>
-        /// <param name="registerValue">1启动，0关闭</param>
-        internal void SetWarningLight(byte slaveAddress, byte type, ushort registerValue)
+        public void ClearGrating2Button()
         {
-            try
-            {
-                if (_serialPort != null && _serialPort.IsOpen)
-                {
-                    switch (type)
-                    {
-                        case 1:
-                            _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, _ModbusSetting.WarningRedLightStartAddress, new ushort[1] { registerValue });
-                            break;
-                        case 2:
-                            _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, _ModbusSetting.WarningGreenLightStartAddress, new ushort[1] { registerValue });
-                            break;
-                        case 3:
-                            _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, _ModbusSetting.WarningYellowLightStartAddress, new ushort[1] { registerValue });
-                            break;
-                        case 4:
-                            //40112   警示灯红
-                            //40113   警示灯绿
-                            //40114   警示灯黄
-                            //40115   警示灯蜂鸣器
-                            _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, _ModbusSetting.WarningRedLightStartAddress, new ushort[4] { registerValue, 1, registerValue, registerValue });
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                SaveErrLogHelper.SaveErrorLog("SlaveAddress="+ slaveAddress, ex.ToString());
-            }
-        }
-        /// <summary>
-        /// 设置警示灯
-        /// </summary>
-        /// <param name="type">1红灯，2绿灯，3黄灯，4蜂鸣器(+全部灯)</param>
-        /// <param name="registerValue">1启动，0关闭</param>
-        internal void SetWarningLight(byte type, ushort registerValue)
-        {
-            try
-            {
-                //获取警示灯从机
-                SlaveConfig slave = GetWarningSlave();
-                Wait_A_Minute();
-                SetWarningLight(slave.SlaveAddress, type, registerValue);
-            }
-            catch (Exception ex)
-            {
-                SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
-            }
-        }
-        /// <summary>
-        /// 重置警示灯
-        /// </summary>
-        /// <returns></returns>
-        internal bool ReSetWarningLight()
-        {
-            try
-            {
-                //_SlaveConfig.ForEach(slave =>
-                //{
-                //    Wait_A_Minute();
-                //    SetWarningLight(slave.SlaveAddress, 4, 0);
-                //});
-                //获取警示灯从机
-                SlaveConfig slave = GetWarningSlave();
-                Wait_A_Minute();
-                SetWarningLight(slave.SlaveAddress, 4, 0);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        /// <summary>
-        /// 获取警示灯从机
-        /// </summary>
-        /// <returns></returns>
-        internal SlaveConfig GetWarningSlave()
-        {
-            return _SlaveConfig.Find(s => s.CabinetId == _WarningCabinetId);
+            this.ClearGratingRegister();
+            this.ClearButtonRegister();
         }
 
-        /// <summary>
-        /// 等待上一次modbus通讯完全结束（访问时间间隔太短，频繁切换从机，会导致无响应）
-        /// </summary>
-        private static void Wait_A_Minute()
+        public void ClearGrating2Button(byte slaveAddress)
         {
-           // Thread.Sleep(TimeoutMilliseconds);
-        }
-        /// <summary>
-        /// sleep 60毫秒
-        /// </summary>
-        private static void ThreadSleep60()
-        {
-            Thread.Sleep(60);
+            this.ClearGratingRegister(slaveAddress);
+            this.ClearButtonRegister(slaveAddress);
         }
     }
 }

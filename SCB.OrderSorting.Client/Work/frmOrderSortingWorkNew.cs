@@ -47,8 +47,10 @@ namespace SCB.OrderSorting.Client
         private static List<LatticeSetting> _LatticesettingList;
         #endregion
         #region 线程
-        List<KeyValuePair<byte,Task>>  _ThreadList = new List<KeyValuePair<byte, Task>>();
-        List<ThreadManage> _ThreadManageList = new List<ThreadManage>();
+        BlockingCollection<ThreadWriteMsg> QueueWrite = new BlockingCollection<Model.ThreadWriteMsg>();
+        CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+        Task WriteTask;
+        Task ReadTask;
         private static bool _ThreadStop;//是否停止所有线程
         private static int _ThreadSleepTime = 30;//线程休息间隔：30毫秒
         private static ThreadSortOrderManager _ThreadSortOrderManager;
@@ -147,27 +149,8 @@ namespace SCB.OrderSorting.Client
             try
             {
                 _ThreadStop = false;
-                foreach (SlaveConfig sc in _SlaveConfig)
-                {
-                    ThreadManage ThreadManage = new ThreadManage
-                    {
-                        SlaveConfig = sc,
-                        QueueWrite = new System.Collections.Concurrent.BlockingCollection<Model.ThreadWriteMsg>()//new Queue<Model.ThreadWriteMsg>()
-                    };
-                    _ThreadManageList.Add(ThreadManage);
-                    _ThreadList.Add(
-                        new KeyValuePair<byte, Task>(
-                            sc.SlaveAddress,
-                            Task.Factory.StartNew(ThreadRead, ThreadManage)
-                        )
-                     );
-                    _ThreadList.Add(
-                        new KeyValuePair<byte, Task>(
-                            sc.SlaveAddress,
-                            Task.Factory.StartNew(ThreadWrite, ThreadManage)
-                        )
-                     );
-                }
+                WriteTask = Task.Factory.StartNew(ThreadWrite, cancelTokenSource.Token);
+                ReadTask = Task.Factory.StartNew(ThreadRead, cancelTokenSource.Token);
             }
             catch (Exception ex)
             {
@@ -179,43 +162,48 @@ namespace SCB.OrderSorting.Client
         /// 读串口数据线程
         /// </summary>
      
-        private  void ThreadRead(object obj)
+        private  void ThreadRead()
         {
-            ThreadManage ThreadManage = (ThreadManage)obj;
             while (!_ThreadStop)
             {
-                //锁定
-                if (ThreadManage.QueueWrite.Count > 0 || !_IsLoaded || _SlaveConfig == null || _SlaveConfig.Count < 1)
+                if (cancelTokenSource.IsCancellationRequested)
                 {
-                    Invoke((MethodInvoker)delegate ()
-                    {
-                        lbl_WaitQuq.Text = ThreadManage.QueueWrite.Count.ToString();
-                    });
+                    break;
+                   
+                }
+                //锁定
+                if (QueueWrite.Count > 0 || !_IsLoaded || _SlaveConfig == null || _SlaveConfig.Count < 1)
+                {
+                    //Invoke((MethodInvoker)delegate ()
+                    //{
+                    //    lbl_WaitQuq.Text = QueueWrite.Count.ToString();
+                    //});
                     Thread.Sleep(_ThreadSleepTime);
                     continue;
                 }
                 else
                 {
-                    Invoke((MethodInvoker)delegate ()
-                    {
-                        lbl_WaitQuq.Text = ThreadManage.QueueWrite.Count.ToString();
-                    });
+                    //Invoke((MethodInvoker)delegate ()
+                    //{
+                    //    lbl_WaitQuq.Text = QueueWrite.Count.ToString();
+                    //});
                 }
                 try
                 {
-                    
-                       //读光栅
-                       var registersGrating = OrderSortService.TCPPortManage.ReadGratingRegisters(ThreadManage.SlaveConfig.SlaveAddress);
-                    ThreadReadGratingMsg(registersGrating, ThreadManage.SlaveConfig);
-                  
-                    // 读按钮 先暂时关闭
-                    //ushort[] registersButton = OrderSortService.TCPPortManage.ReadButtonRegisters(ThreadManage.SlaveConfig.SlaveAddress);
-                    // if (registersButton.Max() > 0)
-                    // {
-                    //     SaveErrLogHelper.SaveErrorLog($"按钮数据：", string.Join(",", registersButton.Select(o => o.ToString())));
-                    // }
-                    // ThreadReadButtonMsg(registersButton, ThreadManage.SlaveConfig);
+                    //读光栅
+                    foreach (SlaveConfig slave in _SlaveConfig)
+                    {
+                        var registersGrating = OrderSortService.SerialPortService.ReadGratingRegisters(slave.SlaveAddress);
+                        ThreadReadGratingMsg(registersGrating, slave);
 
+                        // 读按钮 先暂时关闭
+                        ushort[] registersButton = OrderSortService.SerialPortService.ReadButtonRegisters(slave.SlaveAddress);
+                        //if (registersButton.Max() > 0)
+                        //{
+                        //    SaveErrLogHelper.SaveErrorLog($"按钮数据：", string.Join(",", registersButton.Select(o => o.ToString())));
+                        //}
+                        ThreadReadButtonMsg(registersButton, slave);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -227,13 +215,17 @@ namespace SCB.OrderSorting.Client
         /// <summary>
         /// 写串口数据线程
         /// </summary>
-        private void ThreadWrite(object obj)
+        private void ThreadWrite()
         {
             try
             {
-                ThreadManage ThreadManage = (ThreadManage)obj;
-                foreach (var WriteMsg in ThreadManage.QueueWrite.GetConsumingEnumerable())
+                foreach (var WriteMsg in QueueWrite.GetConsumingEnumerable())
                 {
+                    if (cancelTokenSource.IsCancellationRequested)
+                    {
+                        break;
+
+                    }
                     ThreadWriteMsg(WriteMsg);
                     UpdateSortStatus(WriteMsg.FinishStatus);
                 }
@@ -259,12 +251,13 @@ namespace SCB.OrderSorting.Client
                     MessageBox.Show("请检查分拣架设备是否连接正确！");
                     return;
                 }
-                if (_ThreadList.Count() <= 0)
+              
+                if (WriteTask==null)
                 {
                     //启动线程
                     this.ThreadRun();
                 }
-               SetQueueCount(ReSetCounterType_Enum.Grating2Button);
+                SetQueueCount(ReSetCounterType_Enum.Grating2Button);
                 SetQueueLED(LED_Enum.None);
                 SetQueueWarningLight(LightOperStatus_Enum.Off);
                 Init_ThreadSortOrderManager();
@@ -275,9 +268,6 @@ namespace SCB.OrderSorting.Client
                 txtOrderId.Enabled = true;
                 txtOrderId.Focus();
                 SetTipMsg();
-
-               
-
             }
             catch (Exception ex)
             {
@@ -419,8 +409,14 @@ namespace SCB.OrderSorting.Client
                             OrderSortService.SoundAsny(SoundType.GetOrderError);
                             return;
                         }
+                        //是否存在其它人没有解锁
+                        if (_ThreadSortOrderManager.Get().Exists(o => (o.IsStop == true)  && o.CabinetId != ThreadSortOrder.CabinetId))
+                        {
+                            OrderSortService.SoundAsny(SoundType.ScanLockWait);
+                            return;
+                        }
                         //禁止扫其它扫描枪进行中的格口
-                        if (_ThreadSortOrderManager.Get().Exists(o => (o.SortStatus == SortStatus_Enum.WaitPut) && o != ThreadSortOrder && o.TargetLattice.Exists(tg => ThreadSortOrder.TargetLattice.Exists(p => p.CabinetId == tg.CabinetId && p.LatticeId == tg.LatticeId))))
+                        if (_ThreadSortOrderManager.Get().Exists(o => (o.SortStatus == SortStatus_Enum.WaitPut) && o.CabinetId != ThreadSortOrder.CabinetId && o.TargetLattice.Exists(tg => ThreadSortOrder.TargetLattice.Exists(p => p.CabinetId == tg.CabinetId && p.LatticeId == tg.LatticeId))))
                         {
                             OrderSortService.SoundAsny(SoundType.LatticeWait);
                             return;
@@ -714,9 +710,8 @@ namespace SCB.OrderSorting.Client
         private void frmOrderSortingWorkNew_FormClosing(object sender, FormClosingEventArgs e)
         {
             _ThreadStop = true;
-            _ThreadList.Select(o => o.Value).ToList().ForEach(
-                p => p.Dispose()
-             );
+            cancelTokenSource.Cancel();
+           
         }
         #endregion
         #region 窗口大小改变事件
@@ -745,7 +740,15 @@ namespace SCB.OrderSorting.Client
             {
                lblMsg.Text = "连接设备中....";
 
-                return OrderSortService.TCPPortManage.isCollect();
+                bool isSuccess= OrderSortService.isCollect();
+                if (isSuccess)
+                {
+                    return true;
+                }else
+                {
+                    lblMsg.Text = "连接失败....";
+                    return false;
+                }
             }
             catch
             {
@@ -772,39 +775,39 @@ namespace SCB.OrderSorting.Client
                         //}
                          if (slave == null)
                         {
-                            OrderSortService.TCPPortManage.ClearGrating();
+                            OrderSortService.SerialPortService.ClearGratingRegister();
                         }
                         else if (Index != ushort.MaxValue)
                         {
-                             OrderSortService.TCPPortManage.ClearGrating(slave.SlaveAddress, Index , isCheck);
+                             OrderSortService.SerialPortService.ClearGratingRegister(slave.SlaveAddress, Index , isCheck);
                         }
                         else
                         {
-                             OrderSortService.TCPPortManage.ClearGrating(slave.SlaveAddress);
+                             OrderSortService.SerialPortService.ClearGratingRegister(slave.SlaveAddress);
                         }
                         break;
                     case ReSetCounterType_Enum.Button:
                         if (slave == null)
                         {
-                            OrderSortService.TCPPortManage.ClearButton();
+                            OrderSortService.SerialPortService.ClearButtonRegister();
                         }
                         else if (Index != ushort.MaxValue)
                         {
-                            OrderSortService.TCPPortManage.ClearButton(slave.SlaveAddress, Index);
+                            OrderSortService.SerialPortService.ClearButtonRegister(slave.SlaveAddress, Index);
                         }
                         else
                         {
-                            OrderSortService.TCPPortManage.ClearButton(slave.SlaveAddress);
+                            OrderSortService.SerialPortService.ClearButtonRegister(slave.SlaveAddress);
                         }
                         break;
                     case ReSetCounterType_Enum.Grating2Button:
                         if (slave == null)
                         {
-                            OrderSortService.TCPPortManage.ClearGrating2Button();
+                            OrderSortService.SerialPortService.ClearGrating2Button();
                         }
                         else
                         {
-                            OrderSortService.TCPPortManage.ClearGrating2Button(slave.SlaveAddress);
+                            OrderSortService.SerialPortService.ClearGrating2Button(slave.SlaveAddress);
                         }
                        
                         break;
@@ -825,37 +828,37 @@ namespace SCB.OrderSorting.Client
         /// <param name="LED"></param>
         private void SetPortLED(LatticeSetting LatticeSetting, LED_Enum LED)
         {
-            OrderSortService.TCPPortManage.SetLED(GetSlaveAddress(LatticeSetting.CabinetId), LatticeSetting.LEDIndex, (ushort)LED);
+            OrderSortService.SerialPortService.SetLED(GetSlaveAddress(LatticeSetting.CabinetId), LatticeSetting.LEDIndex, (ushort)LED);
         }
 
       
         private void SetPortLED(int cabinetId, int LEDIndex, LED_Enum LED)
         {
-            OrderSortService.TCPPortManage.SetLED(GetSlaveAddress(cabinetId), LEDIndex, (ushort)LED);
+            OrderSortService.SerialPortService.SetLED(GetSlaveAddress(cabinetId), LEDIndex, (ushort)LED);
         }
         private void SetPortLED(int cabinetId, List<LEDChange> LEDChangeList)
         {
-            OrderSortService.TCPPortManage.SetLED(GetSlaveAddress(cabinetId), LEDChangeList.Select(o => new KeyValuePair<int, ushort>(o.LEDIndex, (ushort)o.LED)).ToList());
+            OrderSortService.SerialPortService.SetLED(GetSlaveAddress(cabinetId), LEDChangeList.Select(o => new KeyValuePair<int, ushort>(o.LEDIndex, (ushort)o.LED)).ToList());
         }
         private void SetPortWarningLight(WarningLight_Enum WarningLight, LightOperStatus_Enum LightOperStatus)
         {
-            switch (WarningLight)
-            {
-                case WarningLight_Enum.Green:
-                    OrderSortService.TCPPortManage.SetWarningLightGreen((ushort)LightOperStatus);
-                    break;
-                case WarningLight_Enum.Red:
-                    OrderSortService.TCPPortManage.SetWarningLightRed((ushort)LightOperStatus);
-                    break;
-                case WarningLight_Enum.WarningSound:
-                    OrderSortService.TCPPortManage.SetWarningTwinkle((ushort)LightOperStatus);
-                    break;
-                case WarningLight_Enum.Yellow:
-                    OrderSortService.TCPPortManage.SetWarningLightYellow((ushort)LightOperStatus);
-                    break;
-                default:
-                    break;
-            }
+            //switch (WarningLight)
+            //{
+            //    case WarningLight_Enum.Green:
+            //        OrderSortService.SerialPortService.SetWarningLightGreen((ushort)LightOperStatus);
+            //        break;
+            //    case WarningLight_Enum.Red:
+            //        OrderSortService.SerialPortService.SetWarningLightRed((ushort)LightOperStatus);
+            //        break;
+            //    case WarningLight_Enum.WarningSound:
+            //        OrderSortService.SerialPortService.SetWarningTwinkle((ushort)LightOperStatus);
+            //        break;
+            //    case WarningLight_Enum.Yellow:
+            //        OrderSortService.SerialPortService.SetWarningLightYellow((ushort)LightOperStatus);
+            //        break;
+            //    default:
+            //        break;
+            //}
         }
         #endregion
         #region 队列
@@ -865,15 +868,15 @@ namespace SCB.OrderSorting.Client
         /// <param name="status"></param>
         private void SetQueueWarningLight( LightOperStatus_Enum status, FinishStatus FinishStatus = null)
         {
-            _ThreadManageList.ForEach(o => 
-             SetQueueWarningLight(o.SlaveConfig.CabinetId,  status,  FinishStatus)
-            );
+            //_ThreadManageList.ForEach(o => 
+            // SetQueueWarningLight(o.SlaveConfig.CabinetId,  status,  FinishStatus)
+            //);
            
         }
         private void SetQueueWarningLight(int CabinetId, LightOperStatus_Enum status, FinishStatus FinishStatus = null)
         {
             
-                var QueueWrite = _ThreadManageList.Find(o => o.SlaveConfig.CabinetId == CabinetId).QueueWrite;
+               // var QueueWrite = _ThreadManageList.Find(o => o.SlaveConfig.CabinetId == CabinetId).QueueWrite;
                 QueueWrite.Add(
                     new ThreadWriteMsg
                     {
@@ -920,7 +923,7 @@ namespace SCB.OrderSorting.Client
                               }).ToList();
 
                 LatticeSettingFormat.ForEach(o =>
-                   _ThreadManageList.Find(p => p.SlaveConfig.CabinetId == o.CabinetId).QueueWrite.Add(
+                  QueueWrite.Add(
                      new ThreadWriteMsg
                      {
                          FinishStatus = FinishStatus,
@@ -943,8 +946,8 @@ namespace SCB.OrderSorting.Client
         /// <param name="status"></param>
         private void SetQueueCount(ReSetCounterType_Enum status, bool isCheck = true, FinishStatus FinishStatus = null)
         {
-            _ThreadManageList.ForEach(o =>
-                SetQueueCount(status, o.SlaveConfig, isCheck, FinishStatus)
+            _SlaveConfig.ForEach(o =>
+                SetQueueCount(status, o, isCheck, FinishStatus)
             );
             
         }
@@ -956,8 +959,7 @@ namespace SCB.OrderSorting.Client
         {
            
                 if (slave == null) return;
-                var QueueWrite = _ThreadManageList.Find(o => o.SlaveConfig.CabinetId == slave.CabinetId);
-                    QueueWrite.QueueWrite.Add(
+                    QueueWrite.Add(
                          new ThreadWriteMsg
                          {
                              FinishStatus = FinishStatus,
@@ -991,9 +993,7 @@ namespace SCB.OrderSorting.Client
                         }
                         else
                         {
-                           // SaveErrLogHelper.SaveErrorLog("开始写LED", sw.ElapsedMilliseconds.ToString()+ "LEDChangeList count:"+ msg.LED.LEDChangeList.Count);
                             SetPortLED(msg.LED.CabinetId, msg.LED.LEDChangeList);
-                            //  SaveErrLogHelper.SaveErrorLog("结束写LED", sw.ElapsedMilliseconds.ToString());
                             //UI线程卡 暂时关闭
                             Invoke((MethodInvoker)delegate ()
                             {
@@ -1047,7 +1047,7 @@ namespace SCB.OrderSorting.Client
                     if (ThreadSortOrder.SortStatus == SortStatus_Enum.Blocked && registers.Max() < 1 && ThreadSortOrder.CabinetId == slave.CabinetId)
                     {
                        // SaveErrLogHelper.SaveErrorLog("", "已解除");
-                        SetQueueLED(ThreadSortOrder.ResultLattice,LED_Enum.None,0, new FinishStatus { SortStatus_Enum = SortStatus_Enum.None, ThreadSortOrderList = _ThreadSortOrderManager.Get().ToList() });
+                        SetQueueLED(ThreadSortOrder.ResultLattice,LED_Enum.None,0, new FinishStatus { SortStatus_Enum = SortStatus_Enum.BackPreStatus, ThreadSortOrderList = _ThreadSortOrderManager.Get().ToList() });
                         SetQueueWarningLight(slave.CabinetId, LightOperStatus_Enum.Off);
                         ThreadSortOrder.CabinetId = 0;
                         // SetTipMsg(string.Format("{0}柜{1}已解除格挡", ThreadSortOrder.ResultLattice.CabinetId, ThreadSortOrder.ResultLattice.LatticeId));
@@ -1091,9 +1091,14 @@ namespace SCB.OrderSorting.Client
                     //    });
                     //}
                     //阻挡
-                    else if (registers[i] >= 200)
+                    else if ( registers[i] >= 200)
                     {
-                        //SaveErrLogHelper.SaveErrorLog(string.Empty, "阻挡");
+                        ThreadSortOrder CurThreadSortOrder = _ThreadSortOrderManager.Get().Find(o => 
+                            !(o.SortStatus == SortStatus_Enum.Success|| o.SortStatus == SortStatus_Enum.None)
+                            && o.TargetLattice!=null 
+                            &&o.TargetLattice.Exists(p => p.GratingIndex == i && p.CabinetId == slave.CabinetId));
+                        if (CurThreadSortOrder != null) continue;
+                       
                         bool isBlock = false;
                         foreach (ThreadSortOrder ThreadSortOrder in _ThreadSortOrderManager.Get())
                         {
@@ -1119,7 +1124,8 @@ namespace SCB.OrderSorting.Client
                     //正确投递
                     else if (_ThreadSortOrderManager.Get().Exists(o => (o.SortStatus == SortStatus_Enum.WaitPut || !_ThreadSortOrderManager.Get().Exists(p => p.SortStatus != SortStatus_Enum.LocationError)) && o.TargetLattice.Exists(p => p.GratingIndex == i && p.CabinetId == slave.CabinetId)))
                     {
-                         //sw.Restart();
+                        Debug.WriteLine("正确投递："+string.Join(",", registers.Select(o => o.ToString())));
+                        //sw.Restart();
                         var ResultLattice = _LatticesettingList.Find(lsc => lsc.GratingIndex == i && lsc.CabinetId == slave.CabinetId);
                         
                         ThreadSortOrder ThreadSortOrder = _ThreadSortOrderManager.Get().Find(o => o.SortStatus == SortStatus_Enum.WaitPut && o.TargetLattice.Exists(p => p.GratingIndex == i && p.CabinetId == slave.CabinetId));
@@ -1158,7 +1164,8 @@ namespace SCB.OrderSorting.Client
                             &&  o.TargetLattice.Exists(p => p.GratingIndex == i && p.CabinetId == slave.CabinetId))
                             )
                     {
-                       
+                        Debug.WriteLine("投递出错："+string.Join(",", registers.Select(o => o.ToString())));
+
                         var ResultLattice = _LatticesettingList.Find(lsc => lsc.GratingIndex == i && lsc.CabinetId == slave.CabinetId);
                         _ThreadSortOrderManager.SetResultLatticeAll(ResultLattice);
                         List<ThreadSortOrder> ThreadSortOrderList = _ThreadSortOrderManager.Get().FindAll(o => o.SortStatus == SortStatus_Enum.WaitPut);
@@ -1435,7 +1442,7 @@ namespace SCB.OrderSorting.Client
                     });
                     ThreadListOther.ForEach(o => {
                         o.PreSortStatus = o.SortStatus;
-                        o.IsStop = o.SortStatus== SortStatus_Enum.LocationError;
+                        o.IsStop =  o.SortStatus== SortStatus_Enum.LocationError;
                     });
                    // SaveErrLogHelper.SaveErrorLog(string.Empty, "LocationError");
                     break;
@@ -1465,13 +1472,15 @@ namespace SCB.OrderSorting.Client
                 case SortStatus_Enum.Blocked:
                     ThreadList.ForEach(o => {
                         o.PreSortStatus = o.SortStatus;
+                       
+                        // o.IsStop = o.SortStatus == SortStatus_Enum.WaitPut;
+                    });
+                    ThreadList.ForEach(o => {
+                       
                         o.SortStatus = SortStatus_Enum.Blocked;
                        // o.IsStop = o.SortStatus == SortStatus_Enum.WaitPut;
                     });
-                    ThreadListOther.ForEach(o => {
-                        o.PreSortStatus = o.SortStatus;
-                       // o.IsStop = o.SortStatus == SortStatus_Enum.WaitPut;
-                    });
+                   
                    
                     break;
                 case SortStatus_Enum.NotScanAndPut:
