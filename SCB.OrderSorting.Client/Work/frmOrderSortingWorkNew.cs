@@ -130,6 +130,10 @@ namespace SCB.OrderSorting.Client
                     });
                 }).ContinueWith(cw => {
                     _IsLoaded = true;
+                    Invoke((MethodInvoker)delegate ()
+                    {
+                        开始分拣ToolStripMenuItem.Enabled = true;
+                    });
                 });
             }
             catch (Exception ex)
@@ -244,7 +248,7 @@ namespace SCB.OrderSorting.Client
         {
             try
             {
-              
+                
                 if (!isCollect())
                 {
                     OrderSortService.SoundAsny(SoundType.ConllectError);
@@ -261,10 +265,6 @@ namespace SCB.OrderSorting.Client
                 SetQueueLED(LED_Enum.None);
                 SetQueueWarningLight(LightOperStatus_Enum.Off);
                 Init_ThreadSortOrderManager();
-                //while (_ThreadManageList.Any(o=>o.QueueWrite.Count>1))
-                //{
-                //    Thread.Sleep(30);
-                //}
                 txtOrderId.Enabled = true;
                 txtOrderId.Focus();
                 SetTipMsg();
