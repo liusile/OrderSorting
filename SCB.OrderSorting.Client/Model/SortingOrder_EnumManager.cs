@@ -146,11 +146,7 @@ namespace SCB.OrderSorting.Client.Model
             /// <summary>
             /// 熄灭
             /// </summary>
-            None = 4,
-            /// <summary>
-            /// 红灯且闪烁
-            /// </summary>
-            RedFlash = 6
+            None = 4
         }
         /// <summary>
         /// 警示灯枚举

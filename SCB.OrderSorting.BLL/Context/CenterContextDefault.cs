@@ -2,7 +2,6 @@
 using SCB.OrderSorting.BLL.Model;
 using SCB.OrderSorting.DAL;
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace SCB.OrderSorting.BLL.Context
@@ -49,7 +48,6 @@ namespace SCB.OrderSorting.BLL.Context
         /// <returns></returns>
         internal override PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo, decimal boxWeight, int operationType = 3)
         {
-            Debug.WriteLine("CreatePackingLog begin 1");
             using (var db = new OrderSortingDBEntities())
             {
                 var logCache = db.LatticeOrdersCache.Where(o => o.LatticesettingId == lattice.ID);

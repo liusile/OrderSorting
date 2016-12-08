@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Data.SQLite;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -744,7 +743,6 @@ namespace SCB.OrderSorting.BLL.Service
         {
             try
             {
-                Debug.WriteLine("CreatePackingLog begin");
                 return _centerContext.CreatePackingLog(lattice, userInfo, boxWeight, operationType);
             }
             catch (Exception)
