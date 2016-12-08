@@ -110,16 +110,19 @@ namespace SCB.OrderSorting.BLL.Service
             if (isCheck)
             {
                 //第三种方式：清除后再检查是否清除成功，不成功则循环再清
-                var ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
-                if (ReadFirst == 0 || ReadFirst == 200)
+                while (true)
                 {
-
+                    var ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
+                    var SecondFirst = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
+                    if (SecondFirst == 0 || SecondFirst == 200)
+                    {
+                        break;
+                    }
+                    else if(ReadFirst== SecondFirst)
+                    {
+                        ClearGratingRegister(slaveAddress, gratingIndex);
+                    }
                 }
-                else
-                {
-                    ClearGratingRegister(slaveAddress, gratingIndex);
-                }
-
             }
         }
         public void ClearGratingRegister(byte slaveAddress, bool isCheck = true)
