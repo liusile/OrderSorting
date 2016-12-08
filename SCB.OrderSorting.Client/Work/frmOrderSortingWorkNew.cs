@@ -461,7 +461,8 @@ namespace SCB.OrderSorting.Client
                                 SetQueueLED(RepeatLacttingList, LED_Enum.None);
                                 SetQueueWarningLight(_SlaveConfig.First().CabinetId, LightOperStatus_Enum.Off);
                             }
-                           else if (_ThreadSortOrderManager.Get().Exists(o => (o.SortStatus == SortStatus_Enum.Success || o.SortStatus == SortStatus_Enum.None))){
+                           else if (_ThreadSortOrderManager.Get().FindAll(o => (o.SortStatus == SortStatus_Enum.Success || o.SortStatus == SortStatus_Enum.None)).Count()== _ThreadSortOrderManager.Get().Count())
+                            {
                                 SetQueueCount(ReSetCounterType_Enum.Grating);
                                 SetQueueLED( LED_Enum.None);
                             }

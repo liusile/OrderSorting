@@ -109,15 +109,26 @@ namespace SCB.OrderSorting.BLL.Service
             WriteRegisters(slaveAddress, (ushort)dataAddress, data);
             if (isCheck)
             {
-                //第三种方式：清除后再检查是否清除成功，不成功则循环再清
-                var ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
-                if (ReadFirst == 0 || ReadFirst == 200)
+                //备用方式1
+                //var ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
+                //if (ReadFirst != 0 && ReadFirst != 200)
+                //{
+                //    ClearGratingRegister(slaveAddress, gratingIndex);
+                //}
+                while (true)
                 {
-
-                }
-                else
-                {
-                    ClearGratingRegister(slaveAddress, gratingIndex);
+                    //第三种方式：清除后再检查是否清除成功，不成功则循环再清
+                    var ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
+                    var ReadSecond = ReadRegisters(slaveAddress, (ushort)addressRead, 1)[0];
+                    if (ReadSecond == 0 || ReadSecond == 200)
+                    {
+                        break;
+                    }
+                    else if (ReadFirst == ReadSecond)
+                    {
+                        ClearGratingRegister(slaveAddress, gratingIndex);
+                        break;
+                    }
                 }
 
             }
