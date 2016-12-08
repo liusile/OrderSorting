@@ -47,6 +47,7 @@ namespace SCB.OrderSorting.Client
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 //Application.Run(new MDIParent());
+               // Application.Run(new frmLogin());
                 //// 测试注释掉
                 Application.Run(new MDIParent());//new MDIParent(this).Show();
                 return;

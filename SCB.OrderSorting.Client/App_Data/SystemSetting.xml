@@ -8,7 +8,7 @@
     <StopBits>1</StopBits>
     <LEDStartAddress>40099</LEDStartAddress>
     <GratingStartAddress>30099</GratingStartAddress>
-    <ButtonStartAddress>30112</ButtonStartAddress>
+    <ButtonStartAddress>30111</ButtonStartAddress>
     <ResetGratingStartAddress>40000</ResetGratingStartAddress>
     <ResetButtonStartAddress>40012</ResetButtonStartAddress>
     <WarningRedLightStartAddress>40111</WarningRedLightStartAddress>
@@ -24,13 +24,13 @@
   <SlaveConfigs>
     <SlaveConfig>
       <CabinetId>1</CabinetId>
-      <SlaveAddress>15</SlaveAddress>
+      <SlaveAddress>14</SlaveAddress>
       <TCPHost>192.168.1.7</TCPHost>
       <TCPPort>26</TCPPort>
     </SlaveConfig>
     <SlaveConfig>
       <CabinetId>2</CabinetId>
-      <SlaveAddress>14</SlaveAddress>
+      <SlaveAddress>15</SlaveAddress>
       <TCPHost>192.168.1.8</TCPHost>
       <TCPPort>27</TCPPort>
     </SlaveConfig>
@@ -49,6 +49,6 @@
   </SlaveConfigs>
   <SortingPatten>2</SortingPatten>
   <LogStorageDays>6</LogStorageDays>
-  <IsFlyt>true</IsFlyt>
+  <IsFlyt>false</IsFlyt>
   <SortingSolution>d5aec967-8595-48ea-b74f-f5f40c1f70cf</SortingSolution>
 </SystemSetting>

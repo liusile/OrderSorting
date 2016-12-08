@@ -314,5 +314,35 @@ namespace SCB.OrderSorting.BLL.Service
             this.ClearGratingRegister(slaveAddress);
             this.ClearButtonRegister(slaveAddress);
         }
+
+        public void SetWarningLightGreen(ushort lightOperStatus)
+        {
+            var address = _ModbusSetting.WarningGreenLightStartAddress;
+            ushort[] data = { lightOperStatus };
+            WriteRegisters(_SlaveConfig.Find(o=>o.CabinetId== _WarningCabinetId).SlaveAddress, (ushort)address, data);
+          
+        }
+
+        public void SetWarningLightRed(ushort lightOperStatus)
+        {
+            var address = _ModbusSetting.WarningRedLightStartAddress;
+            ushort[] data = { lightOperStatus };
+            WriteRegisters(_SlaveConfig.Find(o => o.CabinetId == _WarningCabinetId).SlaveAddress, (ushort)address, data);
+        }
+
+        public void SetWarningTwinkle(ushort lightOperStatus)
+        {
+            var address = _ModbusSetting.WarningRedLightStartAddress;
+            ushort[] data = { lightOperStatus, lightOperStatus, lightOperStatus, lightOperStatus };
+            WriteRegisters(_SlaveConfig.Find(o => o.CabinetId == _WarningCabinetId).SlaveAddress, (ushort)address, data);
+
+        }
+
+        public void SetWarningLightYellow(ushort lightOperStatus)
+        {
+            var address = _ModbusSetting.WarningYellowLightStartAddress;
+            ushort[] data = { lightOperStatus };
+            WriteRegisters(_SlaveConfig.Find(o => o.CabinetId == _WarningCabinetId).SlaveAddress, (ushort)address, data);
+        }
     }
 }

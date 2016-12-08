@@ -494,6 +494,7 @@ namespace SCB.OrderSorting.BLL
 
         public static bool isCollect()
         {
+            LoadSystemSetting();
            return SerialPortService.isCollect();
         }
     }
