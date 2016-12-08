@@ -282,7 +282,7 @@ namespace SCB.OrderSorting.Client
         /// 可重构，把验证分离开
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="e"></param>  
         private void txtOrderId_KeyDown(object sender, KeyEventArgs e)
         {
             try
