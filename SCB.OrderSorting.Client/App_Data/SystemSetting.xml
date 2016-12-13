@@ -17,20 +17,20 @@
     <WarningBuzzerStartAddress>40114</WarningBuzzerStartAddress>
     <NumberOfPoints>12</NumberOfPoints>
   </ModbusSetting>
-  <CabinetNumber>2</CabinetNumber>
+  <CabinetNumber>1</CabinetNumber>
   <CriticalWeight>100</CriticalWeight>
   <BoxWeight>1</BoxWeight>
-  <WarningCabinetId>2</WarningCabinetId>
+  <WarningCabinetId>1</WarningCabinetId>
   <SlaveConfigs>
     <SlaveConfig>
       <CabinetId>1</CabinetId>
-      <SlaveAddress>14</SlaveAddress>
+      <SlaveAddress>15</SlaveAddress>
       <TCPHost>192.168.1.7</TCPHost>
       <TCPPort>26</TCPPort>
     </SlaveConfig>
     <SlaveConfig>
       <CabinetId>2</CabinetId>
-      <SlaveAddress>15</SlaveAddress>
+      <SlaveAddress>14</SlaveAddress>
       <TCPHost>192.168.1.8</TCPHost>
       <TCPPort>27</TCPPort>
     </SlaveConfig>
@@ -47,8 +47,8 @@
       <TCPPort>26</TCPPort>
     </SlaveConfig>
   </SlaveConfigs>
-  <SortingPatten>2</SortingPatten>
+  <SortingPatten>4</SortingPatten>
   <LogStorageDays>6</LogStorageDays>
   <IsFlyt>false</IsFlyt>
-  <SortingSolution>d5aec967-8595-48ea-b74f-f5f40c1f70cf</SortingSolution>
+  <SortingSolution>1</SortingSolution>
 </SystemSetting>

@@ -110,6 +110,12 @@ namespace SCB.OrderSorting.BLL.Service
                 case 2:
                     _sortingPattenWorker = new SortingPattenContext2(_latticeSettingList, _solutionCountryList);
                     break;
+                case 4:
+                    _sortingPattenWorker = new SortingPattenContext4(_latticeSettingList, _solutionCountryList);
+                    break;
+                case 5:
+                    _sortingPattenWorker = new SortingPattenContext5(_latticeSettingList, _solutionCountryList);
+                    break;
                 default:
                     _sortingPattenWorker = new SortingPattenContext3(_latticeSettingList, _solutionPostTypeList, _solutionCountryList);
                     break;

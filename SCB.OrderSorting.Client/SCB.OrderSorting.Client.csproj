@@ -165,6 +165,7 @@
     <Compile Include="Enum\SoundType_Enum.cs" />
     <Compile Include="Enum\SystemSetting_LogStorageDays_Enum.cs" />
     <Compile Include="Enum\SystemSetting_Status_Enum.cs" />
+    <Compile Include="FileTool.cs" />
     <Compile Include="Login\frmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -297,6 +298,12 @@
     <Compile Include="Work\frmOrderSortingWorkNew.Designer.cs">
       <DependentUpon>frmOrderSortingWorkNew.cs</DependentUpon>
     </Compile>
+    <Compile Include="Work\frmProcessBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Work\frmProcessBar.Designer.cs">
+      <DependentUpon>frmProcessBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Work\test.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -363,6 +370,9 @@
     <EmbeddedResource Include="Work\frmOrderSortingWorkNew.resx">
       <DependentUpon>frmOrderSortingWorkNew.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Work\frmProcessBar.resx">
+      <DependentUpon>frmProcessBar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Work\test.resx">
       <DependentUpon>test.cs</DependentUpon>
     </EmbeddedResource>
@@ -376,6 +386,9 @@
     <Content Include="App_Data\OrderSortingDB.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="App_Data\ISO-STM32.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -499,7 +512,9 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\Board\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.102.0\build\net451\System.Data.SQLite.Core.targets')" />

@@ -131,6 +131,9 @@
     <Compile Include="SolutionPostType.cs">
       <DependentUpon>SQLiteEDM.tt</DependentUpon>
     </Compile>
+    <Compile Include="SolutionZipType.cs">
+      <DependentUpon>SQLiteEDM.tt</DependentUpon>
+    </Compile>
     <Compile Include="SortingSolutions.cs">
       <DependentUpon>SQLiteEDM.tt</DependentUpon>
     </Compile>
@@ -148,6 +151,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>sqliteEDM.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ZipType.cs">
+      <DependentUpon>SQLiteEDM.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

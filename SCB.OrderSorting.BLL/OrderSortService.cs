@@ -497,5 +497,10 @@ namespace SCB.OrderSorting.BLL
             LoadSystemSetting();
            return SerialPortService.isCollect();
         }
+        public static byte[] DoloadBoard(byte[] data)
+        {
+           return SerialPortService.DoloadBoard(data);
+        }
+       
     }
 }

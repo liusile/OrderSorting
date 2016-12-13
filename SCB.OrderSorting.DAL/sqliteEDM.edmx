@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="OrderSortingDBModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=C:\SCBSource\OrderSorting\SCB.OrderSorting.Client\bin\Debug\OrderSortingDB.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="OrderSortingDBModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=C:\SCBSource\OrderSorting\SCB.OrderSorting.Client\bin\Debug\App_Data\OrderSortingDB.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ConfigParamers">
           <Key>
             <PropertyRef Name="Key" />
@@ -210,12 +210,32 @@
           <Property Name="PostTypeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
           <Property Name="PostTypeName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
         </EntityType>
+        <EntityType Name="SolutionZipType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="SortingSolutionId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="CabinetId" Type="int" Nullable="false" />
+          <Property Name="LatticeSettingId" Type="int" Nullable="false" />
+          <Property Name="ZipName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
         <EntityType Name="SortingSolutions">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZipType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="ZipId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="ZipName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="2147483647" />
         </EntityType>
         <EntityContainer Name="OrderSortingDBModelStoreContainer">
           <EntitySet Name="ConfigParamers" EntityType="Self.ConfigParamers" store:Type="Tables" />
@@ -234,7 +254,9 @@
           <EntitySet Name="SolutionCountry" EntityType="Self.SolutionCountry" store:Type="Tables" />
           <EntitySet Name="SolutionPostArea" EntityType="Self.SolutionPostArea" store:Type="Tables" />
           <EntitySet Name="SolutionPostType" EntityType="Self.SolutionPostType" store:Type="Tables" />
+          <EntitySet Name="SolutionZipType" EntityType="Self.SolutionZipType" store:Type="Tables" />
           <EntitySet Name="SortingSolutions" EntityType="Self.SortingSolutions" store:Type="Tables" />
+          <EntitySet Name="ZipType" EntityType="Self.ZipType" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -258,6 +280,8 @@
           <EntitySet Name="OldPackingLog" EntityType="OrderSortingDBModel.OldPackingLog" />
           <EntitySet Name="PostArea" EntityType="OrderSortingDBModel.PostArea" />
           <EntitySet Name="SolutionPostArea" EntityType="OrderSortingDBModel.SolutionPostArea" />
+          <EntitySet Name="SolutionZipType" EntityType="OrderSortingDBModel.SolutionZipType" />
+          <EntitySet Name="ZipType" EntityType="OrderSortingDBModel.ZipType" />
         </EntityContainer>
         <EntityType Name="ConfigParamers">
           <Key>
@@ -470,6 +494,26 @@
           <Property Name="CabinetId" Type="Int32" />
           <Property Name="LactticeSettingId" Type="Int32" />
           <Property Name="Area" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SolutionZipType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="SortingSolutionId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="CabinetId" Type="Int32" Nullable="false" />
+          <Property Name="LatticeSettingId" Type="Int32" Nullable="false" />
+          <Property Name="ZipName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ZipType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="ZipId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="ZipName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -703,6 +747,28 @@
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="SortingSolutionId" ColumnName="SortingSolutionId" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SolutionZipType">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.SolutionZipType">
+              <MappingFragment StoreEntitySet="SolutionZipType">
+                <ScalarProperty Name="ZipName" ColumnName="ZipName" />
+                <ScalarProperty Name="LatticeSettingId" ColumnName="LatticeSettingId" />
+                <ScalarProperty Name="CabinetId" ColumnName="CabinetId" />
+                <ScalarProperty Name="SortingSolutionId" ColumnName="SortingSolutionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZipType">
+            <EntityTypeMapping TypeName="OrderSortingDBModel.ZipType">
+              <MappingFragment StoreEntitySet="ZipType">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="ZipName" ColumnName="ZipName" />
+                <ScalarProperty Name="ZipId" ColumnName="ZipId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -42,5 +42,7 @@ namespace SCB.OrderSorting.DAL
         public virtual DbSet<OldPackingLog> OldPackingLog { get; set; }
         public virtual DbSet<PostArea> PostArea { get; set; }
         public virtual DbSet<SolutionPostArea> SolutionPostArea { get; set; }
+        public virtual DbSet<SolutionZipType> SolutionZipType { get; set; }
+        public virtual DbSet<ZipType> ZipType { get; set; }
     }
 }

@@ -139,7 +139,7 @@ namespace SCB.OrderSorting.Client
             txtPostTypes.Text = string.Join(",", solution.Select(s => s.PostTypeName));
             PostTypeId = string.Join(",", solution.Select(s => s.PostTypeId));
             //地区
-            var solutionArea = OrderSortService.GetSolutionPostAreaListByLatticeSettingId(solution.FirstOrDefault().PostTypeId, _latticesettingId);
+            var solutionArea = OrderSortService.GetSolutionPostAreaListByLatticeSettingId(solution.FirstOrDefault()?.PostTypeId, _latticesettingId);
             txtPostAreas.Text = string.Join(",", solutionArea.Select(s => s.Area));
 
             btnPostTypes.Enabled = true;

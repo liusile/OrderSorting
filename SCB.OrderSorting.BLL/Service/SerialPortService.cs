@@ -355,5 +355,35 @@ namespace SCB.OrderSorting.BLL.Service
             ushort[] data = { lightOperStatus };
             WriteRegisters(_SlaveConfig.Find(o => o.CabinetId == _WarningCabinetId).SlaveAddress, (ushort)address, data);
         }
+        /// <summary>
+        /// 下载程序到主板
+        /// </summary>
+        /// <param name="data"></param>
+        public byte[] DoloadBoard(byte [] data)
+        {
+            _serialPort.DiscardInBuffer();
+            _serialPort.Write(data,0,data.Length);
+            return DoloadBoardRead(5);
+        }
+
+        private byte[] DoloadBoardRead(int count)
+        {
+            byte[] frameBytes = new byte[count];
+            int numBytesRead = 0;
+
+            while (numBytesRead != count)
+            {
+                numBytesRead += _serialPort.Read(frameBytes, numBytesRead, count - numBytesRead);
+            }
+
+            if((frameBytes[0]^ frameBytes[1]^ frameBytes[2]^ frameBytes[3])==Convert.ToInt32(frameBytes[4]))
+            {
+                return frameBytes;
+            }
+            else
+            {
+                throw new Exception("数据校验出错！");
+            }
+        }
     }
 }

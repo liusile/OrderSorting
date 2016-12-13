@@ -1,7 +1,10 @@
 ﻿using SCB.OrderSorting.BLL;
 using SCB.OrderSorting.BLL.Common;
 using SCB.OrderSorting.BLL.Model;
+using SCB.OrderSorting.Client.Work;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -80,7 +83,7 @@ namespace SCB.OrderSorting.Client
                 //if (frmLgn.ShowDialog() == DialogResult.OK)
                 //{
                 //测试注释掉
-               // _UserInfo = _frmLgn.GetUserInfo();
+                _UserInfo = _frmLgn.GetUserInfo();
                 //SelProcessCter();
                 Task.Run(() =>
                 {
@@ -114,7 +117,7 @@ namespace SCB.OrderSorting.Client
         private void timerShow_Tick(object sender, EventArgs e)
         {
             //// 测试注释掉
-            return;
+            
             if (!IsLogin)
                 return;
             toolStripStatusLabelname.Text = " 当前时间：" + DateTime.Now.ToString();
@@ -171,5 +174,17 @@ namespace SCB.OrderSorting.Client
             frmDayReport frm = new frmDayReport(_UserInfo);
             frm.ShowDialog();
         }
+
+        private void 底层更新ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmProcessBar myProcessBar = new frmProcessBar();
+            myProcessBar.ShowDialog();
+            return;
+           
+
+        }
+       
+
+       
     }
 }

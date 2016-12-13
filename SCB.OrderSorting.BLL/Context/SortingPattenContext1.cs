@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace SCB.OrderSorting.BLL.Context
 {
+    /// <summary>
+    /// 根据渠道分拣
+    /// </summary>
     public class SortingPattenContext1 : SortingPattenContext
     {
         private List<SolutionPostType> solutionPostTypeList;
@@ -72,7 +75,8 @@ namespace SCB.OrderSorting.BLL.Context
             }
             else if (type == 2)//2.邮编方式
             {
-                result=(from ls in latticeSettingList where ls.ID == PostAreaList.Find(o => o.Flag.Split(',').Contains(info.Zip.Substring(0, 1)))?.LactticeSettingId
+                
+                result =(from ls in latticeSettingList where ls.ID == PostAreaList.Find(o => o.Flag.Split(',').Contains(info.Zip.Substring(0, 1)))?.LactticeSettingId
                 select ls).FirstOrDefault();
             }
             if (result == null) { 
@@ -86,6 +90,7 @@ namespace SCB.OrderSorting.BLL.Context
                 return result;
             }
         }
+
         public override List<LatticeSetting> GetLatticeSettingByOrderinfoList(OrderInfo info)
         {
             //var solutionPost = solutionPostTypeList.Find(sp => sp.PostTypeId == info.posttype);v

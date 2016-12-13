@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace SCB.OrderSorting.BLL.Context
 {
+    /// <summary>
+    /// 根据国家渠道分拣
+    /// </summary>
     public class SortingPattenContext3 : SortingPattenContext
     {
         private List<SolutionCountry> solutionCountryList;
