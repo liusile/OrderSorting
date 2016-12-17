@@ -12,5 +12,9 @@ namespace SCB.OrderSorting.BLL.Model
         public string OperatorName { get; set; }
         public string OrderId { get; set; }
         public string Token { get; set; }
+        /// <summary>
+        /// 处理中心
+        /// </summary>
+        public string ProcessCenterID { get; set; }
     }
 }

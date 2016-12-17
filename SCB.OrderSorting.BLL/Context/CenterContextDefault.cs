@@ -97,14 +97,14 @@ namespace SCB.OrderSorting.BLL.Context
             var order = API_Helper.GetPostForSortOrder(orderId);
             return new OrderInfo
             {
-                OrderId = order.Id,
-                TraceId = "",
-                CountryId = order.countryID,
-                CountryName = order.enname,
-                PostId = order.posttype,
-                PostName = order.type,
-                Zip = "",
-                Weight = order.weight2,
+                OrderId = order.OrderId,
+                TraceId = order.TraceId,
+                CountryId = order.CountryId,
+                CountryName = order.CountryCnName,
+                PostId = order.PostId,
+                PostName = order.PostCnName,
+                Zip = order.Zip,
+                Weight = order.Weight,
                 CreateTime = DateTime.Now
             };
         }

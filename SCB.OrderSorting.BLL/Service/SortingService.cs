@@ -60,6 +60,9 @@ namespace SCB.OrderSorting.BLL.Service
         /// 分拣统计信息
         /// </summary>
         private List<TotalSortingData> _totalTotalSortingDataList;
+
+        public List<ZipType> _zipTypeList { get; private set; }
+        public List<SolutionZipType> _curSolutionZipType { get; private set; }
         #endregion
 
         #region internal
@@ -111,10 +114,10 @@ namespace SCB.OrderSorting.BLL.Service
                     _sortingPattenWorker = new SortingPattenContext2(_latticeSettingList, _solutionCountryList);
                     break;
                 case 4:
-                    _sortingPattenWorker = new SortingPattenContext4(_latticeSettingList, _solutionCountryList);
+                    _sortingPattenWorker = new SortingPattenContext4(_latticeSettingList,_zipTypeList,_curSolutionZipType);
                     break;
                 case 5:
-                    _sortingPattenWorker = new SortingPattenContext5(_latticeSettingList, _solutionCountryList);
+                    _sortingPattenWorker = new SortingPattenContext5(_latticeSettingList, _zipTypeList, _curSolutionZipType);
                     break;
                 default:
                     _sortingPattenWorker = new SortingPattenContext3(_latticeSettingList, _solutionPostTypeList, _solutionCountryList);
@@ -200,6 +203,39 @@ namespace SCB.OrderSorting.BLL.Service
                 SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
             }
         }
+
+        internal void SolutionZipType(SolutionZipType solutionZipType)
+        {
+            try
+            {
+                using (var db = new OrderSortingDBEntities())
+                {
+                    db.SolutionZipType.AddOrUpdate(solutionZipType);
+                    db.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
+            }
+        }
+
+        internal SolutionZipType GetSolutionZipType(int latticeSettingId)
+        {
+            try
+            {
+                using (var db = new OrderSortingDBEntities())
+                {
+                    return _curSolutionZipType.Find(o=>o.LatticeSettingId== latticeSettingId);
+                }
+            }
+            catch (Exception ex)
+            {
+                SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
+                return null;
+            }
+        }
+
         /// <summary>
         /// 更新格口与邮寄方式的关联
         /// </summary>
@@ -325,7 +361,34 @@ namespace SCB.OrderSorting.BLL.Service
                 throw;
             }
         }
-
+        private List<ZipType> GetzipTypeList()
+        {
+            try
+            {
+                using (var db = new OrderSortingDBEntities())
+                {
+                    return db.ZipType.ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        private List<SolutionZipType> GetCurSolutionZipType()
+        {
+            try
+            {
+                using (var db = new OrderSortingDBEntities())
+                {
+                    return db.SolutionZipType.Where(o=>o.SortingSolutionId== _sortingSolution).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         private List<SolutionPostType> GetSolutionPostTypeList()
         {
             try
@@ -503,6 +566,8 @@ namespace SCB.OrderSorting.BLL.Service
                 _solutionCountryList = GetSolutionCountryList();
                 _solutionPostTypeList = GetSolutionPostTypeList();
                 _solutionPostAreaList = GetSolutionPostAreaList();
+                _zipTypeList = GetzipTypeList();
+                _curSolutionZipType = GetCurSolutionZipType();
                 CreateSortingPattenWorker();
                 return _latticeSettingList;
             }

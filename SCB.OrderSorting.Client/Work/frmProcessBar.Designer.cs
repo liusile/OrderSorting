@@ -78,7 +78,7 @@
             this.Controls.Add(this.progressBar1);
             this.Name = "frmProcessBar";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmProcessBar";
+            this.Text = "底层更新";
             this.ResumeLayout(false);
             this.PerformLayout();
 

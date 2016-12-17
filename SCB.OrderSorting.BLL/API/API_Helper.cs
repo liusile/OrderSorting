@@ -39,25 +39,29 @@ namespace SCB.OrderSorting.BLL.API
         {
             try
             {
+               // _processCenterID = "1022";
                 //http://foreignapi.eds.sellercube.com/OrderParent/GetPostForSortOrder?processCenterID=722&orderId=A00051160505001A
-                string Action = "OrderParent";
-                string Function = "/GetPostForSortOrder";
-                string Parameters = string.Format("processCenterID={0}&orderId={1}", _processCenterID, orderId);
-                string result = _httpHelper.QueryData(_ForeignApi_Host + Action + Function, Parameters, "Get", HttpHelper.SelectType.Select);
-
-                var obj = JsonConvert.DeserializeObject<ResponseDataModel<List<SortOrderReponseContract>>>(result);
-                if (!obj.IsSuccess)
+                //http://en.fds.sellercube.com/FDS_OrderAPI/VerifyOrder
+                string host = "http://en.fds.sellercube.com/";
+                string Action = "FDS_OrderAPI";// "OrderParent";
+                string Function = "/VerifyOrder";// "/GetPostForSortOrder";
+                //string Parameters = string.Format("processCenterID={0}&orderId={1}", _processCenterID, orderId);
+                string Parameters = string.Format("ProcessCenterID={0}&OrderId={1}", _processCenterID, orderId);
+                string result = _httpHelper.QueryData(host + Action + Function, Parameters, "Get", HttpHelper.SelectType.Select);
+                System.Diagnostics.Debug.WriteLine(result);
+                var obj = JsonConvert.DeserializeObject<SortOrderReponseContract>(result);
+                if (!obj.Success)
                 {
-                    throw new Exception(obj.ErrorMsg);
+                    throw new Exception(obj.Message);
                 }
-                if (obj.Content == null || obj.Content.Count < 1)
-                {
-                    throw new Exception("根据订单号" + orderId + "获取数据为空！");
-                }
-                var info = obj.Content[0];
+                //if (obj.Content == null || obj.Content.Count < 1)
+                //{
+                //    throw new Exception("根据订单号" + orderId + "获取数据为空！");
+                //}
+                var info = obj;
                 return info;
             }
-            catch (Exception) { throw; }
+            catch (Exception ex) { throw; }
         }
         /// <summary>
         /// 获取OA的全部邮寄方式
@@ -171,6 +175,7 @@ namespace SCB.OrderSorting.BLL.API
         {
             try
             {
+               
                 string url = _FlytApi_Host + "Picker/VerifyOrder";
                 var postData = new VerifyOrderRequestContract
                 {

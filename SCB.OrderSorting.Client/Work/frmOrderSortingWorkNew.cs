@@ -2,6 +2,7 @@
 using SCB.OrderSorting.BLL.Common;
 using SCB.OrderSorting.BLL.Model;
 using SCB.OrderSorting.Client.Model;
+using SCB.OrderSorting.Client.Setting;
 using SCB.OrderSorting.Client.Work;
 using SCB.OrderSorting.DAL;
 using System;
@@ -210,11 +211,11 @@ namespace SCB.OrderSorting.Client
                     if (ex.ToString().IndexOf("端口被关闭") > 0)
                     {
                         OrderSortService.SoundAsny(SoundType.ConllectError);
-                        Invoke((MethodInvoker)delegate () { MessageBox.Show("请检查分拣架设备是否连接正确！"); });
+                        Invoke((MethodInvoker)delegate () { MessageBox.Show("请检查分拣架设备是否连接正确！"); txtOrderId.Enabled = false; });
                         break;
                     }
                     SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
-                  //  Invoke((MethodInvoker)delegate () { MessageBox.Show(ex.Message); });
+                  
                 }
             }
         }
@@ -238,8 +239,13 @@ namespace SCB.OrderSorting.Client
             }
             catch (Exception ex)
             {
-                SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
-                 Invoke((MethodInvoker)delegate () { MessageBox.Show(ex.Message); });
+                if (ex.ToString().IndexOf("端口被关闭") > 0)
+                {
+                    OrderSortService.SoundAsny(SoundType.ConllectError);
+                    Invoke((MethodInvoker)delegate () { MessageBox.Show("请检查分拣架设备是否连接正确！"); txtOrderId.Enabled = false; });
+                }
+                 SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
+                // Invoke((MethodInvoker)delegate () { MessageBox.Show(ex.Message); });
             }
         }
         #endregion
@@ -250,11 +256,17 @@ namespace SCB.OrderSorting.Client
         {
             try
             {
-              
+                开始分拣ToolStripMenuItem.Enabled = false;
+                while (QueueWrite.Count > 0)
+                {
+                    QueueWrite.Take();
+                }
+
                 if (!isCollect())
                 {
                     OrderSortService.SoundAsny(SoundType.ConllectError);
                     MessageBox.Show("请检查分拣架设备是否连接正确！");
+                    开始分拣ToolStripMenuItem.Enabled = true;
                     return;
                 }
               
@@ -273,6 +285,7 @@ namespace SCB.OrderSorting.Client
                 //}
                 txtOrderId.Enabled = true;
                 txtOrderId.Focus();
+                开始分拣ToolStripMenuItem.Enabled = true;
                 SetTipMsg();
             }
             catch (Exception ex)
@@ -507,7 +520,15 @@ namespace SCB.OrderSorting.Client
                     return;
                 }
                 var btn = sender as Button;
-                var frm = new frmLatticeSettingEdit(btn.TabIndex);
+                Form frm = null;
+                if (OrderSortService.GetSortingPatten() == 4 || OrderSortService.GetSortingPatten() == 5)
+                {
+                    frm = new 格口设置(btn.TabIndex);
+                }
+                else
+                {
+                    frm = new frmLatticeSettingEdit(btn.TabIndex);
+                }
                 txtOrderId.Enabled = false;
                 if (frm.ShowDialog() != DialogResult.OK)
                 {
@@ -723,7 +744,6 @@ namespace SCB.OrderSorting.Client
         {
             _ThreadStop = true;
             cancelTokenSource.Cancel();
-           
         }
         #endregion
         #region 窗口大小改变事件
@@ -1393,7 +1413,7 @@ namespace SCB.OrderSorting.Client
         {
             return _SlaveConfig.Find(o => o.CabinetId == CabinetId).SlaveAddress;
         }
-        #endregion
+        #endregion/
         #region 清除订单号
         private void ClearOrderId()
         {
@@ -1544,7 +1564,7 @@ namespace SCB.OrderSorting.Client
             string result = "";
             _ThreadSortOrderManager.Get().ForEach(
                 o => {
-                    result += $"当前订单：{o.SortOrderNo};状态：{o.SortStatus};之前状态:{o.PreSortStatus};是否暂停：{o.IsStop},结果格口：{o.ResultLattice?.ButtonIndex},目标格口:";
+                    result += $"从机：{o.CabinetId},当前订单：{o.SortOrderNo};状态：{o.SortStatus};之前状态:{o.PreSortStatus};是否暂停：{o.IsStop},结果格口：{o.ResultLattice?.ButtonIndex},目标格口:";
                     result += o.TargetLattice == null ? "" : string.Join(",", o.TargetLattice?.Select(p => p.ButtonIndex.ToString()));
                     result += ".........";
                 });

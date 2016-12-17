@@ -72,9 +72,9 @@ namespace SCB.OrderSorting.BLL
             {
                 //获取系统设置信息
                 _systemSetting = BaseDataService.GetSystemSetting();
-
+                
                 //串口服务实例化
-                SerialPortService = SerialPortService.Instance(_systemSetting.ModbusSetting, _systemSetting.SlaveConfigs, _systemSetting.WarningCabinetId);
+                SerialPortService = SerialPortService.Instance(_systemSetting.ModbusSetting, GetSlaveConfig(), _systemSetting.WarningCabinetId);
 
                  //分拣数据服务实例化
                  sortingService = new SortingService(_systemSetting.CabinetNumber, _systemSetting.SortingPatten, _systemSetting.SortingSolution, _systemSetting.IsFlyt, _systemSetting.BoxWeight);
@@ -101,7 +101,7 @@ namespace SCB.OrderSorting.BLL
             return sortingService.GetDayReportByPageSize(startDate, endDate, pageIndex, pageSize, ref recordCount);
         }
         #endregion
-
+       
         /// <summary>
         /// 获取系统设置信息
         /// </summary>
@@ -117,8 +117,10 @@ namespace SCB.OrderSorting.BLL
         {
             _systemSetting = setting;
             BaseDataService.SaveSystemSetting(_systemSetting);
+            SerialPortService.PortClose();
+            LoadSystemSetting();
             //串口服务实例化
-            SerialPortService = SerialPortService.Instance(_systemSetting.ModbusSetting, _systemSetting.SlaveConfigs, _systemSetting.WarningCabinetId);
+           // SerialPortService = SerialPortService.Instance(_systemSetting.ModbusSetting, GetSlaveConfig(), _systemSetting.WarningCabinetId);
         }
         #endregion
    
@@ -226,6 +228,14 @@ namespace SCB.OrderSorting.BLL
         public static void SaveLatticeSetting(LatticeSetting latticesetting)
         {
             sortingService.SaveLatticeSetting(latticesetting);
+        }
+        public static SolutionZipType GetSolutionZipType(int LatticeSettingId)
+        {
+          return  sortingService.GetSolutionZipType(LatticeSettingId);
+        }
+        public static void SaveSolutionZipType(SolutionZipType solutionZipType)
+        {
+            sortingService.SolutionZipType(solutionZipType);
         }
         /// <summary>
         /// 判断格口号是否已存在
@@ -494,13 +504,13 @@ namespace SCB.OrderSorting.BLL
 
         public static bool isCollect()
         {
-            LoadSystemSetting();
+           LoadSystemSetting();
            return SerialPortService.isCollect();
         }
         public static byte[] DoloadBoard(byte[] data)
         {
            return SerialPortService.DoloadBoard(data);
         }
-       
+        
     }
 }

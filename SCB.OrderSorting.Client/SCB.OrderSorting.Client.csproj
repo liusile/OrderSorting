@@ -28,7 +28,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://localhost/SCB.OrderSorting.Client/</UpdateUrl>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -161,6 +161,7 @@
     <Compile Include="Enum\OrderSortingLog_OperationType_Enum.cs" />
     <Compile Include="Enum\OrderSortingLog_Status_Enum.cs" />
     <Compile Include="Enum\PackingLog_OperationType_Enum.cs" />
+    <Compile Include="Enum\qu8_Enum.cs" />
     <Compile Include="Enum\SortingPatten_Enum.cs" />
     <Compile Include="Enum\SoundType_Enum.cs" />
     <Compile Include="Enum\SystemSetting_LogStorageDays_Enum.cs" />
@@ -229,6 +230,12 @@
     </Compile>
     <Compile Include="Setting\frmSelectSolution.Designer.cs">
       <DependentUpon>frmSelectSolution.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Setting\ZipNameSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Setting\ZipNameSetting.Designer.cs">
+      <DependentUpon>ZipNameSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Work\frmMessage.cs">
       <SubType>Form</SubType>
@@ -337,6 +344,9 @@
     <EmbeddedResource Include="Setting\frmSelectSolution.resx">
       <DependentUpon>frmSelectSolution.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Setting\ZipNameSetting.resx">
+      <DependentUpon>ZipNameSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Work\frmMessage.resx">
       <DependentUpon>frmMessage.cs</DependentUpon>
     </EmbeddedResource>
@@ -431,7 +441,9 @@
     <EmbeddedResource Include="App_Data\Sound\ButtonWait.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="App_Data\Sound\CollectError.wav" />
+    <EmbeddedResource Include="App_Data\Sound\CollectError.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="App_Data\Sound\CreateErrorOrderSortingLogError.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

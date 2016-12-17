@@ -12,25 +12,28 @@ namespace SCB.OrderSorting.BLL.Context
     /// </summary>
     public class SortingPattenContext4 : SortingPattenContext
     {
-        
-        public List<SolutionZipType> solutionZipTypeList { get; private set; }
         /// <summary>
-        /// 
+        /// 当前解决方案数据
+        /// </summary>
+        public List<SolutionZipType> curSolutionZipTypeList { get; private set; }
+        /// <summary>
+        /// ZipType全部数据
         /// </summary>
         public List<ZipType> zipTypeList { get; private set; }
         public SortingPattenContext4(List<LatticeSetting> settingList) : base(settingList)
         {
         }
-        public SortingPattenContext4(List<LatticeSetting> latticeSetting, List<SolutionZipType> solutionZipTypeList) : this(latticeSetting)
+        public SortingPattenContext4(List<LatticeSetting> latticeSetting, List<ZipType> ZipTypeList, List<SolutionZipType> curSolutionZipTypeList) : this(latticeSetting)
         {
-            this.solutionZipTypeList = solutionZipTypeList;
+            this.curSolutionZipTypeList = curSolutionZipTypeList;
+            this.zipTypeList = ZipTypeList;
         }
 
         public override string CreateButtonText(LatticeSetting ls)
         {
             if (!ls.IsEnable.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 return "未启用";
-            var str = string.Join(",", solutionZipTypeList.Where(spt => spt.LatticeSettingId == ls.ID).Select(s => s.ZipName));
+            var str = string.Join(",", curSolutionZipTypeList.Where(spt => spt.LatticeSettingId == ls.ID).Select(s => s.ZipName));
             if (str.Length > 25)
             {
                 str = str.Substring(0, 25) + "..";
@@ -40,37 +43,55 @@ namespace SCB.OrderSorting.BLL.Context
 
         public override LatticeSetting GetLatticeSettingByOrderinfo(OrderInfo info)
         {
-            if (info == null) return null;
-            if (info.CountryId != "154") throw new Exception("该订单不属于英国");
-            string zip = info.Zip;
-
-            //1031 飞特英国小包特惠派送走特殊分区
-            if (info.PostId == "1031")
-            {
-               var specZipTypeList= zipTypeList.Where(o => o.Type == "3");
-            }
-            else
-            {
-
-            }
-            return (from sc in solutionZipTypeList
-                    from ls in latticeSettingList
-                    where sc.LatticeSettingId == ls.ID && sc.CountryId == info.CountryId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
-                    select ls).FirstOrDefault();
+            List<LatticeSetting> result = GetLatticeSettingByOrderinfoList(info);
+            return result?.First();
         }
 
         public override List<LatticeSetting> GetLatticeSettingByOrderinfoList(OrderInfo info)
         {
-            throw new NotImplementedException();
+            if (info == null) return null;
+            if (info.CountryId != "237") throw new Exception("该订单不属于英国");
+            string zip = info.Zip;
+            List<ZipType> specZipTypeList = null;
+            //142 飞特英国小包特惠派送走特殊分区
+            if (info.PostId == "142")
+            {
+                specZipTypeList = zipTypeList.Where(o => o.Type == "3").ToList();
+            }
+            else
+            {
+                specZipTypeList = zipTypeList.Where(o => o.Type == "1").ToList();
+            }
+            return GetLatticeSetting(zip, specZipTypeList);
         }
-        private LatticeSetting GetLatticeSetting(string zip,ZipType specZipTypeList)
+        private List<LatticeSetting> GetLatticeSetting(string zip, List<ZipType> specZipTypeList)
         {
+            zip = zip.ToUpper();
+            var ZipName = "";
             for(int i = 1; i <= zip.Length; i++)
             {
                 string subZip = zip.Substring(0, i);
-                specZipTypeList
+                var zipTye = specZipTypeList.Where(o => o.ZipId == subZip);
+                if (zipTye.Any())
+                {
+                    ZipName = zipTye.First().ZipName;
+                } else
+                {
+                    break;
+                }
+            }
+            if (string.IsNullOrEmpty(ZipName))
+            {
+                return null;
+            }
+            else
+            {
+                var result = (from s in latticeSettingList
+                             join c in curSolutionZipTypeList on s.ID equals c.LatticeSettingId
+                              where c.ZipName == ZipName
+                              select s).ToList();
+                return result;
             }
         }
-
     }
 }

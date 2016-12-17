@@ -109,6 +109,7 @@ namespace SCB.OrderSorting.Client
                 _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 3).SlaveAddress = Convert.ToByte(txtCabinetId3_SlaveAddress.Text);
                 _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 4).SlaveAddress = Convert.ToByte(txtCabinetId4_SlaveAddress.Text);
                 OrderSortService.SaveSystemSetting(_systemSetting);
+               
                 Close();
             }
             catch (Exception ex)

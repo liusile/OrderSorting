@@ -63,9 +63,9 @@ namespace SCB.OrderSorting.Client
         //    {
         //        //Task.Run(() =>
         //        //{
-        //        OrderSortService.ReSetLED();
-        //        OrderSortService.ReSetWarningLight();
-        //        OrderSortService.ReSetGratingOrButton(3);
+        //        //OrderSortService.ReSetLED();
+        //        //OrderSortService.ReSetWarningLight();
+        //        //OrderSortService.ReSetGratingOrButton(3);
         //        //});
         //        LoginService.SetProcessCenterID(processCenter.GetProcessCenterID());
         //    }
@@ -84,7 +84,8 @@ namespace SCB.OrderSorting.Client
                 //{
                 //测试注释掉
                 _UserInfo = _frmLgn.GetUserInfo();
-                //SelProcessCter();
+                LoginService.SetProcessCenterID(_UserInfo.Pcid);
+               // SelProcessCter();
                 Task.Run(() =>
                 {
                     try
@@ -146,6 +147,12 @@ namespace SCB.OrderSorting.Client
                         break;
                     case "1063":
                         processeName = "广州品牌处理中心";
+                        break;
+                    case "918":
+                        processeName = "英国伯明翰处理中心";
+                        break;
+                    case "1022":
+                        processeName = "英国2号仓处理中心";
                         break;
                     default:
                         break;

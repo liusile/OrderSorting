@@ -45,19 +45,31 @@ namespace SCB.OrderSorting.Client.Work
                 Invoke((MethodInvoker)delegate ()
                 {
                     this.textBox1.Clear();
+                    btn_Go.Enabled = false;
                 });
-               
+
                 FileTool file = new FileTool();
                 var data = file.Read();
-                SetTextMesssage(100 * 1 / 5, "开始发送联机（更新）信号" + "\r\n");
+                SetTextMesssage(100 * 1 / 5, "开始发送联机（更新）信号,请将分拣架重新上电" + "\r\n");
                 /*****************************2.发送联机（更新）信号 校验码 4F9 0xF9, 0x4*****************************/
-                var write2 = new byte[] { 0x55, 0xAA, 0x1C, 0xC1 };
-                write2 = Enumerable.Concat(write2, CLCData(write2)).ToArray();
-                byte[] result2 = OrderSortService.DoloadBoard(write2);
-                if (result2[0] != 0x5F || result2[1] != 0x01 || result2[2] != 0x00 || result2[3] != 0xC1)
+                bool isSendSuccess = false;
+                for (int i = 1; i < 100; i++)
                 {
-                    throw new Exception($"下载数据失败：联机信号应答失败");
+                    try
+                    {
+                        var write2 = new byte[] { 0x55, 0xAA, 0x1C, 0xC1 };
+                        write2 = Enumerable.Concat(write2, CLCData(write2)).ToArray();
+                        byte[] result2 = OrderSortService.DoloadBoard(write2);
+                        if (result2[0] != 0x5F || result2[1] != 0x01 || result2[2] != 0x00 || result2[3] != 0xC1)
+                        {
+                            throw new Exception($"下载数据失败：联机信号应答失败");
+                        }
+                        isSendSuccess = true;
+                        break;
+                    }
+                    catch { }
                 }
+                if(!isSendSuccess) throw new Exception($"下载数据失败：联机信号应答失败");
                 SetTextMesssage(100 * 2 / 5, "发送联机（更新）信号成功" + "\r\n");
                 SetTextMesssage(100 * 2 / 5, "开始发送文件大小" + "\r\n");
                 /******************************3.发送文件大小 ******************************/
@@ -100,16 +112,22 @@ namespace SCB.OrderSorting.Client.Work
                     SetTextMesssage(100 * 3 / 5 + 40 / (data.Length / 1024) * i, $"第{i}步传输文件数据成功" + "\r\n"); 
                 }
                 SetTextMesssage(100 * 5 / 5, "更新成功！" + "\r\n");
+               
             }
             catch (Exception ex)
             {
+                Invoke((MethodInvoker)delegate ()
+                {
+                    btn_Go.Enabled = true;
+                });
+                
                 MessageBox.Show(ex.Message);
             }
         }
         private byte[] GetData(byte[] data, int start, int count = 1024)
         {
             var resultData = new byte[count];
-            var index = (start - 1) * count + 1;
+            var index = (start - 1) * count ;
             for (int i = 0; i < resultData.Length; i++)
             {
                 resultData[i] = data[index + i];

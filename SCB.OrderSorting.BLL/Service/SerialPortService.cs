@@ -59,14 +59,18 @@ namespace SCB.OrderSorting.BLL.Service
                 _SlaveConfig = slaveConfig;
                 _WarningCabinetId = warningCabinetId;
 
-                if (_serialPort != null)
-                    _serialPort.Dispose();
-                _serialPort = new SerialPort(_ModbusSetting.PortName, _ModbusSetting.BaudRate, (Parity)_ModbusSetting.Parity, _ModbusSetting.DataBits, (StopBits)_ModbusSetting.StopBits);
-                _modbusSerialMaster = ModbusSerialMaster.CreateRtu(new SerialPortAdapter(_serialPort));
+                //if (_serialPort != null)
+                //    _serialPort.Dispose();
+                if (_serialPort == null || !_serialPort.IsOpen)
+                {
+                    _serialPort = new SerialPort(_ModbusSetting.PortName, _ModbusSetting.BaudRate, (Parity)_ModbusSetting.Parity, _ModbusSetting.DataBits, (StopBits)_ModbusSetting.StopBits);
+                    _modbusSerialMaster = ModbusSerialMaster.CreateRtu(new SerialPortAdapter(_serialPort));
+                }
 
                 //设置Modbus通讯的超时时间
                 _modbusSerialMaster.Transport.ReadTimeout = TimeoutMilliseconds;
                 _modbusSerialMaster.Transport.WriteTimeout = TimeoutMilliseconds;
+                if(!_serialPort.IsOpen)
                 _serialPort.Open();
             }
             catch (Exception ex)
@@ -74,9 +78,14 @@ namespace SCB.OrderSorting.BLL.Service
                 SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
             }
         }
+        public static void PortClose()
+        {
+            _serialPort.Close();
+            _modbusSerialMaster.Dispose();
+        }
         public static SerialPortService Instance(Modbussetting modbus, List<SlaveConfig> slaveConfig, ushort warningCabinetId)
         {
-            return new SerialPortService( modbus, slaveConfig,  warningCabinetId);
+            return new SerialPortService(modbus, slaveConfig, warningCabinetId);
         }
         /// <summary>
         /// 读取光栅计数器
@@ -276,12 +285,17 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 try
                 {
-                    _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, dataAddress, data);
+                    if (_serialPort!=null && _serialPort.IsOpen)
+                    {
+                        _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, dataAddress, data);
+                    }
                     return;
                 }
                 catch { }
             }
-            _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, dataAddress, data);
+            
+             _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, dataAddress, data);
+            
         }
         //读
         private ushort[] ReadRegisters(byte slaveAddress, ushort dataAddress, ushort num)
@@ -291,27 +305,26 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 try
                 {
-                    return _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, dataAddress, num);
-
+                    if(_serialPort != null && _serialPort.IsOpen)
+                    {
+                        return _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, dataAddress, num);
+                    }
                 }
                 catch { }
 
             }
-            return _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, dataAddress, num);
             
-           
+                return _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, dataAddress, num);
+            
         }
 
         public bool isCollect()
         {
-            if (_serialPort == null|| !_serialPort.IsOpen)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            
+            ClearGratingRegister(true);
+            _serialPort.ReadTimeout = TimeoutMilliseconds;
+            _serialPort.WriteTimeout = TimeoutMilliseconds;
+            return true;
         }
 
         public void ClearGrating2Button()
@@ -361,7 +374,10 @@ namespace SCB.OrderSorting.BLL.Service
         /// <param name="data"></param>
         public byte[] DoloadBoard(byte [] data)
         {
+            _serialPort.WriteTimeout = 200;
+            _serialPort.ReadTimeout = 200;
             _serialPort.DiscardInBuffer();
+            Debug.WriteLine(string.Join(",", data));
             _serialPort.Write(data,0,data.Length);
             return DoloadBoardRead(5);
         }
@@ -375,7 +391,7 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 numBytesRead += _serialPort.Read(frameBytes, numBytesRead, count - numBytesRead);
             }
-
+            Debug.WriteLine(string.Join(",", frameBytes));
             if((frameBytes[0]^ frameBytes[1]^ frameBytes[2]^ frameBytes[3])==Convert.ToInt32(frameBytes[4]))
             {
                 return frameBytes;
