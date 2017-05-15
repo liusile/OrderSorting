@@ -55,15 +55,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtPostAreas = new System.Windows.Forms.TextBox();
             this.btnPostAreas = new System.Windows.Forms.Button();
+            this.txt_PrintNum = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnSave.Location = new System.Drawing.Point(188, 322);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSave.Location = new System.Drawing.Point(251, 442);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(60, 27);
+            this.btnSave.Size = new System.Drawing.Size(80, 34);
             this.btnSave.TabIndex = 1;
             this.btnSave.Text = "保存";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -76,10 +78,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label4.Location = new System.Drawing.Point(20, 125);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(27, 156);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(71, 20);
+            this.label4.Size = new System.Drawing.Size(85, 23);
             this.label4.TabIndex = 4;
             this.label4.Text = "国家/地区";
             // 
@@ -90,10 +91,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label5.Location = new System.Drawing.Point(19, 160);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Location = new System.Drawing.Point(25, 200);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(37, 20);
+            this.label5.Size = new System.Drawing.Size(44, 23);
             this.label5.TabIndex = 5;
             this.label5.Text = "渠道";
             // 
@@ -104,10 +104,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label6.Location = new System.Drawing.Point(20, 90);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Location = new System.Drawing.Point(27, 112);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(37, 20);
+            this.label6.Size = new System.Drawing.Size(44, 23);
             this.label6.TabIndex = 6;
             this.label6.Text = "格号";
             // 
@@ -115,19 +114,19 @@
             // 
             this.txtLatticeId.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.txtLatticeId.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.txtLatticeId.Location = new System.Drawing.Point(109, 87);
-            this.txtLatticeId.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtLatticeId.Location = new System.Drawing.Point(145, 109);
+            this.txtLatticeId.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtLatticeId.Name = "txtLatticeId";
-            this.txtLatticeId.Size = new System.Drawing.Size(140, 25);
+            this.txtLatticeId.Size = new System.Drawing.Size(185, 29);
             this.txtLatticeId.TabIndex = 0;
             // 
             // btnClear
             // 
             this.btnClear.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnClear.Location = new System.Drawing.Point(109, 322);
-            this.btnClear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnClear.Location = new System.Drawing.Point(145, 440);
+            this.btnClear.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(60, 27);
+            this.btnClear.Size = new System.Drawing.Size(80, 34);
             this.btnClear.TabIndex = 13;
             this.btnClear.Text = "清空";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -137,10 +136,10 @@
             // 
             this.txtLEDIndex.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.txtLEDIndex.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.txtLEDIndex.Location = new System.Drawing.Point(109, 215);
-            this.txtLEDIndex.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtLEDIndex.Location = new System.Drawing.Point(145, 269);
+            this.txtLEDIndex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtLEDIndex.Name = "txtLEDIndex";
-            this.txtLEDIndex.Size = new System.Drawing.Size(140, 25);
+            this.txtLEDIndex.Size = new System.Drawing.Size(185, 29);
             this.txtLEDIndex.TabIndex = 20;
             // 
             // label7
@@ -150,10 +149,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label7.Location = new System.Drawing.Point(19, 218);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Location = new System.Drawing.Point(25, 272);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(63, 20);
+            this.label7.Size = new System.Drawing.Size(75, 23);
             this.label7.TabIndex = 19;
             this.label7.Text = "LED索引";
             // 
@@ -161,10 +159,10 @@
             // 
             this.txtGratingIndex.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.txtGratingIndex.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.txtGratingIndex.Location = new System.Drawing.Point(109, 250);
-            this.txtGratingIndex.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtGratingIndex.Location = new System.Drawing.Point(145, 312);
+            this.txtGratingIndex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtGratingIndex.Name = "txtGratingIndex";
-            this.txtGratingIndex.Size = new System.Drawing.Size(140, 25);
+            this.txtGratingIndex.Size = new System.Drawing.Size(185, 29);
             this.txtGratingIndex.TabIndex = 22;
             // 
             // label8
@@ -174,10 +172,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label8.Location = new System.Drawing.Point(19, 253);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Location = new System.Drawing.Point(25, 316);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(65, 20);
+            this.label8.Size = new System.Drawing.Size(78, 23);
             this.label8.TabIndex = 21;
             this.label8.Text = "光栅索引";
             // 
@@ -185,10 +182,10 @@
             // 
             this.txtButtonIndex.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.txtButtonIndex.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.txtButtonIndex.Location = new System.Drawing.Point(109, 285);
-            this.txtButtonIndex.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtButtonIndex.Location = new System.Drawing.Point(145, 356);
+            this.txtButtonIndex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtButtonIndex.Name = "txtButtonIndex";
-            this.txtButtonIndex.Size = new System.Drawing.Size(140, 25);
+            this.txtButtonIndex.Size = new System.Drawing.Size(185, 29);
             this.txtButtonIndex.TabIndex = 24;
             // 
             // label9
@@ -198,10 +195,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label9.Location = new System.Drawing.Point(20, 289);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Location = new System.Drawing.Point(27, 361);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(65, 20);
+            this.label9.Size = new System.Drawing.Size(78, 23);
             this.label9.TabIndex = 23;
             this.label9.Text = "按钮索引";
             // 
@@ -209,10 +205,10 @@
             // 
             this.txtCabinetId.Enabled = false;
             this.txtCabinetId.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.txtCabinetId.Location = new System.Drawing.Point(109, 52);
-            this.txtCabinetId.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCabinetId.Location = new System.Drawing.Point(145, 65);
+            this.txtCabinetId.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtCabinetId.Name = "txtCabinetId";
-            this.txtCabinetId.Size = new System.Drawing.Size(140, 25);
+            this.txtCabinetId.Size = new System.Drawing.Size(185, 29);
             this.txtCabinetId.TabIndex = 26;
             // 
             // label10
@@ -222,10 +218,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label10.Location = new System.Drawing.Point(19, 55);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label10.Location = new System.Drawing.Point(25, 69);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(85, 20);
+            this.label10.Size = new System.Drawing.Size(102, 23);
             this.label10.TabIndex = 25;
             this.label10.Text = "从机号/柜号";
             // 
@@ -233,32 +228,32 @@
             // 
             this.txtCountrys.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.txtCountrys.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.txtCountrys.Location = new System.Drawing.Point(109, 122);
-            this.txtCountrys.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCountrys.Location = new System.Drawing.Point(145, 152);
+            this.txtCountrys.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtCountrys.Name = "txtCountrys";
             this.txtCountrys.ReadOnly = true;
-            this.txtCountrys.Size = new System.Drawing.Size(140, 25);
+            this.txtCountrys.Size = new System.Drawing.Size(185, 29);
             this.txtCountrys.TabIndex = 27;
             // 
             // txtPostTypes
             // 
             this.txtPostTypes.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.txtPostTypes.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.txtPostTypes.Location = new System.Drawing.Point(109, 157);
-            this.txtPostTypes.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPostTypes.Location = new System.Drawing.Point(145, 196);
+            this.txtPostTypes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPostTypes.Name = "txtPostTypes";
             this.txtPostTypes.ReadOnly = true;
-            this.txtPostTypes.Size = new System.Drawing.Size(140, 25);
+            this.txtPostTypes.Size = new System.Drawing.Size(185, 29);
             this.txtPostTypes.TabIndex = 28;
             // 
             // btnCountrys
             // 
             this.btnCountrys.Enabled = false;
             this.btnCountrys.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnCountrys.Location = new System.Drawing.Point(225, 123);
-            this.btnCountrys.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCountrys.Location = new System.Drawing.Point(300, 154);
+            this.btnCountrys.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCountrys.Name = "btnCountrys";
-            this.btnCountrys.Size = new System.Drawing.Size(23, 23);
+            this.btnCountrys.Size = new System.Drawing.Size(31, 29);
             this.btnCountrys.TabIndex = 29;
             this.btnCountrys.Text = "..";
             this.btnCountrys.UseVisualStyleBackColor = true;
@@ -268,10 +263,10 @@
             // 
             this.btnPostTypes.Enabled = false;
             this.btnPostTypes.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnPostTypes.Location = new System.Drawing.Point(225, 158);
-            this.btnPostTypes.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnPostTypes.Location = new System.Drawing.Point(300, 198);
+            this.btnPostTypes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnPostTypes.Name = "btnPostTypes";
-            this.btnPostTypes.Size = new System.Drawing.Size(23, 23);
+            this.btnPostTypes.Size = new System.Drawing.Size(31, 29);
             this.btnPostTypes.TabIndex = 30;
             this.btnPostTypes.Text = "..";
             this.btnPostTypes.UseVisualStyleBackColor = true;
@@ -280,9 +275,10 @@
             // btnTest2
             // 
             this.btnTest2.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnTest2.Location = new System.Drawing.Point(184, 15);
+            this.btnTest2.Location = new System.Drawing.Point(245, 19);
+            this.btnTest2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnTest2.Name = "btnTest2";
-            this.btnTest2.Size = new System.Drawing.Size(28, 27);
+            this.btnTest2.Size = new System.Drawing.Size(37, 34);
             this.btnTest2.TabIndex = 31;
             this.btnTest2.Text = "闪";
             this.btnTest2.UseVisualStyleBackColor = true;
@@ -291,9 +287,10 @@
             // btnTest1
             // 
             this.btnTest1.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnTest1.Location = new System.Drawing.Point(147, 15);
+            this.btnTest1.Location = new System.Drawing.Point(196, 19);
+            this.btnTest1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnTest1.Name = "btnTest1";
-            this.btnTest1.Size = new System.Drawing.Size(28, 27);
+            this.btnTest1.Size = new System.Drawing.Size(37, 34);
             this.btnTest1.TabIndex = 32;
             this.btnTest1.Text = "红";
             this.btnTest1.UseVisualStyleBackColor = true;
@@ -302,9 +299,10 @@
             // btnTest0
             // 
             this.btnTest0.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnTest0.Location = new System.Drawing.Point(110, 15);
+            this.btnTest0.Location = new System.Drawing.Point(147, 19);
+            this.btnTest0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnTest0.Name = "btnTest0";
-            this.btnTest0.Size = new System.Drawing.Size(28, 27);
+            this.btnTest0.Size = new System.Drawing.Size(37, 34);
             this.btnTest0.TabIndex = 33;
             this.btnTest0.Text = "绿";
             this.btnTest0.UseVisualStyleBackColor = true;
@@ -317,19 +315,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label1.Location = new System.Drawing.Point(20, 19);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(27, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(63, 20);
+            this.label1.Size = new System.Drawing.Size(75, 23);
             this.label1.TabIndex = 34;
             this.label1.Text = "LED测试";
             // 
             // btnTest3
             // 
             this.btnTest3.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnTest3.Location = new System.Drawing.Point(222, 15);
+            this.btnTest3.Location = new System.Drawing.Point(296, 19);
+            this.btnTest3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnTest3.Name = "btnTest3";
-            this.btnTest3.Size = new System.Drawing.Size(28, 27);
+            this.btnTest3.Size = new System.Drawing.Size(37, 34);
             this.btnTest3.TabIndex = 35;
             this.btnTest3.Text = "熄";
             this.btnTest3.UseVisualStyleBackColor = true;
@@ -339,9 +337,10 @@
             // 
             this.cbIsEnable.AutoSize = true;
             this.cbIsEnable.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.cbIsEnable.Location = new System.Drawing.Point(12, 325);
+            this.cbIsEnable.Location = new System.Drawing.Point(16, 449);
+            this.cbIsEnable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbIsEnable.Name = "cbIsEnable";
-            this.cbIsEnable.Size = new System.Drawing.Size(84, 24);
+            this.cbIsEnable.Size = new System.Drawing.Size(100, 27);
             this.cbIsEnable.TabIndex = 36;
             this.cbIsEnable.Text = "是否启用";
             this.cbIsEnable.UseVisualStyleBackColor = true;
@@ -353,10 +352,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.label2.Location = new System.Drawing.Point(20, 189);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(27, 236);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 20);
+            this.label2.Size = new System.Drawing.Size(78, 23);
             this.label2.TabIndex = 37;
             this.label2.Text = "渠道地区";
             // 
@@ -364,31 +362,56 @@
             // 
             this.txtPostAreas.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.txtPostAreas.ImeMode = System.Windows.Forms.ImeMode.Disable;
-            this.txtPostAreas.Location = new System.Drawing.Point(109, 188);
-            this.txtPostAreas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPostAreas.Location = new System.Drawing.Point(145, 235);
+            this.txtPostAreas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPostAreas.Name = "txtPostAreas";
             this.txtPostAreas.ReadOnly = true;
-            this.txtPostAreas.Size = new System.Drawing.Size(140, 25);
+            this.txtPostAreas.Size = new System.Drawing.Size(185, 29);
             this.txtPostAreas.TabIndex = 38;
             // 
             // btnPostAreas
             // 
             this.btnPostAreas.Enabled = false;
             this.btnPostAreas.Font = new System.Drawing.Font("微软雅黑", 10F);
-            this.btnPostAreas.Location = new System.Drawing.Point(226, 189);
-            this.btnPostAreas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnPostAreas.Location = new System.Drawing.Point(301, 236);
+            this.btnPostAreas.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnPostAreas.Name = "btnPostAreas";
-            this.btnPostAreas.Size = new System.Drawing.Size(23, 23);
+            this.btnPostAreas.Size = new System.Drawing.Size(31, 29);
             this.btnPostAreas.TabIndex = 39;
             this.btnPostAreas.Text = "..";
             this.btnPostAreas.UseVisualStyleBackColor = true;
             this.btnPostAreas.Click += new System.EventHandler(this.btnPostAreas_Click);
             // 
+            // txt_PrintNum
+            // 
+            this.txt_PrintNum.Font = new System.Drawing.Font("微软雅黑", 10F);
+            this.txt_PrintNum.ImeMode = System.Windows.Forms.ImeMode.Disable;
+            this.txt_PrintNum.Location = new System.Drawing.Point(145, 398);
+            this.txt_PrintNum.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_PrintNum.Name = "txt_PrintNum";
+            this.txt_PrintNum.Size = new System.Drawing.Size(185, 29);
+            this.txt_PrintNum.TabIndex = 40;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("微软雅黑", 10F);
+            this.label3.Location = new System.Drawing.Point(27, 402);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(78, 23);
+            this.label3.TabIndex = 41;
+            this.label3.Text = "打印张数";
+            // 
             // frmLatticeSettingEdit
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(271, 394);
+            this.ClientSize = new System.Drawing.Size(361, 543);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txt_PrintNum);
             this.Controls.Add(this.btnPostAreas);
             this.Controls.Add(this.txtPostAreas);
             this.Controls.Add(this.label2);
@@ -417,7 +440,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnSave);
             this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "frmLatticeSettingEdit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "编辑";
@@ -455,5 +478,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPostAreas;
         private System.Windows.Forms.Button btnPostAreas;
+        private System.Windows.Forms.TextBox txt_PrintNum;
+        private System.Windows.Forms.Label label3;
     }
 }

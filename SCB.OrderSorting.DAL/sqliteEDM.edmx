@@ -46,6 +46,7 @@
           <Property Name="GratingIndex" Type="int" Nullable="false" />
           <Property Name="ButtonIndex" Type="int" Nullable="false" />
           <Property Name="IsEnable" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PrintNum" Type="int" />
         </EntityType>
         <EntityType Name="LoginLog">
           <Key>
@@ -219,6 +220,8 @@
           <Property Name="CabinetId" Type="int" Nullable="false" />
           <Property Name="LatticeSettingId" Type="int" Nullable="false" />
           <Property Name="ZipName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostTypeId" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="PostTypeName" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
         </EntityType>
         <EntityType Name="SortingSolutions">
           <Key>
@@ -324,6 +327,7 @@
           <Property Name="GratingIndex" Type="Int32" Nullable="false" />
           <Property Name="ButtonIndex" Type="Int32" Nullable="false" />
           <Property Name="IsEnable" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PrintNum" Type="Int32" />
         </EntityType>
         <EntityType Name="OldOrderInfo">
           <Key>
@@ -504,6 +508,8 @@
           <Property Name="CabinetId" Type="Int32" Nullable="false" />
           <Property Name="LatticeSettingId" Type="Int32" Nullable="false" />
           <Property Name="ZipName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostTypeId" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="PostTypeName" Type="String" Nullable="false" MaxLength="2147483647" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ZipType">
           <Key>
@@ -556,6 +562,7 @@
           <EntitySetMapping Name="LatticeSetting">
             <EntityTypeMapping TypeName="OrderSortingDBModel.LatticeSetting">
               <MappingFragment StoreEntitySet="LatticeSetting">
+                <ScalarProperty Name="PrintNum" ColumnName="PrintNum" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
                 <ScalarProperty Name="ButtonIndex" ColumnName="ButtonIndex" />
                 <ScalarProperty Name="GratingIndex" ColumnName="GratingIndex" />
@@ -753,6 +760,8 @@
           <EntitySetMapping Name="SolutionZipType">
             <EntityTypeMapping TypeName="OrderSortingDBModel.SolutionZipType">
               <MappingFragment StoreEntitySet="SolutionZipType">
+                <ScalarProperty Name="PostTypeName" ColumnName="PostTypeName" />
+                <ScalarProperty Name="PostTypeId" ColumnName="PostTypeId" />
                 <ScalarProperty Name="ZipName" ColumnName="ZipName" />
                 <ScalarProperty Name="LatticeSettingId" ColumnName="LatticeSettingId" />
                 <ScalarProperty Name="CabinetId" ColumnName="CabinetId" />

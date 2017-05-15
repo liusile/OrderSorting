@@ -18,8 +18,8 @@
     <NumberOfPoints>12</NumberOfPoints>
   </ModbusSetting>
   <CabinetNumber>1</CabinetNumber>
-  <CriticalWeight>100</CriticalWeight>
-  <BoxWeight>1</BoxWeight>
+  <CriticalWeight>100.000</CriticalWeight>
+  <BoxWeight>1.000</BoxWeight>
   <WarningCabinetId>1</WarningCabinetId>
   <SlaveConfigs>
     <SlaveConfig>
@@ -47,8 +47,9 @@
       <TCPPort>26</TCPPort>
     </SlaveConfig>
   </SlaveConfigs>
-  <SortingPatten>4</SortingPatten>
+  <SortingPatten>2</SortingPatten>
   <LogStorageDays>6</LogStorageDays>
   <IsFlyt>false</IsFlyt>
-  <SortingSolution>1</SortingSolution>
+  <SortingSolution>677f3fca-07dc-46b6-a28c-73a49c9e8982</SortingSolution>
+  <Scanner />
 </SystemSetting>

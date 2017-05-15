@@ -225,6 +225,12 @@
     <Compile Include="Setting\frmSelectAreaTypes.Designer.cs">
       <DependentUpon>frmSelectAreaTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Setting\frmSelectPostTypesForZip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Setting\frmSelectPostTypesForZip.Designer.cs">
+      <DependentUpon>frmSelectPostTypesForZip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Setting\frmSelectSolution.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -340,6 +346,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Setting\frmSelectAreaTypes.resx">
       <DependentUpon>frmSelectAreaTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Setting\frmSelectPostTypesForZip.resx">
+      <DependentUpon>frmSelectPostTypesForZip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Setting\frmSelectSolution.resx">
       <DependentUpon>frmSelectSolution.cs</DependentUpon>

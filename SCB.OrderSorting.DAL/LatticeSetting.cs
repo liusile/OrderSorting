@@ -22,5 +22,6 @@ namespace SCB.OrderSorting.DAL
         public int GratingIndex { get; set; }
         public int ButtonIndex { get; set; }
         public string IsEnable { get; set; }
+        public Nullable<int> PrintNum { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SCB.OrderSorting.BLL.Common
@@ -12,6 +13,7 @@ namespace SCB.OrderSorting.BLL.Common
     /// </summary>
     public class SaveErrLogHelper
     {
+        private readonly static object lockObject = new object();
         #region 启动对象位置
         /// <summary>
         /// 启动对象位置
@@ -111,6 +113,10 @@ namespace SCB.OrderSorting.BLL.Common
             }
 
         }
+        public static void SaveErrorLogAsync(string orderid, string err)
+        {
+            Task.Run(() => SaveErrorLog(orderid,err));
+        }
         public static void SaveErrorLog(string orderid, string err,string PathName)
         {
             try
@@ -132,12 +138,15 @@ namespace SCB.OrderSorting.BLL.Common
         /// <param name="err"></param>
         private static void Write(string err)
         {
-            string path = SaveErrLogHelper.CreatePath() + DateTime.Now.ToString("dd") + ".txt";
-            using (StreamWriter sw = new StreamWriter(path, true))
+            lock (lockObject)
             {
-                sw.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ff"));
-                sw.WriteLine(err);
-                sw.WriteLine(SplitLine);
+                string path = SaveErrLogHelper.CreatePath() + DateTime.Now.ToString("dd") + ".txt";
+                using (StreamWriter sw = new StreamWriter(path, true))
+                {
+                    sw.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss:ff"));
+                    sw.WriteLine(err);
+                    sw.WriteLine(SplitLine);
+                }
             }
         }
         private static void Write(string err,string PathName)

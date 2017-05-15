@@ -38,6 +38,10 @@ namespace SCB.OrderSorting.Client.Model
         {
             ThreadSortOrderList.ForEach(o => o.Value.ResultLattice = LatticeSetting);
         }
+        public int Count()
+        {
+            return ThreadSortOrderList.Count();
+        }
     }
     public class ThreadSortOrder
     {

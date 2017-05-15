@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SCB.OrderSorting.BLL
@@ -363,6 +364,14 @@ namespace SCB.OrderSorting.BLL
         public static OrderInfo GetOrderInfoById(string orderId, UserInfo userInfo, ref string errorMsg)
         {
             return sortingService.GetOrderInfoById(orderId, userInfo, ref errorMsg);
+        }
+        public static OrderInfo GetOrderInfoById(string orderId, UserInfo userInfo)
+        {
+            return sortingService.GetOrderInfoById(orderId, userInfo);
+        }
+        public static Task<OrderInfo> GetOrderInfoByIdAsync(string orderId, UserInfo userInfo)
+        {
+            return Task.Run(()=> sortingService.GetOrderInfoById(orderId, userInfo));
         }
         /// <summary>
         /// 根据格口Id获取格口内的订单信息

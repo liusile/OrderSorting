@@ -55,40 +55,45 @@ namespace SCB.OrderSorting.BLL.Context
         /// <param name="info">订单信息</param>
         public override LatticeSetting GetLatticeSettingByOrderinfo(OrderInfo info)
         {
+            return (from spt in solutionPostTypeList
+                    from ls in latticeSettingList
+                    where spt.LatticeSettingId == ls.ID && spt.PostTypeId == info.PostId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
+                    select ls).FirstOrDefault();
+
             //var solutionPost = solutionPostTypeList.Find(sp => sp.PostTypeId == info.posttype);v
             //if (solutionPost != null)
             //{
             //    return latticeSettingList.Find(ls => ls.ID == solutionPost.LatticeSettingId);
             //}
             //return null;
-            var PostAreaList = (from spt in solutionPostAreaList
-                                 from ls in latticeSettingList
-                                 where spt.LactticeSettingId == ls.ID && spt.PostTypeId == info.PostId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
-                                 select spt).ToList();
-            LatticeSetting result =null;
-            int? type = PostAreaList.FirstOrDefault()?.Type;
-            if (type == 1)//1.跟踪单号
-            {
-                result=(from ls in latticeSettingList
-                        where ls.ID == PostAreaList.Find(o => o.Flag == info.TraceId.Substring(0, 3))?.LactticeSettingId
-                        select ls).FirstOrDefault();
-            }
-            else if (type == 2)//2.邮编方式
-            {
+            //var PostAreaList = (from spt in solutionPostAreaList
+            //                     from ls in latticeSettingList
+            //                     where spt.LactticeSettingId == ls.ID && spt.PostTypeId == info.PostId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
+            //                     select spt).ToList();
+            //LatticeSetting result =null;
+            //int? type = PostAreaList.FirstOrDefault()?.Type;
+            //if (type == 1)//1.跟踪单号
+            //{
+            //    result=(from ls in latticeSettingList
+            //            where ls.ID == PostAreaList.Find(o => o.Flag == info.TraceId.Substring(0, 3))?.LactticeSettingId
+            //            select ls).FirstOrDefault();
+            //}
+            //else if (type == 2)//2.邮编方式
+            //{
                 
-                result =(from ls in latticeSettingList where ls.ID == PostAreaList.Find(o => o.Flag.Split(',').Contains(info.Zip.Substring(0, 1)))?.LactticeSettingId
-                select ls).FirstOrDefault();
-            }
-            if (result == null) { 
-                return (from spt in solutionPostTypeList
-                        from ls in latticeSettingList
-                        where spt.LatticeSettingId == ls.ID && spt.PostTypeId == info.PostId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
-                        select ls).FirstOrDefault();
-            }
-            else
-            {
-                return result;
-            }
+            //    result =(from ls in latticeSettingList where ls.ID == PostAreaList.Find(o => o.Flag.Split(',').Contains(info.Zip.Substring(0, 1)))?.LactticeSettingId
+            //    select ls).FirstOrDefault();
+            //}
+            //if (result == null) { 
+            //    return (from spt in solutionPostTypeList
+            //            from ls in latticeSettingList
+            //            where spt.LatticeSettingId == ls.ID && spt.PostTypeId == info.PostId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
+            //            select ls).FirstOrDefault();
+            //}
+            //else
+            //{
+            //    return result;
+            //}
         }
 
         public override List<LatticeSetting> GetLatticeSettingByOrderinfoList(OrderInfo info)

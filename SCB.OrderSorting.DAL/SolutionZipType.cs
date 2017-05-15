@@ -19,5 +19,7 @@ namespace SCB.OrderSorting.DAL
         public int CabinetId { get; set; }
         public int LatticeSettingId { get; set; }
         public string ZipName { get; set; }
+        public string PostTypeId { get; set; }
+        public string PostTypeName { get; set; }
     }
 }

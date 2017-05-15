@@ -39,7 +39,7 @@ namespace SCB.OrderSorting.BLL.API
         {
             try
             {
-               // _processCenterID = "1022";
+                //_processCenterID = "918";
                 //http://foreignapi.eds.sellercube.com/OrderParent/GetPostForSortOrder?processCenterID=722&orderId=A00051160505001A
                 //http://en.fds.sellercube.com/FDS_OrderAPI/VerifyOrder
                 string host = "http://en.fds.sellercube.com/";
@@ -61,7 +61,7 @@ namespace SCB.OrderSorting.BLL.API
                 var info = obj;
                 return info;
             }
-            catch (Exception ex) { throw; }
+            catch { throw; }
         }
         /// <summary>
         /// 获取OA的全部邮寄方式
@@ -175,7 +175,6 @@ namespace SCB.OrderSorting.BLL.API
         {
             try
             {
-               
                 string url = _FlytApi_Host + "Picker/VerifyOrder";
                 var postData = new VerifyOrderRequestContract
                 {

@@ -62,7 +62,7 @@ namespace SCB.OrderSorting.Client.Work
                         byte[] result2 = OrderSortService.DoloadBoard(write2);
                         if (result2[0] != 0x5F || result2[1] != 0x01 || result2[2] != 0x00 || result2[3] != 0xC1)
                         {
-                            throw new Exception($"下载数据失败：联机信号应答失败");
+                            throw new Exception($"下载数据失败：");
                         }
                         isSendSuccess = true;
                         break;

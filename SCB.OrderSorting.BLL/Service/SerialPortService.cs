@@ -78,6 +78,21 @@ namespace SCB.OrderSorting.BLL.Service
                 SaveErrLogHelper.SaveErrorLog(string.Empty, ex.ToString());
             }
         }
+
+        private void ReCollectPortService()
+        {
+            if (_serialPort == null || !_serialPort.IsOpen)
+            {
+                _serialPort = new SerialPort(_ModbusSetting.PortName, _ModbusSetting.BaudRate, (Parity)_ModbusSetting.Parity, _ModbusSetting.DataBits, (StopBits)_ModbusSetting.StopBits);
+                _modbusSerialMaster = ModbusSerialMaster.CreateRtu(new SerialPortAdapter(_serialPort));
+
+                //设置Modbus通讯的超时时间
+                _modbusSerialMaster.Transport.ReadTimeout = TimeoutMilliseconds;
+                _modbusSerialMaster.Transport.WriteTimeout = TimeoutMilliseconds;
+            }
+            if (!_serialPort.IsOpen)
+                _serialPort.Open();
+        }
         public static void PortClose()
         {
             _serialPort.Close();
@@ -155,6 +170,7 @@ namespace SCB.OrderSorting.BLL.Service
                 ushort[] ReadFirst = ReadRegisters(slaveAddress, (ushort)addressRead, _ModbusSetting.NumberOfPoints);
                 if (ReadFirst.Max()>0)
                 {
+                    SaveErrLogHelper.SaveErrorLog(string.Empty, "尝试清光栅不成功");
                     ClearGratingRegister(slaveAddress);
                 }
             }
@@ -174,6 +190,7 @@ namespace SCB.OrderSorting.BLL.Service
                     ushort[] ReadFirst = ReadRegisters(o.SlaveAddress, (ushort)addressRead, _ModbusSetting.NumberOfPoints);
                     if (ReadFirst.Max()>0)
                     {
+                        SaveErrLogHelper.SaveErrorLog(string.Empty, "尝试清光栅不成功");
                         ClearGratingRegister(o.SlaveAddress);
                     }
                 }
@@ -288,10 +305,15 @@ namespace SCB.OrderSorting.BLL.Service
                     if (_serialPort!=null && _serialPort.IsOpen)
                     {
                         _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, dataAddress, data);
+                    }else
+                    {
+                        ReCollectPortService();
                     }
                     return;
                 }
-                catch { }
+                catch {
+                    SaveErrLogHelper.SaveErrorLogAsync($"第{i}次WriteRegisters 异常：", $"dataAddress:{dataAddress},data:{string.Join(",",data)}");
+                }
             }
             
              _modbusSerialMaster.WriteMultipleRegisters(slaveAddress, dataAddress, data);
@@ -308,6 +330,10 @@ namespace SCB.OrderSorting.BLL.Service
                     if(_serialPort != null && _serialPort.IsOpen)
                     {
                         return _modbusSerialMaster.ReadHoldingRegisters(slaveAddress, dataAddress, num);
+                    }
+                    else
+                    {
+                        ReCollectPortService();
                     }
                 }
                 catch { }
@@ -374,8 +400,8 @@ namespace SCB.OrderSorting.BLL.Service
         /// <param name="data"></param>
         public byte[] DoloadBoard(byte [] data)
         {
-            _serialPort.WriteTimeout = 200;
-            _serialPort.ReadTimeout = 200;
+            _serialPort.WriteTimeout = 2000;
+            _serialPort.ReadTimeout = 2000;
             _serialPort.DiscardInBuffer();
             Debug.WriteLine(string.Join(",", data));
             _serialPort.Write(data,0,data.Length);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SCB.OrderSorting.DAL;
+using System.Diagnostics;
 
 namespace SCB.OrderSorting.BLL.Context
 {
@@ -31,14 +32,18 @@ namespace SCB.OrderSorting.BLL.Context
 
         public override string CreateButtonText(LatticeSetting ls)
         {
+            string result = "";
             if (!ls.IsEnable.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 return "未启用";
-            var str = string.Join(",", curSolutionZipTypeList.Where(spt => spt.LatticeSettingId == ls.ID).Select(s => s.ZipName));
-            if (str.Length > 25)
+
+            var soulutionZipType = curSolutionZipTypeList.Find(spt => spt.LatticeSettingId == ls.ID);
+
+            result += string.Format("格号：{0}\r\n渠道：{1}", ls.LatticeId, soulutionZipType?.PostTypeName ?? "");
+            if (!string.IsNullOrEmpty(soulutionZipType?.ZipName))
             {
-                str = str.Substring(0, 25) + "..";
+                result += string.Format("\r\n地区：{1}", ls.LatticeId, soulutionZipType.ZipName);
             }
-            return string.Format("格号：{0}\r\n地区：{1}", ls.LatticeId, str);
+            return result;
         }
 
         public override LatticeSetting GetLatticeSettingByOrderinfo(OrderInfo info)
@@ -57,12 +62,21 @@ namespace SCB.OrderSorting.BLL.Context
             if (info.PostId == "142")
             {
                 specZipTypeList = zipTypeList.Where(o => o.Type == "3").ToList();
+                return GetLatticeSetting(zip, specZipTypeList);
+            }
+            else if(info.PostId == "78") //78 Royal Mail Second Class走英国伯明翰仓库分拣分区
+            {
+                specZipTypeList = zipTypeList.Where(o => o.Type == "1").ToList();
+                return GetLatticeSetting(zip, specZipTypeList);
             }
             else
             {
-                specZipTypeList = zipTypeList.Where(o => o.Type == "1").ToList();
+                return  (from s in latticeSettingList
+                                     join c in curSolutionZipTypeList on s.ID equals c.LatticeSettingId
+                                     where c.PostTypeId == info.PostId
+                         select s).ToList();
             }
-            return GetLatticeSetting(zip, specZipTypeList);
+           
         }
         private List<LatticeSetting> GetLatticeSetting(string zip, List<ZipType> specZipTypeList)
         {
@@ -75,10 +89,7 @@ namespace SCB.OrderSorting.BLL.Context
                 if (zipTye.Any())
                 {
                     ZipName = zipTye.First().ZipName;
-                } else
-                {
-                    break;
-                }
+                } 
             }
             if (string.IsNullOrEmpty(ZipName))
             {

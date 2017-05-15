@@ -605,7 +605,7 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 return _sortingPattenWorker.GetLatticeSettingByOrderinfo(info);
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -897,6 +897,17 @@ namespace SCB.OrderSorting.BLL.Service
                 return null;
             }
         }
+        internal OrderInfo GetOrderInfoById(string orderId, UserInfo userInfo)
+        {
+            try
+            {
+                return _centerContext.GetOrderInfoById(orderId, userInfo);
+            }
+            catch
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// 根据格口Id获取格口内的订单信息
         /// </summary>
@@ -949,10 +960,14 @@ namespace SCB.OrderSorting.BLL.Service
                             PostId = info.PostId,
                             PostName = info.PostName
                         });
+
+                        db.SaveChanges();
+                        //重新统计分拣信息
+                        LoadTotalSortingDataList(db);
+                    }else
+                    {
+                        db.SaveChanges();
                     }
-                    db.SaveChanges();
-                    //重新统计分拣信息
-                    LoadTotalSortingDataList(db);
                     return true;
                 }
             }

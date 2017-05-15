@@ -39,12 +39,12 @@ namespace SCB.OrderSorting.Client
             this.分拣统计报表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.测试订单标签打印ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.底层更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelname = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerShow = new System.Windows.Forms.Timer(this.components);
-            this.底层更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -58,8 +58,8 @@ namespace SCB.OrderSorting.Client
             this.装包记录查询ToolStripMenuItem,
             this.分拣统计报表ToolStripMenuItem,
             this.系统设置ToolStripMenuItem,
-            this.测试订单标签打印ToolStripMenuItem,
-            this.底层更新ToolStripMenuItem});
+            this.底层更新ToolStripMenuItem,
+            this.测试订单标签打印ToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
@@ -116,6 +116,14 @@ namespace SCB.OrderSorting.Client
             this.测试订单标签打印ToolStripMenuItem.Visible = false;
             this.测试订单标签打印ToolStripMenuItem.Click += new System.EventHandler(this.测试订单标签打印ToolStripMenuItem_Click);
             // 
+            // 底层更新ToolStripMenuItem
+            // 
+            this.底层更新ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.底层更新ToolStripMenuItem.Name = "底层更新ToolStripMenuItem";
+            this.底层更新ToolStripMenuItem.Size = new System.Drawing.Size(104, 31);
+            this.底层更新ToolStripMenuItem.Text = "底层更新";
+            this.底层更新ToolStripMenuItem.Click += new System.EventHandler(this.底层更新ToolStripMenuItem_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -145,14 +153,6 @@ namespace SCB.OrderSorting.Client
             this.timerShow.Enabled = true;
             this.timerShow.Interval = 1000;
             this.timerShow.Tick += new System.EventHandler(this.timerShow_Tick);
-            // 
-            // 底层更新ToolStripMenuItem
-            // 
-            this.底层更新ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.底层更新ToolStripMenuItem.Name = "底层更新ToolStripMenuItem";
-            this.底层更新ToolStripMenuItem.Size = new System.Drawing.Size(104, 31);
-            this.底层更新ToolStripMenuItem.Text = "底层更新";
-            this.底层更新ToolStripMenuItem.Click += new System.EventHandler(this.底层更新ToolStripMenuItem_Click);
             // 
             // MDIParent
             // 

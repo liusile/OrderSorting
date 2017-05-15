@@ -28,12 +28,9 @@ namespace SCB.OrderSorting.Client.Setting
         private void btn_Save_Click(object sender, EventArgs e)
         {
             string qu = this.cmb_qu.Text;
+            string PostTypeId = txtPostTypeId.Text;
+            string PostTypeName = txtPostTypes.Text;
             bool isEnable =cbIsEnable.Checked;
-            if (isEnable && qu == "请选择")
-            {
-                MessageBox.Show("请选择区！");
-                return;
-            }
            
             ls.IsEnable = isEnable.ToString();
             OrderSortService.SaveLatticeSetting(ls);
@@ -46,12 +43,16 @@ namespace SCB.OrderSorting.Client.Setting
                     LatticeSettingId = ls.ID,
                     ZipName = qu == "请选择" ? "" : qu,
                     SortingSolutionId = OrderSortService.GetSystemSettingCache().SortingSolution,
-                    Id=Guid.NewGuid().ToString()
+                    Id = Guid.NewGuid().ToString(),
+                    PostTypeId = PostTypeId,
+                    PostTypeName = PostTypeName
                 };
             }
             else
             {
                 sz.ZipName = qu == "请选择" ? "" : qu;
+                sz.PostTypeId = PostTypeId;
+                sz.PostTypeName = PostTypeName;
             }
             OrderSortService.SaveSolutionZipType(sz);
             this.DialogResult = DialogResult.OK;
@@ -80,6 +81,42 @@ namespace SCB.OrderSorting.Client.Setting
             cmb_qu.ValueMember = "Key";
             cmb_qu.SelectedValue = 0;
             cmb_qu.SelectedValue = qu8List.Find(o => o.Value == sz?.ZipName).Key;
+            //渠道初始化
+            txtPostTypeId.Text = sz?.PostTypeId??"";
+            txtPostTypes.Text = sz?.PostTypeName??"";
+            SettingQu();
+        }
+
+        private void btnPostTypes_Click(object sender, EventArgs e)
+        {
+            frmSelectPostTypesForZip frm = new frmSelectPostTypesForZip(_latticesettingId);
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                var PosttypesList = frm.PosttypesList;
+                if (PosttypesList.Count < 1)
+                {
+                    txtPostTypes.Text =  "";
+                    txtPostTypeId.Text = "";
+                }
+                else
+                {
+                    txtPostTypes.Text = PosttypesList.First().CnPostName;
+                    txtPostTypeId.Text = PosttypesList.First().PostID;
+                }
+                SettingQu();
+            }
+        }
+        private void SettingQu()
+        {
+            if (txtPostTypeId.Text == "142" || txtPostTypeId.Text == "78")
+            {
+                cmb_qu.Enabled = true;
+            }
+            else
+            {
+                cmb_qu.SelectedValue = "";
+                cmb_qu.Enabled = false;
+            }
         }
     }
 }

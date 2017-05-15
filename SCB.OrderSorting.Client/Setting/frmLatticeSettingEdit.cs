@@ -48,6 +48,7 @@ namespace SCB.OrderSorting.Client
                 txtLEDIndex.Text = _latticesetting.LEDIndex.ToString();
                 txtGratingIndex.Text = _latticesetting.GratingIndex.ToString();
                 txtButtonIndex.Text = _latticesetting.ButtonIndex.ToString();
+                txt_PrintNum.Text = (_latticesetting.PrintNum??1).ToString();
                 cbIsEnable.Checked = Convert.ToBoolean(_latticesetting.IsEnable);
                 switch (OrderSortService.GetSortingPatten())
                 {
@@ -75,6 +76,7 @@ namespace SCB.OrderSorting.Client
         {
             try
             {
+                int printNum = int.Parse(txt_PrintNum.Text);
                 if (string.IsNullOrWhiteSpace(txtLatticeId.Text))
                 {
                     throw new Exception("格号禁止为空！");
@@ -83,6 +85,12 @@ namespace SCB.OrderSorting.Client
                 {
                     throw new Exception("存在重复格号" + txtLatticeId.Text);
                 }
+                
+                if (printNum <= 0)
+                {
+                    throw new Exception("打印数量必须大于0!");
+                }
+                _latticesetting.PrintNum = printNum;
                 _latticesetting.LatticeId = txtLatticeId.Text;
                 _latticesetting.LEDIndex = Convert.ToInt32(txtLEDIndex.Text);
                 _latticesetting.GratingIndex = Convert.ToInt32(txtGratingIndex.Text);

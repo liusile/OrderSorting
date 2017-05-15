@@ -43,6 +43,7 @@ namespace SCB.OrderSorting.BLL.Model
         /// 解决方案
         /// </summary>
         public string SortingSolution { get; set; }
+        public string Scanner { get; set; }
     }
 
     public class Modbussetting
