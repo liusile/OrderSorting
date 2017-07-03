@@ -15,6 +15,7 @@ namespace SCB.OrderSorting.Client
         private List<KeyValuePair<int, string>> stopbitsList = new List<KeyValuePair<int, string>>();
         private List<KeyValuePair<int, string>> pattenList = new List<KeyValuePair<int, string>>();
         private List<KeyValuePair<int, string>> daysList = new List<KeyValuePair<int, string>>();
+        private List<KeyValuePair<int, string>> printList = new List<KeyValuePair<int, string>>();
         private bool _isLoaded = false;
 
         public frmSystemSetting()
@@ -72,6 +73,17 @@ namespace SCB.OrderSorting.Client
                 cbLogStorageDays.DisplayMember = "Value";
                 cbLogStorageDays.ValueMember = "Key";
                 cbLogStorageDays.SelectedValue = 0;
+                //打印格式
+                var printArray = Enum.GetValues(typeof(PrintFormat_Enum));
+                foreach (var enumItem in printArray)
+                {
+                    printList.Add(new KeyValuePair<int, string>((int)enumItem, enumItem.ToString()));
+                }
+                cmbPrintFormat.DataSource = printList;
+                cmbPrintFormat.DisplayMember = "Value";
+                cmbPrintFormat.ValueMember = "Key";
+                cmbPrintFormat.SelectedValue = 0;
+                
             }
             catch (Exception ex)
             {
@@ -108,6 +120,7 @@ namespace SCB.OrderSorting.Client
                 _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 2).SlaveAddress = Convert.ToByte(txtCabinetId2_SlaveAddress.Text);
                 _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 3).SlaveAddress = Convert.ToByte(txtCabinetId3_SlaveAddress.Text);
                 _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 4).SlaveAddress = Convert.ToByte(txtCabinetId4_SlaveAddress.Text);
+                _systemSetting.PrintFormat = Convert.ToInt32(cmbPrintFormat.SelectedValue);
                 OrderSortService.SaveSystemSetting(_systemSetting);
                
                 Close();
@@ -164,6 +177,7 @@ namespace SCB.OrderSorting.Client
             txtCabinetId2_SlaveAddress.Text = _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 2).SlaveAddress.ToString();
             txtCabinetId3_SlaveAddress.Text = _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 3).SlaveAddress.ToString();
             txtCabinetId4_SlaveAddress.Text = _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 4).SlaveAddress.ToString();
+            cmbPrintFormat.SelectedValue = _systemSetting.PrintFormat;
         }
 
         private void cbCabinetNumber_TextChanged(object sender, EventArgs e)

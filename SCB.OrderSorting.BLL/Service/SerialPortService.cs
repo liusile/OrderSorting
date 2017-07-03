@@ -346,17 +346,19 @@ namespace SCB.OrderSorting.BLL.Service
 
         public bool isCollect()
         {
-            
-            ClearGratingRegister(true);
+            bool isSuccess = true;
+            ClearGratingRegister(false);
+            var addressRead = _ModbusSetting.GratingStartAddress;
+           
             _serialPort.ReadTimeout = TimeoutMilliseconds;
             _serialPort.WriteTimeout = TimeoutMilliseconds;
-            return true;
+            return isSuccess;
         }
 
-        public void ClearGrating2Button()
+        public void ClearGrating2Button(bool isCheck=true)
         {
-            this.ClearGratingRegister();
-            this.ClearButtonRegister();
+            this.ClearGratingRegister(isCheck);
+            this.ClearButtonRegister(isCheck);
         }
 
         public void ClearGrating2Button(byte slaveAddress)

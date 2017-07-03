@@ -1,7 +1,11 @@
-﻿using SCB.OrderSorting.DAL;
+﻿using Gma.QrCodeNet.Encoding;
+using Gma.QrCodeNet.Encoding.Windows.Render;
+using SCB.OrderSorting.DAL;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Printing;
+using System.IO;
 
 namespace SCB.OrderSorting.Client
 {
@@ -12,6 +16,7 @@ namespace SCB.OrderSorting.Client
         BarcodeLib.TYPE type = BarcodeLib.TYPE.CODE128;
         public void PrintSetup(OrderInfo info)
         {
+           
             _orderinfo = info;
             //页边距设置
             DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
@@ -39,7 +44,21 @@ namespace SCB.OrderSorting.Client
                 throw;
             }
         }
+        public void GenerateQRByQrCodeNet(string content)
+        {
+            QrEncoder qrEncoder = new QrEncoder(ErrorCorrectionLevel.H);
+            QrCode qrCode = new QrCode();
+            qrEncoder.TryEncode(content, out qrCode);
 
+            GraphicsRenderer renderer = new GraphicsRenderer(new FixedModuleSize(5, QuietZoneModules.Two), Brushes.Black, Brushes.White);
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                renderer.WriteToStream(qrCode.Matrix, ImageFormat.Png, ms);
+                Image img = Image.FromStream(ms);
+                img.Save("C:/Img/RRR.png");
+            }
+        }
 
     }
 }

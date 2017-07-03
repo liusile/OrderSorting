@@ -101,7 +101,7 @@ namespace SCB.OrderSorting.Client
                             clsPosttypes.SetSelected(i, true);
                             return;
                         }
-                        if (ptStr.Contains(txtSearch.Text))
+                        if (ptStr.StartsWith(txtSearch.Text))
                         {
                             clsPosttypes.SetSelected(i, true);
                             return;

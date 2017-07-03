@@ -20,7 +20,15 @@ namespace SCB.OrderSorting.Client
                     return;
                 var pkg = OrderSortService.GetPackingLog(txtLatticeId.Text);
                 //打印包牌
-                new PackingLabelPrintDocument().PrintSetup(pkg);
+                if (OrderSortService.GetSystemSettingCache().PrintFormat == 0)
+                {
+                    new PackingLabelPrintDocument().PrintSetup(pkg);
+                }
+                else
+                {
+                    new PackingLabelPrintDocument2().PrintSetup(pkg);
+                }
+               
             }
             catch (Exception ex)
             {
@@ -37,7 +45,14 @@ namespace SCB.OrderSorting.Client
                     return;
                 var pkg = OrderSortService.GetPackingLog("", txtPkg.Text);
                 //打印包牌
-                new PackingLabelPrintDocument().PrintSetup(pkg);
+                if (OrderSortService.GetSystemSettingCache().PrintFormat == 0)
+                {
+                    new PackingLabelPrintDocument().PrintSetup(pkg);
+                }
+                else
+                {
+                    new PackingLabelPrintDocument2().PrintSetup(pkg);
+                }
             }
             catch (Exception ex)
             {

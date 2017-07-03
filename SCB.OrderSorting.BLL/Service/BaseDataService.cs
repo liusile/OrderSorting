@@ -39,7 +39,7 @@ namespace SCB.OrderSorting.BLL.Service
         {
             using (var db = new OrderSortingDBEntities())
             {
-                return db.Posttypes.OrderBy(pt => pt.EnPostCode).ToList();
+                return db.Posttypes.OrderBy(pt => pt.CnPostName).ToList();
             }
         }
         /// <summary>

@@ -20,15 +20,26 @@ namespace SCB.OrderSorting.Client
         private void btnReprintByLatticeId_Click(object sender, EventArgs e)
         {
             try
-            {
+            {   
                 if (string.IsNullOrWhiteSpace(txtLatticeId.Text))
                     return;
+                var printNum = int.Parse(txtNum.Text.Trim());
                 var latticeIdArray = txtLatticeId.Text.Split(Environment.NewLine.ToArray());
                 var pkg = OrderSortService.CreatePackingLog(latticeIdArray, _UserInfo);
                 if (pkg != null)
                 {
-                    //打印包牌
-                    new PackingLabelPrintDocument().PrintSetup(pkg);
+                    for (int i = 0; i < printNum; i++)
+                    {
+                        //打印包牌
+                        if (OrderSortService.GetSystemSettingCache().PrintFormat == 0)
+                        {
+                            new PackingLabelPrintDocument().PrintSetup(pkg);
+                        }
+                        else
+                        {
+                            new PackingLabelPrintDocument2().PrintSetup(pkg);
+                        }
+                    }
                 }
             }
             catch (Exception ex)

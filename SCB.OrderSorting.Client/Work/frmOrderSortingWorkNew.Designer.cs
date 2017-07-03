@@ -54,8 +54,8 @@
             this.全部清除重扫ToolStripMenuItem,
             this.pKG条码重打ToolStripMenuItem,
             this.分拣撤回ToolStripMenuItem1,
-            this.方案管理ToolStripMenuItem,
-            this.pKG标签打印ToolStripMenuItem});
+            this.pKG标签打印ToolStripMenuItem,
+            this.方案管理ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1002, 35);
@@ -201,7 +201,7 @@
             this.Name = "frmOrderSortingWorkNew";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "分拣架作业";
+            this.Text = "分拣架作业 V1.1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmOrderSortingWorkNew_FormClosing);
             this.Load += new System.EventHandler(this.frmLatticeSettingSearch_Load);

@@ -17,7 +17,7 @@ namespace SCB.OrderSorting.BLL.Context
             _y = _startY1;
             _btnWidth = Convert.ToInt32(formWidth * 0.115);
             _btnHeight = Convert.ToInt32(formHeight * 0.13);
-            _emSize = (float)((formWidth + formHeight) * 0.005);
+            _emSize = (float)((formWidth + formHeight) * 0.004);
         }
 
         internal override void AfterAdd()

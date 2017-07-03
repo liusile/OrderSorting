@@ -44,6 +44,7 @@ namespace SCB.OrderSorting.BLL.Model
         /// </summary>
         public string SortingSolution { get; set; }
         public string Scanner { get; set; }
+        public int PrintFormat { get; set; }
     }
 
     public class Modbussetting

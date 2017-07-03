@@ -55,7 +55,7 @@ namespace SCB.OrderSorting.BLL.Context
         public override List<LatticeSetting> GetLatticeSettingByOrderinfoList(OrderInfo info)
         {
             if (info == null) return null;
-            if (info.CountryId != "237") throw new Exception("该订单不属于英国");
+          //  if (info.CountryId != "237") throw new Exception("该订单不属于英国");
             string zip = info.Zip;
             List<ZipType> specZipTypeList = null;
             //142 飞特英国小包特惠派送走特殊分区

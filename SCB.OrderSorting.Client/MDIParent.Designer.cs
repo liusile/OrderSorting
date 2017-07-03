@@ -38,8 +38,8 @@ namespace SCB.OrderSorting.Client
             this.装包记录查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.分拣统计报表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.测试订单标签打印ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.底层更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.测试订单标签打印ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -107,15 +107,6 @@ namespace SCB.OrderSorting.Client
             this.系统设置ToolStripMenuItem.Text = "系统设置";
             this.系统设置ToolStripMenuItem.Click += new System.EventHandler(this.系统设置ToolStripMenuItem_Click);
             // 
-            // 测试订单标签打印ToolStripMenuItem
-            // 
-            this.测试订单标签打印ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.测试订单标签打印ToolStripMenuItem.Name = "测试订单标签打印ToolStripMenuItem";
-            this.测试订单标签打印ToolStripMenuItem.Size = new System.Drawing.Size(184, 31);
-            this.测试订单标签打印ToolStripMenuItem.Text = "测试订单标签打印";
-            this.测试订单标签打印ToolStripMenuItem.Visible = false;
-            this.测试订单标签打印ToolStripMenuItem.Click += new System.EventHandler(this.测试订单标签打印ToolStripMenuItem_Click);
-            // 
             // 底层更新ToolStripMenuItem
             // 
             this.底层更新ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
@@ -123,6 +114,14 @@ namespace SCB.OrderSorting.Client
             this.底层更新ToolStripMenuItem.Size = new System.Drawing.Size(104, 31);
             this.底层更新ToolStripMenuItem.Text = "底层更新";
             this.底层更新ToolStripMenuItem.Click += new System.EventHandler(this.底层更新ToolStripMenuItem_Click);
+            // 
+            // 测试订单标签打印ToolStripMenuItem
+            // 
+            this.测试订单标签打印ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.测试订单标签打印ToolStripMenuItem.Name = "测试订单标签打印ToolStripMenuItem";
+            this.测试订单标签打印ToolStripMenuItem.Size = new System.Drawing.Size(184, 31);
+            this.测试订单标签打印ToolStripMenuItem.Text = "测试订单标签打印";
+            this.测试订单标签打印ToolStripMenuItem.Click += new System.EventHandler(this.测试订单标签打印ToolStripMenuItem_Click);
             // 
             // statusStrip
             // 

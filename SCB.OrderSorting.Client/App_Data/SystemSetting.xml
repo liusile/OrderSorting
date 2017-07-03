@@ -51,5 +51,6 @@
   <LogStorageDays>6</LogStorageDays>
   <IsFlyt>false</IsFlyt>
   <SortingSolution>677f3fca-07dc-46b6-a28c-73a49c9e8982</SortingSolution>
-  <Scanner />
+  <Scanner>A,B</Scanner>
+  <PrintFormat>0</PrintFormat>
 </SystemSetting>

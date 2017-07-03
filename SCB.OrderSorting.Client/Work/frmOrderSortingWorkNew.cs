@@ -35,6 +35,7 @@ namespace SCB.OrderSorting.Client
         private static UserInfo _UserInfo;//=new UserInfo {UserId=123,UserName="刘思乐" };//用户信息
         private static bool _IsLoaded = false;//是否加载完成
         private SoundType_Enum SoundType;
+        private static bool isFirstScan=true;
         /// <summary>
         /// 按钮集合
         /// </summary>
@@ -247,17 +248,17 @@ namespace SCB.OrderSorting.Client
                 if (!isCollect())
                 {
                     OrderSortService.SoundAsny(SoundType.ConllectError);
-                    MessageBox.Show("请检查分拣架设备是否连接正确！");
+                    MessageBox.Show("请检查分拣架设备是否阻挡且连接正确！");
                     开始分拣ToolStripMenuItem.Enabled = true;
                     return;
                 }
-              
+
                 if (WriteTask==null)
                 {
                     //启动线程
                     this.ThreadRun();
                 }
-                SetQueueCount(ReSetCounterType_Enum.Grating2Button);
+                SetQueueCount(ReSetCounterType_Enum.Button,false);
                 SetQueueLED(LED_Enum.None);
                 SetQueueWarningLight(LightOperStatus_Enum.Off);
                 Init_ThreadSortOrderManager();
@@ -462,6 +463,11 @@ namespace SCB.OrderSorting.Client
 
                         ThreadSortOrder.TargetLattice = LatticeSettingNotOver;
                         ThreadSortOrder.CabinetId = LatticeSettingNotOver.First().CabinetId;
+                        if (isFirstScan)
+                        {
+                            SetQueueCount(ReSetCounterType_Enum.Grating);
+                            isFirstScan = false;
+                        }
                         if (ThreadSortOrder.SortStatus == SortStatus_Enum.WaitPut)
                         {
                             SetQueueCount(ReSetCounterType_Enum.Grating);
@@ -762,15 +768,8 @@ namespace SCB.OrderSorting.Client
             {
                lblMsg.Text = "连接设备中....";
 
-                bool isSuccess= OrderSortService.isCollect();
-                if (isSuccess)
-                {
-                    return true;
-                }else
-                {
-                    lblMsg.Text = "连接失败....";
-                    return false;
-                }
+              return  OrderSortService.isCollect();
+              
             }
             catch
             {
@@ -820,7 +819,7 @@ namespace SCB.OrderSorting.Client
                     case ReSetCounterType_Enum.Grating2Button:
                         if (slave == null)
                         {
-                            OrderSortService.SerialPortService.ClearGrating2Button();
+                            OrderSortService.SerialPortService.ClearGrating2Button(isCheck);
                         }
                         else
                         {
@@ -1178,7 +1177,14 @@ namespace SCB.OrderSorting.Client
                             var printNum = resultLatticesetting.PrintNum??1;
                             for(int p=0;p< printNum; p++)
                             {
-                                new PackingLabelPrintDocument().PrintSetup(packingLog);
+                                if (OrderSortService.GetSystemSettingCache().PrintFormat == 0)
+                                {
+                                    new PackingLabelPrintDocument().PrintSetup(packingLog);
+                                }
+                                else
+                                {
+                                    new PackingLabelPrintDocument2().PrintSetup(packingLog);
+                                }
                             }
                             UpdateButtonList(resultLatticesetting);
                         }

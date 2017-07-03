@@ -35,13 +35,24 @@ namespace SCB.OrderSorting.Client
                     }
                     if (Orderinfo != null)
                     {
-                        new TestPrintDocument().PrintSetup(Orderinfo);
+                        //new TestPrintDocument().PrintSetup(Orderinfo);
+                        //return;
+                        new PackingLabelPrintDocument2().PrintSetup(new PackingLog { 
+                            CabinetId="3",
+                            CountryNames="33",
+                            OrderIds="1234567",
+                            PackNumber="123456789111",
+                            PostTypeNames="2349999999",
+                            Weight=1234,
+                            UserName="李小四",
+                            OperationTime=DateTime.Now
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.ToString());
             }
         }
 

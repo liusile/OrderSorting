@@ -818,7 +818,7 @@ namespace SCB.OrderSorting.BLL.Service
                 Debug.WriteLine("CreatePackingLog begin");
                 return _centerContext.CreatePackingLog(lattice, userInfo, boxWeight, operationType);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

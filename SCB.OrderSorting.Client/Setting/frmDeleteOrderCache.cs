@@ -19,7 +19,12 @@ namespace SCB.OrderSorting.Client
             {
                 if (string.IsNullOrWhiteSpace(txtOrderId.Text))
                     return;
-                var orderIdArray = txtOrderId.Text.Split(Environment.NewLine.ToArray());
+                string [] orderIdArray = txtOrderId.Text.Split(Environment.NewLine.ToArray());
+                string[] scan = OrderSortService.GetSystemSettingCache().Scanner?.Split(',');
+                if (scan.Length > 1)
+                {
+                    orderIdArray = orderIdArray.Where(o=>o!="").Select(o => o.Substring(1)).ToArray();
+                }
                 string result = OrderSortService.DeleteOrderCacheByOrderId(orderIdArray);
                 MessageBox.Show(result);
                 if (result.IndexOf("失败") < 0)
