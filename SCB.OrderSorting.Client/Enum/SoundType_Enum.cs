@@ -109,6 +109,9 @@ namespace SCB.OrderSorting.Client
         /// 请稍等
         /// </summary>
         public string Waiting = BasePath + "waiting.wav";
-
+        /// <summary>
+        /// 未找到订单对应的格口
+        /// </summary>
+        public string UndefindLattice = BasePath + "UndefindLattice.wav";
     }
 }

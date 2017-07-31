@@ -518,6 +518,9 @@
     <EmbeddedResource Include="App_Data\Sound\UnBlocked.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Content Include="App_Data\Sound\UndefindLattice.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\Sound\waiting.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

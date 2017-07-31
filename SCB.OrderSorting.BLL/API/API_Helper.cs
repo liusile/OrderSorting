@@ -221,9 +221,12 @@ namespace SCB.OrderSorting.BLL.API
                         Reason = 0
                     });
                 });
+               // SaveErrLogHelper.SaveErrorLog("",JsonConvert.SerializeObject(outboudRequest) + "url:" + url);
                 return _httpHelper.Post<BaseResponseContract>(url, outboudRequest);
             }
-            catch (Exception) { throw new Exception("装箱信息上传到物流系统时出错"); }
+            catch (Exception ex) { throw new Exception("装箱信息上传到物流系统时出错:"+ex.ToString());
+               
+            }
         }
 
         /// <summary>

@@ -18,6 +18,13 @@ namespace SCB.OrderSorting.Client
         {
             _latticesettingId = id;
             InitializeComponent();
+            if (frmOrderSortingWorkNew._UserInfo?.UserName == "admin")
+            {
+                txtLEDIndex.ReadOnly = false;
+                txtGratingIndex.ReadOnly = false;
+                txtButtonIndex.ReadOnly = false;
+                btnClear.Visible = true;
+            }
             //InitializeControl();
         }
 
@@ -206,6 +213,11 @@ namespace SCB.OrderSorting.Client
             {
                 LoadSolutionPostType();
             }
+        }
+
+        private void cbIsEnable_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

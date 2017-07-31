@@ -53,4 +53,5 @@
   <SortingSolution>677f3fca-07dc-46b6-a28c-73a49c9e8982</SortingSolution>
   <Scanner>A,B</Scanner>
   <PrintFormat>0</PrintFormat>
+  <VerType>0</VerType><!--0稳定版1快速版-->
 </SystemSetting>

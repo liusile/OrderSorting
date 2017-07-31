@@ -247,7 +247,7 @@ namespace SCB.OrderSorting.BLL.Common
             httpRequest.ContentType = "application/json;charset=utf-8";
             httpRequest.ContentLength = byteData.Length;
             httpRequest.GetRequestStream().Write(byteData, 0, byteData.Length);
-            httpRequest.Timeout = 2 * 60 * 1000;
+            //httpRequest.Timeout = 2 * 60 * 1000;
             var strResponse = string.Empty;
             TryMultiTime(() =>
             {

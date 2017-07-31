@@ -32,7 +32,7 @@ namespace SCB.OrderSorting.Client
         Stopwatch TeStopwatchstTime = null;
         #region 字段
         #region 基本字段
-        private static UserInfo _UserInfo;//=new UserInfo {UserId=123,UserName="刘思乐" };//用户信息
+        public static UserInfo _UserInfo;//=new UserInfo {UserId=123,UserName="刘思乐" };//用户信息
         private static bool _IsLoaded = false;//是否加载完成
         private SoundType_Enum SoundType;
         private static bool isFirstScan=true;
@@ -420,9 +420,9 @@ namespace SCB.OrderSorting.Client
                         {
                             Invoke((MethodInvoker)delegate ()
                             {
-                                txtOrderId.Text = "获取订单数据失败";
+                                lblMsg.Text = "未找到订单对应的格口";
                             });
-                            OrderSortService.SoundAsny(SoundType.GetOrderError);
+                            OrderSortService.SoundAsny(SoundType.UndefindLattice);
                             return;
                         }
                         if (!isScanSingle)
@@ -432,7 +432,7 @@ namespace SCB.OrderSorting.Client
                             {
                                 Invoke((MethodInvoker)delegate ()
                                 {
-                                    txtOrderId.Text = "获取订单格口失败";
+                                    lblMsg.Text = "获取订单格口失败";
                                 });
                                 OrderSortService.SoundAsny(SoundType.ScanLockWait);
                                 return;
@@ -485,6 +485,9 @@ namespace SCB.OrderSorting.Client
                         {
                             //SetQueueCount(ReSetCounterType_Enum.Grating);
                            // SetQueueLED( LED_Enum.None);
+                        }
+                        if (OrderSortService.GetSystemSettingCache()?.VerType==0) {
+                            SetQueueCount(ReSetCounterType_Enum.Grating);
                         }
                         ThreadSortOrder.ResultLattice = null;
                         ThreadSortOrder.SortStatus = SortStatus_Enum.WaitPuting;
@@ -1094,7 +1097,7 @@ namespace SCB.OrderSorting.Client
                     }
                     
                     //正确投递
-                    else if (_ThreadSortOrderManager.Get().Exists(o => (o.SortStatus == SortStatus_Enum.WaitPut || !_ThreadSortOrderManager.Get().Exists(p => p.SortStatus != SortStatus_Enum.LocationError)) && o.TargetLattice.Exists(p => p.GratingIndex == i && p.CabinetId == slave.CabinetId)))
+                    else if (registers.Count(o=>o>0)==1 && _ThreadSortOrderManager.Get().Exists(o => (o.SortStatus == SortStatus_Enum.WaitPut || !_ThreadSortOrderManager.Get().Exists(p => p.SortStatus != SortStatus_Enum.LocationError)) && o.TargetLattice.Exists(p => p.GratingIndex == i && p.CabinetId == slave.CabinetId)))
                     {
                         var ResultLattice = _LatticesettingList.Find(lsc => lsc.GratingIndex == i && lsc.CabinetId == slave.CabinetId);   
                         ThreadSortOrder ThreadSortOrder = _ThreadSortOrderManager.Get().Find(o => o.SortStatus == SortStatus_Enum.WaitPut && o.TargetLattice.Exists(p => p.GratingIndex == i && p.CabinetId == slave.CabinetId));
@@ -1107,12 +1110,12 @@ namespace SCB.OrderSorting.Client
                             UpdateButtonList(ResultLattice);
                         }
                         else
-                        {
+                        { 
                             OrderSortService.SoundAsny(SoundType.CreateOrderSortingLogError);
                         }
                     }
                     //投递错误
-                    else if (_ThreadSortOrderManager.Get().Exists(o => o.SortStatus == SortStatus_Enum.WaitPut) && !_ThreadSortOrderManager.Get().Exists(o => o.SortStatus == SortStatus_Enum.WaitPut
+                    else if (_ThreadSortOrderManager.Get().Exists(o=>o.SortStatus==SortStatus_Enum.WaitPut) && _ThreadSortOrderManager.Get().All(o => o.SortStatus == SortStatus_Enum.WaitPut|| o.SortStatus == SortStatus_Enum.Success|| o.SortStatus == SortStatus_Enum.None) && !_ThreadSortOrderManager.Get().Exists(o => o.SortStatus == SortStatus_Enum.WaitPut
                             &&  o.TargetLattice.Exists(p => p.GratingIndex == i && p.CabinetId == slave.CabinetId)))
                     {
                         Debug.WriteLine("投递出错："+string.Join(",", registers.Select(o => o.ToString())));

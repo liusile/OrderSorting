@@ -130,6 +130,7 @@
             this.btnClear.TabIndex = 13;
             this.btnClear.Text = "清空";
             this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Visible = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // txtLEDIndex
@@ -139,6 +140,7 @@
             this.txtLEDIndex.Location = new System.Drawing.Point(145, 269);
             this.txtLEDIndex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtLEDIndex.Name = "txtLEDIndex";
+            this.txtLEDIndex.ReadOnly = true;
             this.txtLEDIndex.Size = new System.Drawing.Size(185, 29);
             this.txtLEDIndex.TabIndex = 20;
             // 
@@ -162,6 +164,7 @@
             this.txtGratingIndex.Location = new System.Drawing.Point(145, 312);
             this.txtGratingIndex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtGratingIndex.Name = "txtGratingIndex";
+            this.txtGratingIndex.ReadOnly = true;
             this.txtGratingIndex.Size = new System.Drawing.Size(185, 29);
             this.txtGratingIndex.TabIndex = 22;
             // 
@@ -185,6 +188,7 @@
             this.txtButtonIndex.Location = new System.Drawing.Point(145, 356);
             this.txtButtonIndex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtButtonIndex.Name = "txtButtonIndex";
+            this.txtButtonIndex.ReadOnly = true;
             this.txtButtonIndex.Size = new System.Drawing.Size(185, 29);
             this.txtButtonIndex.TabIndex = 24;
             // 
@@ -208,6 +212,7 @@
             this.txtCabinetId.Location = new System.Drawing.Point(145, 65);
             this.txtCabinetId.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtCabinetId.Name = "txtCabinetId";
+            this.txtCabinetId.ReadOnly = true;
             this.txtCabinetId.Size = new System.Drawing.Size(185, 29);
             this.txtCabinetId.TabIndex = 26;
             // 
@@ -276,7 +281,7 @@
             // 
             this.btnTest2.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.btnTest2.Location = new System.Drawing.Point(245, 19);
-            this.btnTest2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnTest2.Margin = new System.Windows.Forms.Padding(4);
             this.btnTest2.Name = "btnTest2";
             this.btnTest2.Size = new System.Drawing.Size(37, 34);
             this.btnTest2.TabIndex = 31;
@@ -288,7 +293,7 @@
             // 
             this.btnTest1.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.btnTest1.Location = new System.Drawing.Point(196, 19);
-            this.btnTest1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnTest1.Margin = new System.Windows.Forms.Padding(4);
             this.btnTest1.Name = "btnTest1";
             this.btnTest1.Size = new System.Drawing.Size(37, 34);
             this.btnTest1.TabIndex = 32;
@@ -300,7 +305,7 @@
             // 
             this.btnTest0.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.btnTest0.Location = new System.Drawing.Point(147, 19);
-            this.btnTest0.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnTest0.Margin = new System.Windows.Forms.Padding(4);
             this.btnTest0.Name = "btnTest0";
             this.btnTest0.Size = new System.Drawing.Size(37, 34);
             this.btnTest0.TabIndex = 33;
@@ -325,7 +330,7 @@
             // 
             this.btnTest3.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.btnTest3.Location = new System.Drawing.Point(296, 19);
-            this.btnTest3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnTest3.Margin = new System.Windows.Forms.Padding(4);
             this.btnTest3.Name = "btnTest3";
             this.btnTest3.Size = new System.Drawing.Size(37, 34);
             this.btnTest3.TabIndex = 35;
@@ -338,12 +343,13 @@
             this.cbIsEnable.AutoSize = true;
             this.cbIsEnable.Font = new System.Drawing.Font("微软雅黑", 10F);
             this.cbIsEnable.Location = new System.Drawing.Point(16, 449);
-            this.cbIsEnable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbIsEnable.Margin = new System.Windows.Forms.Padding(4);
             this.cbIsEnable.Name = "cbIsEnable";
             this.cbIsEnable.Size = new System.Drawing.Size(100, 27);
             this.cbIsEnable.TabIndex = 36;
             this.cbIsEnable.Text = "是否启用";
             this.cbIsEnable.UseVisualStyleBackColor = true;
+            this.cbIsEnable.CheckedChanged += new System.EventHandler(this.cbIsEnable_CheckedChanged);
             // 
             // label2
             // 
