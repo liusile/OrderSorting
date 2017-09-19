@@ -276,6 +276,10 @@ namespace SCB.OrderSorting.BLL
         {
             return BaseDataService.GetPostTypesList();
         }
+        public static string GetPostTypeName(string postId)
+        {
+            return BaseDataService.GetPostTypeName(postId);
+        }
         /// <summary>
         /// 跟据渠道获取所有的区
         /// </summary>

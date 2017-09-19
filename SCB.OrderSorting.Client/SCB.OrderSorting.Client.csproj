@@ -407,9 +407,6 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="24.ico" />
-    <Content Include="App_Data\LoginData.dat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="App_Data\OrderSortingDB.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

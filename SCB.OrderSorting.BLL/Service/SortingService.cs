@@ -903,8 +903,9 @@ namespace SCB.OrderSorting.BLL.Service
             {
                 return _centerContext.GetOrderInfoById(orderId, userInfo);
             }
-            catch
+            catch(Exception ex)
             {
+                Debug.Write(ex.ToString());
                 return null;
             }
         }

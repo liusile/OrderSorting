@@ -6,6 +6,7 @@ using SCB.WHP.EDS.SocketServer.Common.CommonHelper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 
 namespace SCB.OrderSorting.BLL.API
 {
@@ -63,6 +64,7 @@ namespace SCB.OrderSorting.BLL.API
             }
             catch { throw; }
         }
+
         /// <summary>
         /// 获取OA的全部邮寄方式
         /// </summary>
@@ -186,6 +188,23 @@ namespace SCB.OrderSorting.BLL.API
                 return _httpHelper.Post<VerifyOrderResponseContract>(url, postData);
             }
             catch (Exception ) { throw ; }
+        }
+        internal static VerifyOrderResponseContract VerifyOrderForHangZhou(string orderId, UserInfo user)
+        {
+            try
+            {
+                string host = "http://foreignapi.eds.sellercube.com";
+                string Action = "/orderparent";
+                string Function = "/GetOrderVerification";
+                string Parameters = string.Format("Token={0}&OperatorId={1}&OperatorName={2}&OrderId={3}&ProcessCenterID={4}", "f959d57cf4e94b6f93c129e2a504860d", user.UserId, user.UserName, orderId, user.Pcid);
+                string result = _httpHelper.QueryData(host + Action + Function, Parameters, "Get");
+                Debug.Write(result);
+                return JsonConvert.DeserializeObject<VerifyOrderResponseContract>(result);
+            }
+            catch (Exception ex) {
+                string error = ex.ToString();
+                Debug.Write(error);
+                throw; }
         }
         /// <summary>
         /// 把装箱信息上传到物流系统

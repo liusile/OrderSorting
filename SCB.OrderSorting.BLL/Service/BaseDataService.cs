@@ -42,6 +42,15 @@ namespace SCB.OrderSorting.BLL.Service
                 return db.Posttypes.OrderBy(pt => pt.CnPostName).ToList();
             }
         }
+        internal static string GetPostTypeName(string postID)
+        {
+            using (var db = new OrderSortingDBEntities())
+            {
+                var postIdArr = postID.Split(',');
+                var data = db.Posttypes.Where(o=> postIdArr.Contains(o.PostID)).ToList();
+                return string.Join(",", data.Select(o => o.CnPostName));
+            }
+        }
         /// <summary>
         /// 跟据渠道获取所有的区
         /// </summary>

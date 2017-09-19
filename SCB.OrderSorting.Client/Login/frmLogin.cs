@@ -50,7 +50,7 @@ namespace SCB.OrderSorting.Client
                 {
                     userInfo = new UserInfo
                     {
-                        Pcid = "7",
+                        Pcid = "1067",
                         PcName = "7",
                         UserName = "admin",
                         ReceivePointId = "7",

@@ -45,6 +45,7 @@ namespace SCB.OrderSorting.Client
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelname = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerShow = new System.Windows.Forms.Timer(this.components);
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -129,29 +130,36 @@ namespace SCB.OrderSorting.Client
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
-            this.toolStripStatusLabelname});
-            this.statusStrip.Location = new System.Drawing.Point(0, 708);
+            this.toolStripStatusLabelname,
+            this.toolStripStatusLabel2});
+            this.statusStrip.Location = new System.Drawing.Point(0, 698);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
-            this.statusStrip.Size = new System.Drawing.Size(1117, 22);
+            this.statusStrip.Size = new System.Drawing.Size(1117, 32);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 27);
             // 
             // toolStripStatusLabelname
             // 
             this.toolStripStatusLabelname.Name = "toolStripStatusLabelname";
-            this.toolStripStatusLabelname.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabelname.Size = new System.Drawing.Size(0, 27);
             // 
             // timerShow
             // 
             this.timerShow.Enabled = true;
             this.timerShow.Interval = 1000;
             this.timerShow.Tick += new System.EventHandler(this.timerShow_Tick);
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(92, 27);
+            this.toolStripStatusLabel2.Text = "V1.0.0.0";
             // 
             // MDIParent
             // 
@@ -192,6 +200,7 @@ namespace SCB.OrderSorting.Client
         private System.Windows.Forms.ToolStripMenuItem 测试订单标签打印ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 分拣统计报表ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 底层更新ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 

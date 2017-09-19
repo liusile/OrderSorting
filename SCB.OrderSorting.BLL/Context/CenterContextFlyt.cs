@@ -19,10 +19,15 @@ namespace SCB.OrderSorting.BLL.Context
         /// <returns></returns>
         internal override PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo, decimal criticalWeight, decimal boxWeight, int operationType = 3)
         {
+            
             using (var db = new OrderSortingDBEntities())
             {
                 //根据格口号获取格口信息
                 var LatticesettingIds = db.LatticeSetting.Where(ls => latticeIdArray.Contains(ls.LatticeId)).Select(ls => ls.ID);
+                if (LatticesettingIds.Count() != latticeIdArray.Where(o => !string.IsNullOrWhiteSpace(o)).Count())
+                {
+                    throw new Exception("输入的格口号有误，注意：多个格口间需使用回车键分隔！");
+                }
                 //根据格口信息获取相关的快件信息
                 var logCache = db.LatticeOrdersCache.Where(o => LatticesettingIds.Contains(o.LatticesettingId));
                 if (logCache == null || logCache.Count() < 1)
@@ -94,6 +99,7 @@ namespace SCB.OrderSorting.BLL.Context
                 {
                     return info;
                 }
+               
                 info = CreateFlytOrderInfo(orderId, userInfo);
                 if (info != null)
                 {
@@ -112,8 +118,17 @@ namespace SCB.OrderSorting.BLL.Context
         private OrderInfo CreateFlytOrderInfo(string orderId, UserInfo userInfo)
         {
             //调用物流接口，根据订单号获取订单信息
-            var order = API_Helper.VerifyOrder(orderId, userInfo);
-            if (!order.Success && !string.IsNullOrWhiteSpace(order.Message))
+            VerifyOrderResponseContract order = null;
+            if (userInfo.Pcid == "1067")//杭州处理中心
+            {
+                order = API_Helper.VerifyOrderForHangZhou(orderId, userInfo);
+            }
+            else
+            {
+                order = API_Helper.VerifyOrder(orderId, userInfo);
+            }
+               
+            if ( ((!order.Success??false) || (!order?.Sucess ?? false)) && !string.IsNullOrWhiteSpace(order.Message))
                 throw new Exception(order.Message);
             return new OrderInfo
             {
@@ -128,5 +143,6 @@ namespace SCB.OrderSorting.BLL.Context
                 CreateTime = DateTime.Now
             };
         }
+
     }
 }

@@ -14,12 +14,12 @@
         /// 邮递方式ID
         /// </summary>
         public string PostId { get; set; }
-        public string PostCnName { get; set; }
+        public string PostCnName { get; set; } = "";
         /// <summary>
         /// 国家ID
         /// </summary>
         public string CountryId { get; set; }
-        public string CountryCnName { get; set; }
+        public string CountryCnName { get; set; } = "";
         /// <summary>
         /// 邮编
         /// </summary>
@@ -31,7 +31,8 @@
         /// <summary>
         /// 是否成功
         /// </summary>
-        public bool Success { get; set; }
+        public bool? Success { get; set; }
+        public bool? Sucess { get; set; }
         /// <summary>
         /// 备注信息
         /// </summary>

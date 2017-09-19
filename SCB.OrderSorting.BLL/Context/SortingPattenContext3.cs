@@ -1,6 +1,7 @@
 ﻿using SCB.OrderSorting.DAL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SCB.OrderSorting.BLL.Context
@@ -58,10 +59,12 @@ namespace SCB.OrderSorting.BLL.Context
         /// <param name="info">订单信息</param>
         public override List<LatticeSetting> GetLatticeSettingByOrderinfoList(OrderInfo info)
         {
-            return (from sc in solutionCountryList
-                    from spt in solutionPostTypeList
+            return (
                     from ls in latticeSettingList
-                    where sc.LatticeSettingId == ls.ID && spt.LatticeSettingId == ls.ID && sc.CountryId == info.CountryId && spt.PostTypeId == info.PostId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
+                    join sc in solutionCountryList on ls.ID equals sc.LatticeSettingId into temp
+                    from tt in temp.DefaultIfEmpty()
+                    join spt in solutionPostTypeList on ls.ID equals spt.LatticeSettingId
+                    where (tt==null || tt.CountryId == info.CountryId ) && spt.PostTypeId == info.PostId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
                     select ls).ToList();
         }
         //internal override List<SolutionCountry> GetSolutionCountryListByLatticeSettingId(int latticeSettingId)

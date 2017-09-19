@@ -494,9 +494,10 @@ namespace SCB.OrderSorting.Client
                         SetQueueLED(ThreadSortOrder.TargetLattice, ThreadSortOrder.WaitPutColor, 0, new FinishStatus { SortStatus_Enum = SortStatus_Enum.WaitPut, ThreadSortOrder = ThreadSortOrder });
                         ThreadSortOrder.SortOrderNo = orderID;
                         CreateOrderSortingLogAsync(ThreadSortOrder.OrderInfo, ThreadSortOrder.TargetLattice, null, OrderSortingLog_OperationType_Enum.扫描, OrderSortingLog_Status_Enum.待投递);
-                    }
-                });
+                }
             }
+                    );
+        }
             catch (Exception ex)
             {
                 SaveErrLogHelper.SaveErrorLogAsync(string.Empty, ex.ToString());
