@@ -34,7 +34,7 @@ namespace SCB.OrderSorting.Client
                         throw new Exception(msg);
                     }
                     if (Orderinfo != null)
-                    {
+                    { 
                         //new TestPrintDocument().PrintSetup(Orderinfo);
                         //return;
                         new PackingLabelPrintDocument2().PrintSetup(new PackingLog { 

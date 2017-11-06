@@ -36,9 +36,9 @@ namespace SCB.OrderSorting.BLL.Model
         /// </summary>
         public int LogStorageDays { get; set; }
         /// <summary>
-        /// 是否飞特
+        /// 接口类型
         /// </summary>
-        public bool IsFlyt { get; set; }
+        public InterfaceType InterfaceType { get; set; }
         /// <summary>
         /// 解决方案
         /// </summary>
@@ -127,4 +127,11 @@ namespace SCB.OrderSorting.BLL.Model
         public int TCPPort { get; set; }
     }
 
+    public enum InterfaceType
+    {
+        General,
+        Flyt,
+        //飞特独立出了物流系统，同时也得适配新接口
+        SigleFlyt
+    }
 }

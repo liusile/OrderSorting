@@ -23,7 +23,7 @@ namespace SCB.OrderSorting.BLL.Context
         /// <param name="userInfo">用户信息</param>
         /// <param name="boxWeight">箱子重量</param>
         /// <param name="operationType">操作类型：1自动满格，2手动满格，3打印包牌号</param>
-        internal abstract PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo, decimal boxWeight, int operationType = 3);
+        internal abstract PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo, decimal boxWeight,out List<LatticeOrdersCache> latticeInfo, int operationType = 3);
         /// <summary>
         /// 创建装箱记录（多格口打印一个PKG标签）
         /// </summary>
@@ -32,7 +32,7 @@ namespace SCB.OrderSorting.BLL.Context
         /// <param name="criticalWeight">临界重量</param>
         /// <param name="boxWeight">箱子重量</param>
         /// <returns></returns>
-        internal abstract PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo, decimal criticalWeight, decimal boxWeight, int operationType = 3);
+        internal abstract PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo, decimal criticalWeight, decimal boxWeight, out List<LatticeOrdersCache> latticeInfo,int operationType = 3);
 
         protected PackingLog NewPackingLog(LatticeSetting lattice, UserInfo userInfo, int operationType, List<LatticeOrdersCache> logList, decimal boxWeight)
         {

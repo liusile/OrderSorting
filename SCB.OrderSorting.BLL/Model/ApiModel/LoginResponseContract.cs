@@ -29,7 +29,7 @@
         /// <summary>
         /// 用户所属的收货点ID
         /// </summary>
-        public int ReceivePointId { get; set; }
+        public string ReceivePointId { get; set; }
         /// <summary>
         /// 用户所属的收货点名称
         /// </summary>

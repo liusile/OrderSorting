@@ -2,6 +2,8 @@
 using SCB.OrderSorting.BLL.Model;
 using SCB.OrderSorting.DAL;
 using System;
+using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Diagnostics;
 using System.Linq;
 
@@ -17,7 +19,7 @@ namespace SCB.OrderSorting.BLL.Context
         /// <param name="criticalWeight">临界重量</param>
         /// <param name="boxWeight">箱子重量</param>
         /// <returns></returns>
-        internal override PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo, decimal criticalWeight, decimal boxWeight, int operationType = 3)
+        internal override PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo, decimal criticalWeight, decimal boxWeight, out List<LatticeOrdersCache> latticeInfo,int operationType = 3)
         {
             
             using (var db = new OrderSortingDBEntities())
@@ -35,6 +37,7 @@ namespace SCB.OrderSorting.BLL.Context
                     throw new Exception("没有分拣记录，装箱记录生成失败！");
                 }
                 var logList = logCache.ToList();
+                latticeInfo = logList;
                 //装箱记录
                 PackingLog pkgLog = NewPackingLog(null, userInfo, operationType, logList, boxWeight);
                 if (pkgLog.Weight > criticalWeight)
@@ -61,7 +64,7 @@ namespace SCB.OrderSorting.BLL.Context
         /// <param name="boxWeight">箱子重量</param>
         /// <param name="operationType">操作类型：1自动满格，2手动满格，3打印包牌号</param>
         /// <returns></returns>
-        internal override PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo, decimal boxWeight, int operationType = 3)
+        internal override PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo, decimal boxWeight,out List<LatticeOrdersCache> LatticeOrdersCacheList ,int operationType = 3)
         {
             Debug.WriteLine("CreatePackingLog begin 2");
             using (var db = new OrderSortingDBEntities())
@@ -69,9 +72,11 @@ namespace SCB.OrderSorting.BLL.Context
                 var logCache = db.LatticeOrdersCache.Where(o => o.LatticesettingId == lattice.ID);
                 if (logCache == null || logCache.Count() < 1)
                 {
+                    LatticeOrdersCacheList = null;
                     return null;
                 }
                 var logList = logCache.ToList();
+                LatticeOrdersCacheList = logList;
                 PackingLog pkgLog = NewPackingLog(lattice, userInfo, operationType, logList, boxWeight);
                 db.PackingLog.Add(pkgLog);
                 db.LatticeOrdersCache.RemoveRange(logList);
@@ -94,16 +99,16 @@ namespace SCB.OrderSorting.BLL.Context
         {
             using (var db = new OrderSortingDBEntities())
             {
-                var info = db.OrderInfo.Find(orderId);
-                if (info != null)
-                {
-                    return info;
-                }
+                //var info = db.OrderInfo.Find(orderId);
+                //if (info != null)
+                //{
+                //    return info;
+                //}
                
-                info = CreateFlytOrderInfo(orderId, userInfo);
+                var info = CreateFlytOrderInfo(orderId, userInfo);
                 if (info != null)
                 {
-                    db.OrderInfo.Add(info);
+                    db.OrderInfo.AddOrUpdate(info);
                     db.SaveChangesAsync();
                 }
                 return info;

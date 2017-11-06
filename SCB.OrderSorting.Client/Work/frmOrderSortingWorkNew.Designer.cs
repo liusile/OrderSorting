@@ -34,10 +34,10 @@
             this.全部清除重扫ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pKG条码重打ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.分拣撤回ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.pKG标签打印ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.方案管理ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.新建方案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.方案重命名ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pKG标签打印ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.txtOrderId = new System.Windows.Forms.TextBox();
             this.lblMsg = new System.Windows.Forms.Label();
@@ -103,6 +103,14 @@
             this.分拣撤回ToolStripMenuItem1.Text = "分拣撤回";
             this.分拣撤回ToolStripMenuItem1.Click += new System.EventHandler(this.分拣撤回ToolStripMenuItem_Click);
             // 
+            // pKG标签打印ToolStripMenuItem
+            // 
+            this.pKG标签打印ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
+            this.pKG标签打印ToolStripMenuItem.Name = "pKG标签打印ToolStripMenuItem";
+            this.pKG标签打印ToolStripMenuItem.Size = new System.Drawing.Size(146, 31);
+            this.pKG标签打印ToolStripMenuItem.Text = "PKG标签打印";
+            this.pKG标签打印ToolStripMenuItem.Click += new System.EventHandler(this.pKG标签打印ToolStripMenuItem_Click);
+            // 
             // 方案管理ToolStripMenuItem
             // 
             this.方案管理ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -126,14 +134,6 @@
             this.方案重命名ToolStripMenuItem.Size = new System.Drawing.Size(190, 32);
             this.方案重命名ToolStripMenuItem.Text = "方案重命名";
             this.方案重命名ToolStripMenuItem.Click += new System.EventHandler(this.方案重命名ToolStripMenuItem_Click);
-            // 
-            // pKG标签打印ToolStripMenuItem
-            // 
-            this.pKG标签打印ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
-            this.pKG标签打印ToolStripMenuItem.Name = "pKG标签打印ToolStripMenuItem";
-            this.pKG标签打印ToolStripMenuItem.Size = new System.Drawing.Size(146, 31);
-            this.pKG标签打印ToolStripMenuItem.Text = "PKG标签打印";
-            this.pKG标签打印ToolStripMenuItem.Click += new System.EventHandler(this.pKG标签打印ToolStripMenuItem_Click);
             // 
             // label1
             // 
@@ -201,7 +201,7 @@
             this.Name = "frmOrderSortingWorkNew";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "分拣架作业 V1.1";
+            this.Text = "分拣架作业 V1.2.6";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmOrderSortingWorkNew_FormClosing);
             this.Load += new System.EventHandler(this.frmLatticeSettingSearch_Load);

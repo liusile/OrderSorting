@@ -81,7 +81,7 @@
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
-            this.cbIsFlyt = new System.Windows.Forms.ComboBox();
+            this.cbIsInterfaceType = new System.Windows.Forms.ComboBox();
             this.label31 = new System.Windows.Forms.Label();
             this.btnSortingSolution = new System.Windows.Forms.Button();
             this.cbWarningCabinetId = new System.Windows.Forms.ComboBox();
@@ -175,7 +175,7 @@
             // 
             this.txtPortName.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtPortName.Location = new System.Drawing.Point(193, 52);
-            this.txtPortName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtPortName.Margin = new System.Windows.Forms.Padding(4);
             this.txtPortName.Name = "txtPortName";
             this.txtPortName.Size = new System.Drawing.Size(132, 27);
             this.txtPortName.TabIndex = 7;
@@ -185,7 +185,7 @@
             // 
             this.txtBaudRate.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtBaudRate.Location = new System.Drawing.Point(491, 56);
-            this.txtBaudRate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtBaudRate.Margin = new System.Windows.Forms.Padding(4);
             this.txtBaudRate.Name = "txtBaudRate";
             this.txtBaudRate.Size = new System.Drawing.Size(132, 27);
             this.txtBaudRate.TabIndex = 8;
@@ -195,7 +195,7 @@
             // 
             this.txtDataBits.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtDataBits.Location = new System.Drawing.Point(491, 90);
-            this.txtDataBits.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDataBits.Margin = new System.Windows.Forms.Padding(4);
             this.txtDataBits.Name = "txtDataBits";
             this.txtDataBits.Size = new System.Drawing.Size(132, 27);
             this.txtDataBits.TabIndex = 9;
@@ -205,7 +205,7 @@
             // 
             this.txtCabinetId1_SlaveAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtCabinetId1_SlaveAddress.Location = new System.Drawing.Point(193, 434);
-            this.txtCabinetId1_SlaveAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCabinetId1_SlaveAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtCabinetId1_SlaveAddress.Name = "txtCabinetId1_SlaveAddress";
             this.txtCabinetId1_SlaveAddress.Size = new System.Drawing.Size(132, 27);
             this.txtCabinetId1_SlaveAddress.TabIndex = 10;
@@ -215,7 +215,7 @@
             // 
             this.txtLEDStartAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtLEDStartAddress.Location = new System.Drawing.Point(193, 228);
-            this.txtLEDStartAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtLEDStartAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtLEDStartAddress.Name = "txtLEDStartAddress";
             this.txtLEDStartAddress.Size = new System.Drawing.Size(131, 27);
             this.txtLEDStartAddress.TabIndex = 11;
@@ -227,7 +227,7 @@
             this.cbParity.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.cbParity.FormattingEnabled = true;
             this.cbParity.Location = new System.Drawing.Point(193, 90);
-            this.cbParity.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbParity.Margin = new System.Windows.Forms.Padding(4);
             this.cbParity.Name = "cbParity";
             this.cbParity.Size = new System.Drawing.Size(132, 28);
             this.cbParity.TabIndex = 12;
@@ -238,7 +238,7 @@
             this.cbStopBits.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.cbStopBits.FormattingEnabled = true;
             this.cbStopBits.Location = new System.Drawing.Point(193, 129);
-            this.cbStopBits.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbStopBits.Margin = new System.Windows.Forms.Padding(4);
             this.cbStopBits.Name = "cbStopBits";
             this.cbStopBits.Size = new System.Drawing.Size(132, 28);
             this.cbStopBits.TabIndex = 13;
@@ -247,7 +247,7 @@
             // 
             this.btnSave.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.btnSave.Location = new System.Drawing.Point(491, 740);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(133, 34);
             this.btnSave.TabIndex = 14;
@@ -269,7 +269,7 @@
             // 
             this.txtGratingStartAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtGratingStartAddress.Location = new System.Drawing.Point(193, 265);
-            this.txtGratingStartAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtGratingStartAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtGratingStartAddress.Name = "txtGratingStartAddress";
             this.txtGratingStartAddress.Size = new System.Drawing.Size(131, 27);
             this.txtGratingStartAddress.TabIndex = 17;
@@ -290,7 +290,7 @@
             // 
             this.txtButtonStartAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtButtonStartAddress.Location = new System.Drawing.Point(193, 302);
-            this.txtButtonStartAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtButtonStartAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtButtonStartAddress.Name = "txtButtonStartAddress";
             this.txtButtonStartAddress.Size = new System.Drawing.Size(131, 27);
             this.txtButtonStartAddress.TabIndex = 19;
@@ -329,7 +329,7 @@
             "3",
             "4"});
             this.cbCabinetNumber.Location = new System.Drawing.Point(193, 509);
-            this.cbCabinetNumber.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbCabinetNumber.Margin = new System.Windows.Forms.Padding(4);
             this.cbCabinetNumber.Name = "cbCabinetNumber";
             this.cbCabinetNumber.Size = new System.Drawing.Size(132, 28);
             this.cbCabinetNumber.TabIndex = 22;
@@ -339,7 +339,7 @@
             // 
             this.txtCabinetId2_SlaveAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtCabinetId2_SlaveAddress.Location = new System.Drawing.Point(491, 434);
-            this.txtCabinetId2_SlaveAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCabinetId2_SlaveAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtCabinetId2_SlaveAddress.Name = "txtCabinetId2_SlaveAddress";
             this.txtCabinetId2_SlaveAddress.Size = new System.Drawing.Size(132, 27);
             this.txtCabinetId2_SlaveAddress.TabIndex = 25;
@@ -360,7 +360,7 @@
             // 
             this.txtCabinetId3_SlaveAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtCabinetId3_SlaveAddress.Location = new System.Drawing.Point(193, 471);
-            this.txtCabinetId3_SlaveAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCabinetId3_SlaveAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtCabinetId3_SlaveAddress.Name = "txtCabinetId3_SlaveAddress";
             this.txtCabinetId3_SlaveAddress.Size = new System.Drawing.Size(132, 27);
             this.txtCabinetId3_SlaveAddress.TabIndex = 27;
@@ -381,7 +381,7 @@
             // 
             this.txtCabinetId4_SlaveAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtCabinetId4_SlaveAddress.Location = new System.Drawing.Point(491, 471);
-            this.txtCabinetId4_SlaveAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCabinetId4_SlaveAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtCabinetId4_SlaveAddress.Name = "txtCabinetId4_SlaveAddress";
             this.txtCabinetId4_SlaveAddress.Size = new System.Drawing.Size(132, 27);
             this.txtCabinetId4_SlaveAddress.TabIndex = 29;
@@ -402,7 +402,7 @@
             // 
             this.txtNumberOfPoints.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtNumberOfPoints.Location = new System.Drawing.Point(491, 131);
-            this.txtNumberOfPoints.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtNumberOfPoints.Margin = new System.Windows.Forms.Padding(4);
             this.txtNumberOfPoints.Name = "txtNumberOfPoints";
             this.txtNumberOfPoints.ReadOnly = true;
             this.txtNumberOfPoints.Size = new System.Drawing.Size(132, 27);
@@ -423,7 +423,7 @@
             // 
             this.txtWarningGreenLightStartAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtWarningGreenLightStartAddress.Location = new System.Drawing.Point(491, 265);
-            this.txtWarningGreenLightStartAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtWarningGreenLightStartAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtWarningGreenLightStartAddress.Name = "txtWarningGreenLightStartAddress";
             this.txtWarningGreenLightStartAddress.Size = new System.Drawing.Size(132, 27);
             this.txtWarningGreenLightStartAddress.TabIndex = 38;
@@ -444,7 +444,7 @@
             // 
             this.txtWarningRedLightStartAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtWarningRedLightStartAddress.Location = new System.Drawing.Point(491, 228);
-            this.txtWarningRedLightStartAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtWarningRedLightStartAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtWarningRedLightStartAddress.Name = "txtWarningRedLightStartAddress";
             this.txtWarningRedLightStartAddress.Size = new System.Drawing.Size(132, 27);
             this.txtWarningRedLightStartAddress.TabIndex = 36;
@@ -465,7 +465,7 @@
             // 
             this.txtResetGratingStartAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtResetGratingStartAddress.Location = new System.Drawing.Point(193, 340);
-            this.txtResetGratingStartAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtResetGratingStartAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtResetGratingStartAddress.Name = "txtResetGratingStartAddress";
             this.txtResetGratingStartAddress.Size = new System.Drawing.Size(131, 27);
             this.txtResetGratingStartAddress.TabIndex = 34;
@@ -486,7 +486,7 @@
             // 
             this.txtWarningBuzzerStartAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtWarningBuzzerStartAddress.Location = new System.Drawing.Point(491, 340);
-            this.txtWarningBuzzerStartAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtWarningBuzzerStartAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtWarningBuzzerStartAddress.Name = "txtWarningBuzzerStartAddress";
             this.txtWarningBuzzerStartAddress.Size = new System.Drawing.Size(132, 27);
             this.txtWarningBuzzerStartAddress.TabIndex = 42;
@@ -507,7 +507,7 @@
             // 
             this.txtWarningYellowLightStartAddress.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtWarningYellowLightStartAddress.Location = new System.Drawing.Point(491, 300);
-            this.txtWarningYellowLightStartAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtWarningYellowLightStartAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtWarningYellowLightStartAddress.Name = "txtWarningYellowLightStartAddress";
             this.txtWarningYellowLightStartAddress.Size = new System.Drawing.Size(132, 27);
             this.txtWarningYellowLightStartAddress.TabIndex = 40;
@@ -530,7 +530,7 @@
             this.cbSortingPatten.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.cbSortingPatten.FormattingEnabled = true;
             this.cbSortingPatten.Location = new System.Drawing.Point(193, 640);
-            this.cbSortingPatten.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbSortingPatten.Margin = new System.Windows.Forms.Padding(4);
             this.cbSortingPatten.Name = "cbSortingPatten";
             this.cbSortingPatten.Size = new System.Drawing.Size(132, 28);
             this.cbSortingPatten.TabIndex = 44;
@@ -552,7 +552,7 @@
             this.cbLogStorageDays.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.cbLogStorageDays.FormattingEnabled = true;
             this.cbLogStorageDays.Location = new System.Drawing.Point(491, 602);
-            this.cbLogStorageDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbLogStorageDays.Margin = new System.Windows.Forms.Padding(4);
             this.cbLogStorageDays.Name = "cbLogStorageDays";
             this.cbLogStorageDays.Size = new System.Drawing.Size(132, 28);
             this.cbLogStorageDays.TabIndex = 46;
@@ -575,7 +575,7 @@
             this.cbSortingSolution.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.cbSortingSolution.FormattingEnabled = true;
             this.cbSortingSolution.Location = new System.Drawing.Point(491, 640);
-            this.cbSortingSolution.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbSortingSolution.Margin = new System.Windows.Forms.Padding(4);
             this.cbSortingSolution.Name = "cbSortingSolution";
             this.cbSortingSolution.Size = new System.Drawing.Size(132, 30);
             this.cbSortingSolution.TabIndex = 50;
@@ -665,19 +665,19 @@
             this.label30.TabIndex = 57;
             this.label30.Text = "label30";
             // 
-            // cbIsFlyt
+            // cbIsInterfaceType
             // 
-            this.cbIsFlyt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbIsFlyt.Font = new System.Drawing.Font("微软雅黑", 9F);
-            this.cbIsFlyt.FormattingEnabled = true;
-            this.cbIsFlyt.Items.AddRange(new object[] {
+            this.cbIsInterfaceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbIsInterfaceType.Font = new System.Drawing.Font("微软雅黑", 9F);
+            this.cbIsInterfaceType.FormattingEnabled = true;
+            this.cbIsInterfaceType.Items.AddRange(new object[] {
             "是",
             "否"});
-            this.cbIsFlyt.Location = new System.Drawing.Point(192, 602);
-            this.cbIsFlyt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.cbIsFlyt.Name = "cbIsFlyt";
-            this.cbIsFlyt.Size = new System.Drawing.Size(132, 28);
-            this.cbIsFlyt.TabIndex = 59;
+            this.cbIsInterfaceType.Location = new System.Drawing.Point(192, 602);
+            this.cbIsInterfaceType.Margin = new System.Windows.Forms.Padding(4);
+            this.cbIsInterfaceType.Name = "cbIsInterfaceType";
+            this.cbIsInterfaceType.Size = new System.Drawing.Size(132, 28);
+            this.cbIsInterfaceType.TabIndex = 59;
             // 
             // label31
             // 
@@ -686,14 +686,14 @@
             this.label31.Location = new System.Drawing.Point(53, 606);
             this.label31.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(69, 20);
+            this.label31.Size = new System.Drawing.Size(54, 20);
             this.label31.TabIndex = 58;
-            this.label31.Text = "是否飞特";
+            this.label31.Text = "对接方";
             // 
             // btnSortingSolution
             // 
             this.btnSortingSolution.Location = new System.Drawing.Point(588, 641);
-            this.btnSortingSolution.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSortingSolution.Margin = new System.Windows.Forms.Padding(4);
             this.btnSortingSolution.Name = "btnSortingSolution";
             this.btnSortingSolution.Size = new System.Drawing.Size(33, 29);
             this.btnSortingSolution.TabIndex = 60;
@@ -712,7 +712,7 @@
             "3",
             "4"});
             this.cbWarningCabinetId.Location = new System.Drawing.Point(491, 509);
-            this.cbWarningCabinetId.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbWarningCabinetId.Margin = new System.Windows.Forms.Padding(4);
             this.cbWarningCabinetId.Name = "cbWarningCabinetId";
             this.cbWarningCabinetId.Size = new System.Drawing.Size(132, 28);
             this.cbWarningCabinetId.TabIndex = 62;
@@ -732,7 +732,7 @@
             // 
             this.txtCriticalWeight.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtCriticalWeight.Location = new System.Drawing.Point(192, 679);
-            this.txtCriticalWeight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCriticalWeight.Margin = new System.Windows.Forms.Padding(4);
             this.txtCriticalWeight.Name = "txtCriticalWeight";
             this.txtCriticalWeight.Size = new System.Drawing.Size(132, 27);
             this.txtCriticalWeight.TabIndex = 64;
@@ -753,7 +753,7 @@
             // 
             this.txtBoxWeight.Font = new System.Drawing.Font("微软雅黑", 9F);
             this.txtBoxWeight.Location = new System.Drawing.Point(491, 679);
-            this.txtBoxWeight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtBoxWeight.Margin = new System.Windows.Forms.Padding(4);
             this.txtBoxWeight.Name = "txtBoxWeight";
             this.txtBoxWeight.Size = new System.Drawing.Size(132, 27);
             this.txtBoxWeight.TabIndex = 66;
@@ -809,7 +809,7 @@
             this.Controls.Add(this.cbWarningCabinetId);
             this.Controls.Add(this.label32);
             this.Controls.Add(this.btnSortingSolution);
-            this.Controls.Add(this.cbIsFlyt);
+            this.Controls.Add(this.cbIsInterfaceType);
             this.Controls.Add(this.label31);
             this.Controls.Add(this.label30);
             this.Controls.Add(this.label29);
@@ -864,7 +864,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximumSize = new System.Drawing.Size(698, 826);
             this.MinimumSize = new System.Drawing.Size(698, 826);
             this.Name = "frmSystemSetting";
@@ -931,7 +931,7 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.ComboBox cbIsFlyt;
+        private System.Windows.Forms.ComboBox cbIsInterfaceType;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Button btnSortingSolution;
         private System.Windows.Forms.ComboBox cbWarningCabinetId;

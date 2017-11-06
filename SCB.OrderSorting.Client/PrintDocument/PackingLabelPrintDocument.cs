@@ -33,8 +33,8 @@ namespace SCB.OrderSorting.Client
                 e.Graphics.DrawString(_packingLog.PackNumber, Regularfont, Brushes.Black, 90, 133);
                 e.Graphics.DrawString("运输方式：" + _packingLog.PostTypeNames, Regularfont, Brushes.Black, x, 162);
                 e.Graphics.DrawString("日期：" + _packingLog.OperationTime.ToString("yyyy/MM/dd"), Regularfont, Brushes.Black, x, 192);
-                e.Graphics.DrawString("操作人：" + _packingLog.UserName, Regularfont, Brushes.Black, x, 222);
-                e.Graphics.DrawString("件数：" + _packingLog.OrderQty, Regularfont, Brushes.Black, x, 252);
+                e.Graphics.DrawString("操作人：" + _packingLog.UserName + "        格口号：" + _packingLog.LatticeId + "", Regularfont, Brushes.Black, x, 222);
+                e.Graphics.DrawString("件数：" + _packingLog.OrderQty , Regularfont, Brushes.Black, x, 252);
                 e.Graphics.DrawString("重量：" + _packingLog.Weight + " Kg", Regularfont, Brushes.Black, x, 282);
                 e.HasMorePages = false;
                 Dispose();

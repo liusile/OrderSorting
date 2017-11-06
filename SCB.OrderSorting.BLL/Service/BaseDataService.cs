@@ -69,6 +69,7 @@ namespace SCB.OrderSorting.BLL.Service
         {
             try
             {
+                var systemSetting = GetSystemSetting();
                 using (var db = new OrderSortingDBEntities())
                 {
                     var now = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
@@ -76,18 +77,38 @@ namespace SCB.OrderSorting.BLL.Service
                     if (loginCount > 0)
                         return;
                     //获取OA的全部邮寄方式
-                    var dt = API_Helper.GetPostList();
-                    if (dt != null && dt.Rows.Count > 1)
+                    DataTable dt = null;
+                    if (systemSetting.InterfaceType == InterfaceType.SigleFlyt)
                     {
-                        foreach (DataRow row in dt.Rows)
+                        var  content = API_Helper.GetPostListBySingleFlyt();
+                        if (content != null && content.Count > 1)
                         {
-                            Posttypes post = new Posttypes();
-                            post.PostID = row["id"].ToString();
-                            post.CnPostName = row["type"].ToString();
-                            post.EnPostCode = row["entype"].ToString();
-                            db.Posttypes.AddOrUpdate(post);
+                            foreach (var  row in content)
+                            {
+                                Posttypes post = new Posttypes();
+                                post.PostID = row.Id;
+                                post.CnPostName = row.Type;
+                                post.EnPostCode = row.Id;
+                                db.Posttypes.AddOrUpdate(post);
+                            }
+                            db.SaveChangesAsync();
                         }
-                        db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        dt = API_Helper.GetPostList();
+                        if (dt != null && dt.Rows.Count > 1)
+                        {
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                Posttypes post = new Posttypes();
+                                post.PostID = row["id"].ToString();
+                                post.CnPostName = row["type"].ToString();
+                                post.EnPostCode = row["entype"].ToString();
+                                db.Posttypes.AddOrUpdate(post);
+                            }
+                            db.SaveChangesAsync();
+                        }
                     }
                 }
             }

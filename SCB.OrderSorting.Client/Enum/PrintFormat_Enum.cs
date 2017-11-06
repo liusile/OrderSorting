@@ -9,6 +9,8 @@ namespace SCB.OrderSorting.Client
    public enum PrintFormat_Enum
     {
         条形码,
-        条形码及二维码
+        二维码,
+        条形码及汇总,
+        二维码及汇总
     }
 }

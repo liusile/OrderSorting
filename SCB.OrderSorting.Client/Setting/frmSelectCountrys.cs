@@ -21,8 +21,15 @@ namespace SCB.OrderSorting.Client
         {
             try
             {
+                var sysSetting = OrderSortService.GetSystemSettingCache();
+               
                 //clsCountrys
                 var countrysList = OrderSortService.GetCountrysList();
+               
+                if (sysSetting.InterfaceType == BLL.Model.InterfaceType.SigleFlyt) {
+                    countrysList.ForEach(o => o.ID = o.EnShorting);
+
+                }
                 clsCountrys.DataSource = countrysList;
                 clsCountrys.ValueMember = "ID";
                 clsCountrys.DisplayMember = "CnName";

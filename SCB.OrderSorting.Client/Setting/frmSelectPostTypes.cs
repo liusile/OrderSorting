@@ -21,8 +21,17 @@ namespace SCB.OrderSorting.Client
         {
             try
             {
+               var sysSetting = OrderSortService.GetSystemSettingCache();
                 //clsPosttypes
                 var posttypeList = OrderSortService.GetPostTypesList();
+                if (sysSetting.InterfaceType == BLL.Model.InterfaceType.SigleFlyt)
+                {
+                    posttypeList = posttypeList.FindAll(o => o.PostID == o.EnPostCode);
+                }
+                else
+                {
+                    posttypeList = posttypeList.FindAll(o => o.PostID != o.EnPostCode);
+                }
                 clsPosttypes.DataSource = posttypeList;
                 clsPosttypes.ValueMember = "PostID";
                 clsPosttypes.DisplayMember = "CnPostName";

@@ -33,9 +33,9 @@ namespace SCB.OrderSorting.BLL.Service
         /// </summary>
         private string _sortingSolution;
         /// <summary>
-        /// 是否调用飞特接口
+        /// 调用口类型
         /// </summary>
-        private bool _isFlyt;
+        private InterfaceType _interfaceType;
         /// <summary>
         /// 包装箱重量
         /// </summary>
@@ -74,14 +74,14 @@ namespace SCB.OrderSorting.BLL.Service
         /// <param name="solution">分拣方案id</param>
         /// <param name="isFlyt">是否调用飞特接口</param>
         /// <param name="boxWeight"></param>
-        internal SortingService(int number, int patten, string solution, bool isFlyt, decimal boxWeight)
+        internal SortingService(int number, int patten, string solution, InterfaceType interfaceType, decimal boxWeight)
         {
             try
             {
                 _cabinetNumber = number;
                 _sortingPatten = patten;
                 _sortingSolution = solution;
-                _isFlyt = isFlyt;
+                _interfaceType = interfaceType;
                 _boxWeight = boxWeight;
                 //重新统计分拣信息
                 LoadTotalSortingDataList();
@@ -97,10 +97,12 @@ namespace SCB.OrderSorting.BLL.Service
 
         private void CreateCenterContext()
         {
-            if (_isFlyt)
+            if (_interfaceType==InterfaceType.Flyt)
                 _centerContext = new CenterContextFlyt();
-            else
+            else if (_interfaceType == InterfaceType.General)
                 _centerContext = new CenterContextDefault();
+            else if (_interfaceType == InterfaceType.SigleFlyt)
+                _centerContext = new CenterContextSingleFlyt();
         }
 
         private void CreateSortingPattenWorker()
@@ -811,12 +813,12 @@ namespace SCB.OrderSorting.BLL.Service
         /// <param name="boxWeight">箱子重量</param>
         /// <param name="operationType">操作类型：1自动满格，2手动满格，3打印包牌号</param>
         /// <returns></returns>
-        internal PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo, decimal boxWeight, int operationType = 3)
+        internal PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo, decimal boxWeight,out List<LatticeOrdersCache> latticeInfo,  int operationType = 3)
         {
             try
             {
                 Debug.WriteLine("CreatePackingLog begin");
-                return _centerContext.CreatePackingLog(lattice, userInfo, boxWeight, operationType);
+                return _centerContext.CreatePackingLog(lattice, userInfo, boxWeight,out latticeInfo, operationType);
             }
             catch (Exception ex)
             {
@@ -837,11 +839,11 @@ namespace SCB.OrderSorting.BLL.Service
         /// <param name="criticalWeight">临界重量</param>
         /// <param name="boxWeight">箱子重量</param>
         /// <returns></returns>
-        internal PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo, decimal criticalWeight, decimal boxWeight)
+        internal PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo, decimal criticalWeight, decimal boxWeight, out List<LatticeOrdersCache> latticeInfo)
         {
             try
             {
-                return _centerContext.CreatePackingLog(latticeIdArray, userInfo, criticalWeight, boxWeight);
+                return _centerContext.CreatePackingLog(latticeIdArray, userInfo, criticalWeight, boxWeight,out latticeInfo);
             }
             catch (Exception)
             {
@@ -949,7 +951,7 @@ namespace SCB.OrderSorting.BLL.Service
                     //正确投入，计数
                     if (status == 2 && !db.LatticeOrdersCache.Any(o => o.OrderId == info.OrderId))
                     {
-                        var countryEnName = db.Countrys.Where(cntr => cntr.ID == info.CountryId).Select(cnt => cnt.EnName).FirstOrDefault();
+                        var countryEnName = db.Countrys.Where(cntr => cntr.ID == info.CountryId|| cntr.EnShorting==info.CountryId).Select(cnt => cnt.EnName).FirstOrDefault();
                         db.LatticeOrdersCache.Add(new LatticeOrdersCache()
                         {
                             LatticesettingId = resultLattice.ID,

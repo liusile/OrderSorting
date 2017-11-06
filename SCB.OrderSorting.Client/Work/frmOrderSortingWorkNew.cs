@@ -252,15 +252,15 @@ namespace SCB.OrderSorting.Client
                     开始分拣ToolStripMenuItem.Enabled = true;
                     return;
                 }
-
+                SetQueueCount(ReSetCounterType_Enum.Button, false);
+                SetQueueLED(LED_Enum.None);
+                SetQueueWarningLight(LightOperStatus_Enum.Off);
                 if (WriteTask==null)
                 {
                     //启动线程
                     this.ThreadRun();
                 }
-                SetQueueCount(ReSetCounterType_Enum.Button,false);
-                SetQueueLED(LED_Enum.None);
-                SetQueueWarningLight(LightOperStatus_Enum.Off);
+              
                 Init_ThreadSortOrderManager();
                 txtOrderId.Enabled = true;
                 txtOrderId.Focus();
@@ -1076,6 +1076,9 @@ namespace SCB.OrderSorting.Client
                     {
                         continue;
                     }
+                    var latticesetting = _LatticesettingList.Find(lsc => lsc.GratingIndex == i && lsc.CabinetId == slave.CabinetId);
+                    if (latticesetting.IsEnable.Equals("false", StringComparison.CurrentCultureIgnoreCase))
+                        continue;
                     //阻挡
                     else if ( registers[i] >= 200)
                     {
@@ -1175,7 +1178,8 @@ namespace SCB.OrderSorting.Client
                     //创建打包记录
                     if (ThreadSortOrder == null || ThreadSortOrder.SortStatus == SortStatus_Enum.None || ThreadSortOrder.SortStatus == SortStatus_Enum.Success || ThreadSortOrder.SortStatus == SortStatus_Enum.OverWeight)
                     {
-                        var packingLog = OrderSortService.CreatePackingLog(resultLatticesetting, _UserInfo, 3);
+                        List<LatticeOrdersCache> latticeInfo;
+                        var packingLog = OrderSortService.CreatePackingLog(resultLatticesetting, _UserInfo, out latticeInfo, 3);
                         if (packingLog != null)
                         {
                             var printNum = resultLatticesetting.PrintNum??1;
@@ -1190,6 +1194,20 @@ namespace SCB.OrderSorting.Client
                                     new PackingLabelPrintDocument2().PrintSetup(packingLog);
                                 }
                             }
+                            if (OrderSortService.GetSystemSettingCache().PrintFormat == 2|| OrderSortService.GetSystemSettingCache().PrintFormat == 3)
+                            {
+
+                                if (latticeInfo.Count > 1)
+                                {
+                                    latticeInfo.Add(new LatticeOrdersCache
+                                    {
+                                        CountryName = "袋子（箱子）",
+                                        Weight = OrderSortService.GetSystemSettingCache().BoxWeight
+                                    });
+                                    new PackingCountryItemsPrintDocument().PrintSetup(packingLog, latticeInfo);
+                                }
+                            }
+                           
                             UpdateButtonList(resultLatticesetting);
                         }
                         else

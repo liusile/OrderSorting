@@ -4,6 +4,8 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 using SCB.OrderSorting.BLL.Model;
+using System.Collections.Generic;
+using SCB.OrderSorting.DAL;
 
 namespace SCB.OrderSorting.Client
 {
@@ -25,7 +27,8 @@ namespace SCB.OrderSorting.Client
                     return;
                 var printNum = int.Parse(txtNum.Text.Trim());
                 var latticeIdArray = txtLatticeId.Text.Split(Environment.NewLine.ToArray());
-                var pkg = OrderSortService.CreatePackingLog(latticeIdArray, _UserInfo);
+                List<LatticeOrdersCache> latticeInfo;
+                var pkg = OrderSortService.CreatePackingLog(latticeIdArray, _UserInfo,out latticeInfo);
                 if (pkg != null)
                 {
                     for (int i = 0; i < printNum; i++)
@@ -34,12 +37,35 @@ namespace SCB.OrderSorting.Client
                         if (OrderSortService.GetSystemSettingCache().PrintFormat == 0)
                         {
                             new PackingLabelPrintDocument().PrintSetup(pkg);
+                        }//打印二维码
+                        else if(OrderSortService.GetSystemSettingCache().PrintFormat == 1)
+                        {
+                            new PackingLabelPrintDocument2().PrintSetup(pkg);
                         }
-                        else
+                        else if (OrderSortService.GetSystemSettingCache().PrintFormat == 2)
+                        {
+                            new PackingLabelPrintDocument().PrintSetup(pkg);
+                        }
+                        else if (OrderSortService.GetSystemSettingCache().PrintFormat == 3)
                         {
                             new PackingLabelPrintDocument2().PrintSetup(pkg);
                         }
                     }
+                    if (OrderSortService.GetSystemSettingCache().PrintFormat == 2 || OrderSortService.GetSystemSettingCache().PrintFormat == 3)
+                    {
+                        
+                      
+                        if (latticeInfo.Count > 1)
+                        {
+                            latticeInfo.Add(new LatticeOrdersCache
+                            {
+                                CountryName = "袋子（箱子）",
+                                Weight = OrderSortService.GetSystemSettingCache().BoxWeight
+                            });
+                            new PackingCountryItemsPrintDocument().PrintSetup(pkg, latticeInfo);
+                        }
+                    }
+
                 }
             }
             catch (Exception ex)

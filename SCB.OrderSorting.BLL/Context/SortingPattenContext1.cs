@@ -57,7 +57,7 @@ namespace SCB.OrderSorting.BLL.Context
         {
             return (from spt in solutionPostTypeList
                     from ls in latticeSettingList
-                    where spt.LatticeSettingId == ls.ID && spt.PostTypeId == info.PostId && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
+                    where spt.LatticeSettingId == ls.ID && (spt.PostTypeId == info.PostId) && ls.IsEnable.Equals("true", System.StringComparison.CurrentCultureIgnoreCase)
                     select ls).FirstOrDefault();
 
             //var solutionPost = solutionPostTypeList.Find(sp => sp.PostTypeId == info.posttype);v

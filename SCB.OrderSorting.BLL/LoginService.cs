@@ -29,14 +29,23 @@ namespace SCB.OrderSorting.BLL
         public static UserInfo CheckLogin(string userAccount, string userPassword, ref string ErrorMsg)
         {
             var systemSetting = BaseDataService.GetSystemSetting();
-            if (systemSetting.IsFlyt)
+            if (systemSetting.InterfaceType==InterfaceType.Flyt)
             {
                 return API_Helper.Login(userAccount, userPassword, ref ErrorMsg);
             }
-            else
+            else if(systemSetting.InterfaceType == InterfaceType.General)
             {
                 userPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(userPassword, "MD5").ToLower();
                 return API_Helper.CheckLogin(userAccount, userPassword, ref ErrorMsg);
+            }
+            else if (systemSetting.InterfaceType == InterfaceType.SigleFlyt)
+            {
+                userPassword = FormsAuthentication.HashPasswordForStoringInConfigFile(userPassword, "MD5").ToUpper();
+                return API_Helper.LoginBySingleFlyt(userAccount, userPassword, ref ErrorMsg);
+            }
+            else
+            {
+                throw new System.Exception("配置出错，未知的对接方！");
             }
         }
 

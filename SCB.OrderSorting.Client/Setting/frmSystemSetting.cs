@@ -16,6 +16,7 @@ namespace SCB.OrderSorting.Client
         private List<KeyValuePair<int, string>> pattenList = new List<KeyValuePair<int, string>>();
         private List<KeyValuePair<int, string>> daysList = new List<KeyValuePair<int, string>>();
         private List<KeyValuePair<int, string>> printList = new List<KeyValuePair<int, string>>();
+        private List<KeyValuePair<int, string>> interfaceTypeList = new List<KeyValuePair<int, string>>();
         private bool _isLoaded = false;
 
         public frmSystemSetting()
@@ -73,6 +74,16 @@ namespace SCB.OrderSorting.Client
                 cbLogStorageDays.DisplayMember = "Value";
                 cbLogStorageDays.ValueMember = "Key";
                 cbLogStorageDays.SelectedValue = 0;
+                //接口类型
+                var interfaceTypeArray = Enum.GetValues(typeof(InterfaceType));
+                foreach (var enumItem in interfaceTypeArray)
+                {
+                    interfaceTypeList.Add(new KeyValuePair<int, string>((int)enumItem, enumItem.ToString()));
+                }
+                cbIsInterfaceType.DataSource = interfaceTypeList;
+                cbIsInterfaceType.DisplayMember = "Value";
+                cbIsInterfaceType.ValueMember = "Key";
+                cbIsInterfaceType.SelectedValue = 0;
                 //打印格式
                 var printArray = Enum.GetValues(typeof(PrintFormat_Enum));
                 foreach (var enumItem in printArray)
@@ -115,7 +126,7 @@ namespace SCB.OrderSorting.Client
                 _systemSetting.BoxWeight = Convert.ToDecimal(txtBoxWeight.Text);
                 _systemSetting.WarningCabinetId = Convert.ToUInt16(cbWarningCabinetId.Text);
                 _systemSetting.LogStorageDays = Convert.ToInt32(cbLogStorageDays.SelectedValue);
-                _systemSetting.IsFlyt = cbIsFlyt.Text == "是";
+                _systemSetting.InterfaceType = (InterfaceType)cbIsInterfaceType.SelectedValue;
                 _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 1).SlaveAddress = Convert.ToByte(txtCabinetId1_SlaveAddress.Text);
                 _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 2).SlaveAddress = Convert.ToByte(txtCabinetId2_SlaveAddress.Text);
                 _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 3).SlaveAddress = Convert.ToByte(txtCabinetId3_SlaveAddress.Text);
@@ -172,7 +183,7 @@ namespace SCB.OrderSorting.Client
             txtCriticalWeight.Text = _systemSetting.CriticalWeight.ToString("0.000");
             txtBoxWeight.Text = _systemSetting.BoxWeight.ToString("0.000");
             cbLogStorageDays.SelectedValue = _systemSetting.LogStorageDays;
-            cbIsFlyt.Text = _systemSetting.IsFlyt ? "是" : "否";
+            cbIsInterfaceType.SelectedValue = (int)_systemSetting.InterfaceType;
             txtCabinetId1_SlaveAddress.Text = _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 1).SlaveAddress.ToString();
             txtCabinetId2_SlaveAddress.Text = _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 2).SlaveAddress.ToString();
             txtCabinetId3_SlaveAddress.Text = _systemSetting.SlaveConfigs.Find(s => s.CabinetId == 3).SlaveAddress.ToString();

@@ -162,6 +162,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\InterfaceType_Enum.cs" />
     <Compile Include="Enum\OrderSortingLog_OperationType_Enum.cs" />
     <Compile Include="Enum\OrderSortingLog_Status_Enum.cs" />
     <Compile Include="Enum\PackingLog_OperationType_Enum.cs" />
@@ -182,6 +183,9 @@
     <Compile Include="Model\ThreadOrderManager.cs" />
     <Compile Include="Model\ThreadManage.cs" />
     <Compile Include="Model\ThreadWriteMsg.cs" />
+    <Compile Include="PrintDocument\PackingCountryItemsPrintDocument.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PrintDocument\PackingLabelPrintDocument2.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -331,6 +335,7 @@
     <Compile Include="Work\test.Designer.cs">
       <DependentUpon>test.cs</DependentUpon>
     </Compile>
+    <Content Include="版本控制.txt" />
     <EmbeddedResource Include="Login\frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </EmbeddedResource>

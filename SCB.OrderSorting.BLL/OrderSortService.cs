@@ -78,7 +78,7 @@ namespace SCB.OrderSorting.BLL
                 SerialPortService = SerialPortService.Instance(_systemSetting.ModbusSetting, GetSlaveConfig(), _systemSetting.WarningCabinetId);
 
                  //分拣数据服务实例化
-                 sortingService = new SortingService(_systemSetting.CabinetNumber, _systemSetting.SortingPatten, _systemSetting.SortingSolution, _systemSetting.IsFlyt, _systemSetting.BoxWeight);
+                 sortingService = new SortingService(_systemSetting.CabinetNumber, _systemSetting.SortingPatten, _systemSetting.SortingSolution, _systemSetting.InterfaceType, _systemSetting.BoxWeight);
                 //声音服务
                 soundService = new SoundService();
             }
@@ -434,20 +434,20 @@ namespace SCB.OrderSorting.BLL
         /// <param name="lattice">柜格</param>
         /// <param name="operationType">操作类型：1自动满格，2手动满格，3打印包牌号</param>
         /// <returns></returns>
-        public static PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo, int operationType = 3)
+        public static PackingLog CreatePackingLog(LatticeSetting lattice, UserInfo userInfo,out List<LatticeOrdersCache> latticeInfo, int operationType = 3)
         {
-            return sortingService.CreatePackingLog(lattice, userInfo, _systemSetting.BoxWeight, operationType);
+            return sortingService.CreatePackingLog(lattice, userInfo, _systemSetting.BoxWeight,out latticeInfo, operationType);
         }
-
+       
         /// <summary>
         /// 创建装箱记录（多格口打印一个PKG标签）
         /// </summary>
         /// <param name="latticeIdArray">格口号</param>
         /// <param name="userInfo">用户信息</param>
         /// <returns></returns>
-        public static PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo)
+        public static PackingLog CreatePackingLog(string[] latticeIdArray, UserInfo userInfo ,out List<LatticeOrdersCache> latticeInfo)
         {
-            return sortingService.CreatePackingLog(latticeIdArray, userInfo, _systemSetting.CriticalWeight, _systemSetting.BoxWeight);
+            return sortingService.CreatePackingLog(latticeIdArray, userInfo, _systemSetting.CriticalWeight, _systemSetting.BoxWeight,out latticeInfo);
         }
         /// <summary>
         /// 根据订单号撤回分拣

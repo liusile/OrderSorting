@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SCB.OrderSorting.BLL.Common;
 using SCB.OrderSorting.BLL.Model;
+using SCB.OrderSorting.BLL.Model.ApiModel;
 using SCB.OrderSorting.DAL;
 using SCB.WHP.EDS.SocketServer.Common.CommonHelper;
 using System;
@@ -140,6 +141,8 @@ namespace SCB.OrderSorting.BLL.API
             }
             catch (Exception) { throw; }
         }
+
+
 
         /// <summary>
         /// 获取包牌号
@@ -292,6 +295,144 @@ namespace SCB.OrderSorting.BLL.API
             {
                 errorMsg = ex.Message;
                 return null;
+            }
+        }
+        //-------------------------------------------------------飞特独立接口------------------------------------------------------------
+        public static UserInfo LoginBySingleFlyt(string email, string pwd, ref string errorMsg)
+        {
+            try
+            {
+                string url = "http://rpswebapi.flytcloud.com/api/PickingShelf/Login";
+                var request = new LoginRequestContract
+                {
+                    Token = "5ea36184bcdd2fe59d2720309c681502",
+                    LoginName = email,
+                    Password = pwd
+                };
+                var response = _httpHelper.Post<LoginResponseContract>(url, request);
+                if (response == null)
+                {
+                    errorMsg = "获取用户信息异常, 请检查服务是否已关闭!";
+                    return null;
+                }
+                if (!response.Success)
+                {
+                    errorMsg = response.Message;
+                    return null;
+                }
+                return new UserInfo
+                {
+                    UserId = Convert.ToInt32(response.userID),
+                    UserName = response.userName,
+                    ReceivePointId = response.ReceivePointId.ToString(),
+                    RepName = response.RepName,
+                    Pcid = response.Pcid,
+                    PcName = response.PcName
+                };
+            }
+            catch (Exception ex)
+            {
+                errorMsg = ex.Message;
+                return null;
+            }
+        }
+        internal static VerifyOrderResponseContract VerifyOrderBySingleFlyt(string orderId, UserInfo user)
+        {
+            try
+            {
+                string url = "http://rpswebapi.flytcloud.com/api/PickingShelf/GetOrderInfo";
+                var postData = new VerifyOrderRequestContract
+                {
+                    Token = "5ea36184bcdd2fe59d2720309c681502",
+                    OperatorId = user.UserId,
+                    OperatorName = user.UserName,
+                    OrderId = orderId
+                };
+                return _httpHelper.Post<VerifyOrderResponseContract>(url, postData);
+            }
+            catch (Exception) { throw; }
+        }
+        public static BaseResponseContract BatchOutboundBySingleFlyt(UserInfo userInfo, PackingLog pkgLog, List<LatticeOrdersCache> logList)
+        {
+            try
+            {
+                string url = "http://rpswebapi.flytcloud.com/api/PickingShelf/BatchOutbound";
+                var outboudRequest = new BatchOutboudRequestContract
+                {
+                    Token = "5ea36184bcdd2fe59d2720309c681502",
+                    OperatorId = userInfo.UserId,
+                    OperatorName = userInfo.UserName,
+                    Pkg = pkgLog.PackNumber,
+                    OutboundPostId = pkgLog.PostTypeIds.Split(',')[0],
+                    ReceivePoint = userInfo.ReceivePointId,
+                    ProcessCenterId = userInfo.Pcid,
+                    OutboudDetails = new List<OrderOutboudDetailContract>()
+                };
+                logList.ForEach(lg =>
+                {
+                    outboudRequest.OutboudDetails.Add(new OrderOutboudDetailContract
+                    {
+                        OrderId = lg.OrderId,
+                        TraceId = lg.TraceId,
+                        Weight = lg.Weight,
+                        CountryId = lg.CountryId,
+                        Reason = 0
+                    });
+                });
+                // SaveErrLogHelper.SaveErrorLog("",JsonConvert.SerializeObject(outboudRequest) + "url:" + url);
+                return _httpHelper.Post<BaseResponseContract>(url, outboudRequest);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("装箱信息上传到物流系统时出错:" + ex.ToString());
+            }
+        }
+        internal static string GetFlytPackageLabelIDBySingleFlyt()
+        {
+            try
+            {
+                string packageLabelID = string.Empty;
+                string url = "http://rpswebapi.flytcloud.com/api/PickingShelf/CreatePkg";
+                var postData = new VerifyOrderRequestContract
+                {
+                    Token = "5ea36184bcdd2fe59d2720309c681502"
+                };
+                var obj = _httpHelper.Post<ResponseDataModel>(url, postData);
+                if (obj != null && obj.IsSuccess)
+                {
+                    packageLabelID = obj.Content;
+                }
+                if (string.IsNullOrWhiteSpace(packageLabelID))
+                {
+                    throw new Exception("服务器错误，接口http://rpswebapi.flytcloud.com/api/PickingShelf/CreatePkg无法访问，请联系技术人员！");
+                }
+                return packageLabelID;
+            }
+            catch (Exception) { throw; }
+        }
+        internal static List<Content> GetPostListBySingleFlyt()
+        {
+            try
+            {
+                string url = "http://rpswebapi.flytcloud.com/api/PickingShelf/GetAllPostType";
+                var postData = new VerifyOrderRequestContract
+                {
+                    Token = "5ea36184bcdd2fe59d2720309c681502"
+                };
+                var obj = _httpHelper.Post<ResponseDataModelBySingleFlyt>(url, postData);
+                if (obj == null)
+                {
+                    return null;
+                }
+                if (!obj.Success)
+                {
+                    throw new Exception(obj.Message);
+                }
+                return obj.Data;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

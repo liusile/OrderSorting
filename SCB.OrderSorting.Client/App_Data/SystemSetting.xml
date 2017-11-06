@@ -49,9 +49,9 @@
   </SlaveConfigs>
   <SortingPatten>2</SortingPatten>
   <LogStorageDays>6</LogStorageDays>
-  <IsFlyt>true</IsFlyt>
+  <InterfaceType>Flyt</InterfaceType>
   <SortingSolution>677f3fca-07dc-46b6-a28c-73a49c9e8982</SortingSolution>
   <Scanner>A,B</Scanner>
-  <PrintFormat>0</PrintFormat>
+  <PrintFormat>2</PrintFormat>
   <VerType>0</VerType><!--0稳定版1快速版-->
 </SystemSetting>

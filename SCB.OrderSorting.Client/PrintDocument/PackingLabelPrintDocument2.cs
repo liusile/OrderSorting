@@ -106,7 +106,7 @@ namespace SCB.OrderSorting.Client
                 e.Graphics.DrawString("日期："+ _dayPackage, Regularfont4, Brushes.Black, 30, 190);
                 e.Graphics.DrawString("操作人：", Regularfont4, Brushes.Black, 30, 220);
                 e.Graphics.DrawString("件数："+ _packingLog.OrderQty, Regularfont4, Brushes.Black, 30, 250);
-                e.Graphics.DrawString("BGHZ", Regularfont4, Brushes.Black, 30, 280);
+                e.Graphics.DrawString("BGHZ  "+ _packingLog.LatticeId, Regularfont4, Brushes.Black, 30, 280);
                 e.Graphics.DrawString("重量：", Regularfont4, Brushes.Black, 130, 280);
                 var image = GenerateQRByQrCodeNet(_packingLog.PackNumber);
                 e.Graphics.DrawImage(image, 130, 170,100, 100);

@@ -145,12 +145,14 @@
     <Compile Include="Context\CenterContext.cs" />
     <Compile Include="Context\CenterContextDefault.cs" />
     <Compile Include="Context\CenterContextFlyt.cs" />
+    <Compile Include="Context\CenterContextSingleFlyt.cs" />
     <Compile Include="Context\SortingPattenContext4.cs" />
     <Compile Include="Context\SortingPattenContext5.cs" />
     <Compile Include="Model\ApiModel\BaseResponseContract.cs" />
     <Compile Include="Model\ApiModel\BatchOutboudRequestContract.cs" />
     <Compile Include="Model\ApiModel\LoginRequestContract.cs" />
     <Compile Include="Model\ApiModel\LoginResponseContract.cs" />
+    <Compile Include="Model\ApiModel\ResponseDataModelBySingleFlyt.cs" />
     <Compile Include="Model\ApiModel\UserInfo.cs" />
     <Compile Include="Model\CacheModel\LoginData.cs" />
     <Compile Include="Model\CacheModel\SystemSetting.cs" />
